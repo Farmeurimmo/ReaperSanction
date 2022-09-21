@@ -85,7 +85,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 getLogger().warning("A new update is available please consider updating if you want to receive support !");
                 getLogger().info("Newest version: " + version);
                 getLogger().info("Your version: " + this.getDescription().getVersion());
-                getLogger().info("Download link: https://www.spigotmc.org/resources/sanctionset-ss-spigot-java-plugin.89580/");
+                getLogger().info("Download link: https://www.spigotmc.org/resources/reapersanction.89580/");
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.hasPermission("reapersanction.rsadmin")) {
                         player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
