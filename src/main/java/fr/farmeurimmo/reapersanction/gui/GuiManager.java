@@ -18,6 +18,11 @@ public class GuiManager implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
+
+        if (current == null) {
+            return;
+        }
+
         Material currenttype = current.getType();
 
         if (current.getItemMeta() == null) {
@@ -40,11 +45,13 @@ public class GuiManager implements Listener {
         }
 
         ItemStack cibleitem = event.getInventory().getItem(13);
+        if (!cibleitem.hasItemMeta()) {
+            return;
+        }
         String cible = cibleitem.getItemMeta().getDisplayName().replace("§6", "");
 
         switch (title) {
             case "§4ReaperSanction":
-
                 event.setCancelled(true);
 
                 switch (currenttype) {
