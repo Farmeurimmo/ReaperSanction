@@ -81,13 +81,13 @@ public class EndGui {
 
             ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta customd = custom5.getItemMeta();
-            customd.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            customd.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom5.setItemMeta(customd);
             inv.setItem(18, custom5);
 
             ItemStack custom6 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta custome = custom6.getItemMeta();
-            custome.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            custome.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom6.setItemMeta(custome);
             inv.setItem(26, custom6);
 

@@ -21,13 +21,13 @@ public class BanIpGui {
 
             ItemStack custom1 = new ItemStack(Material.NAME_TAG, 1);
             ItemMeta customS = custom1.getItemMeta();
-            customS.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.Banip.NameTag.Reason"));
+            customS.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.Banip.NameTag.Reason"));
             custom1.setItemMeta(customS);
             inv.setItem(12, custom1);
 
             ItemStack custom2 = new ItemStack(Material.CLAY_BALL, 2);
             ItemMeta customa = custom2.getItemMeta();
-            customa.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.Banip.ClayBall.Reason"));
+            customa.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.Banip.ClayBall.Reason"));
             custom2.setItemMeta(customa);
             inv.setItem(14, custom2);
 
@@ -52,7 +52,7 @@ public class BanIpGui {
                     inv.setItem(13, stack);
                 }
             } else {
-                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForMod") == true) {
+                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForMod")) {
                     ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
                     ItemMeta meta = stack.getItemMeta();
                     ((SkullMeta) meta).setOwner(cible);
@@ -75,17 +75,17 @@ public class BanIpGui {
 
             ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta customd = custom5.getItemMeta();
-            customd.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            customd.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom5.setItemMeta(customd);
             inv.setItem(18, custom5);
 
             ItemStack custom6 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta custome = custom6.getItemMeta();
-            custome.setDisplayName("§6" + ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            custome.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom6.setItemMeta(custome);
             inv.setItem(26, custom6);
 
-            if (ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane") == true) {
+            if (ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) {
                 ItemStack custom0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
                 ItemMeta meta0 = custom0.getItemMeta();
                 meta0.setDisplayName("§6");
