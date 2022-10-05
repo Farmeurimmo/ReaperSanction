@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.BanList.Type;
@@ -19,18 +20,18 @@ public class BanIpCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorBanIpArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorBanIpArg"));
         } else if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
             StringBuilder sb = new StringBuilder();
             for (String s : args) {
                 sb.append(s).append(' ');
             }
-            String reason = ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.UnkownReasonSpecified").replace("&", "§");
+            String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
             if (p != null & p.isOnline()) {
-                p.kickPlayer(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.BanIp.lines").replace("&", "§")
+                p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason));
@@ -49,7 +50,7 @@ public class BanIpCmd implements CommandExecutor {
             String reason = sb.toString().replace(args[0] + " ", "").trim();
             assert p != null;
             if (p.isOnline()) {
-                p.kickPlayer(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.BanIp.lines").replace("&", "§")
+                p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason));

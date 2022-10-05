@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,14 +16,14 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorArgAdminCommands").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorArgAdminCommands"));
             sender.sendMessage("Subs commands available: infos, reload, rl");
             return true;
         }
         if (args.length >= 2) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorArgAdminCommands").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorArgAdminCommands"));
             sender.sendMessage("Subs commands available: infos, reload, rl");
             return true;
         }
@@ -34,20 +35,14 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (!sender.hasPermission("reapersanction.rsadmin")) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("NoPermission"));
             return true;
         }
-        if (args[0].equalsIgnoreCase("reload")) {
-            ReaperSanction.instance.reloadConfig();
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ReloadMessage").replace("&", "§"));
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("rl")) {
-            ReaperSanction.instance.reloadConfig();
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ReloadMessage").replace("&", "§"));
+        if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
+            ReaperSanction.instance.reload();
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ReloadMessage"));
             return true;
         }
         return false;

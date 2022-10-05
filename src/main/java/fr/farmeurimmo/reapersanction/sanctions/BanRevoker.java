@@ -1,5 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.sanctions;
 
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -8,14 +10,14 @@ public class BanRevoker {
 
     @SuppressWarnings("deprecation")
     public static void CheckForUnban() {
-        for (String aa : ReaperSanction.instance.getData().getConfigurationSection("").getKeys(false)) {
-            if (ReaperSanction.instance.getData().getBoolean(aa + ".tempban.istempbanned")) {
-                if (ReaperSanction.instance.getData().getLong(aa + ".tempban.timemillis") <= System.currentTimeMillis()) {
+        for (String aa : ConfigManager.instance.getData().getConfigurationSection("").getKeys(false)) {
+            if (ConfigManager.instance.getData().getBoolean(aa + ".tempban.istempbanned")) {
+                if (ConfigManager.instance.getData().getLong(aa + ".tempban.timemillis") <= System.currentTimeMillis()) {
                     UnTempBan(aa, Bukkit.getConsoleSender());
                 }
             }
-            if (ReaperSanction.instance.getData().getBoolean(aa + ".tempmute.istempmuted")) {
-                if (ReaperSanction.instance.getData().getLong(aa + ".tempmute.timemillis") <= System.currentTimeMillis()) {
+            if (ConfigManager.instance.getData().getBoolean(aa + ".tempmute.istempmuted")) {
+                if (ConfigManager.instance.getData().getLong(aa + ".tempmute.timemillis") <= System.currentTimeMillis()) {
                     MuteRevoker.revokepermamute(aa, Bukkit.getConsoleSender());
                 }
             }
@@ -28,30 +30,30 @@ public class BanRevoker {
     }
 
     public static void UnTempBan(String aa, CommandSender sender) {
-        if (ReaperSanction.instance.getData().getBoolean(aa + ".ban.isbanned") ||
-                ReaperSanction.instance.getData().getBoolean(aa + ".tempban.istempbanned")
-                || ReaperSanction.instance.getData().getBoolean(aa + ".ban.isipbanned")) {
-            ReaperSanction.instance.getData().set(aa + ".tempban.banner", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.reason", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.date", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.expiration", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.duration", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.timemillis", "");
-            ReaperSanction.instance.getData().set(aa + ".tempban.istempbanned", false);
+        if (ConfigManager.instance.getData().getBoolean(aa + ".ban.isbanned") ||
+                ConfigManager.instance.getData().getBoolean(aa + ".tempban.istempbanned")
+                || ConfigManager.instance.getData().getBoolean(aa + ".ban.isipbanned")) {
+            ConfigManager.instance.getData().set(aa + ".tempban.banner", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.reason", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.date", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.expiration", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.duration", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.timemillis", "");
+            ConfigManager.instance.getData().set(aa + ".tempban.istempbanned", false);
 
-            ReaperSanction.instance.getData().set(aa + ".ban.banner", "");
-            ReaperSanction.instance.getData().set(aa + ".ban.reason", "");
-            ReaperSanction.instance.getData().set(aa + ".ban.date", "");
-            ReaperSanction.instance.getData().set(aa + ".ban.isbanned", false);
+            ConfigManager.instance.getData().set(aa + ".ban.banner", "");
+            ConfigManager.instance.getData().set(aa + ".ban.reason", "");
+            ConfigManager.instance.getData().set(aa + ".ban.date", "");
+            ConfigManager.instance.getData().set(aa + ".ban.isbanned", false);
 
-            ReaperSanction.instance.saveData();
+            ConfigManager.instance.saveData();
 
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SuccefullyUnbanned").replace("&", "§")
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("SuccefullyUnbanned")
                             .replace("%player%", aa));
         } else {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NotBanned").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("NotBanned"));
         }
     }
 }

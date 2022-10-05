@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.MuteRevoker;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,8 +18,8 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorUnBanArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorUnBanArg"));
         } else {
             MuteRevoker.revokepermamute(args[0], sender);
         }

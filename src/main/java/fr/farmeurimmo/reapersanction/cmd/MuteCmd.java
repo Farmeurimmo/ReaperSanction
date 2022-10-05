@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,16 +18,16 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorMuteArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorMuteArg"));
         } else if (args.length == 1) {
             if (Bukkit.getPlayer(args[0]) != null) {
                 Player p = Bukkit.getPlayer(args[0]);
-                String reason = ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.UnkownReasonSpecified").replace("&", "§");
+                String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
                 ApplySanction.instance.ApplyPermaMute(p.getName(), reason.trim(), sender.getName(), sender);
             } else {
-                sender.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.InvalidPlayer").replace("&", "§"));
+                sender.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("InvalidPlayer"));
             }
         } else {
             if (Bukkit.getPlayer(args[0]) != null) {
@@ -39,8 +39,8 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
                 String reason = sb.toString().replace(args[0] + " ", "").trim();
                 ApplySanction.instance.ApplyPermaMute(p.getName(), reason, sender.getName(), sender);
             } else {
-                sender.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.InvalidPlayer").replace("&", "§"));
+                sender.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("InvalidPlayer"));
             }
         }
         return false;

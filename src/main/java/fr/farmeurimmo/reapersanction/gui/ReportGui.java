@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,13 +17,13 @@ public class ReportGui {
 
         ItemStack custom1 = new ItemStack(Material.GRASS, 1);
         ItemMeta customS = custom1.getItemMeta();
-        customS.setDisplayName(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.Reason.grass").replace("&", "§"));
+        customS.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.grass"));
         custom1.setItemMeta(customS);
         inv.setItem(10, custom1);
 
         ItemStack custom2 = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta customa = custom2.getItemMeta();
-        customa.setDisplayName(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.Reason.DiamondSword").replace("&", "§"));
+        customa.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.DiamondSword"));
         custom2.setItemMeta(customa);
         inv.setItem(11, custom2);
 
@@ -35,17 +36,17 @@ public class ReportGui {
 
         ItemStack custom3 = new ItemStack(Material.APPLE, 1);
         ItemMeta customb = custom3.getItemMeta();
-        customb.setDisplayName(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.Reason.apple").replace("&", "§"));
+        customb.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.apple"));
         custom3.setItemMeta(customb);
         inv.setItem(15, custom3);
 
         ItemStack custom4 = new ItemStack(Material.BEACON, 1);
         ItemMeta customc = custom4.getItemMeta();
-        customc.setDisplayName(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.Reason.beacon").replace("&", "§"));
+        customc.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.beacon"));
         custom4.setItemMeta(customc);
         inv.setItem(16, custom4);
 
-        if (ReaperSanction.instance.getConfig().getBoolean("ReaperSanction.Settings.FillInventoryWithGlassPane")) {
+        if (ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) {
             ItemStack custom8 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
             ItemMeta meta8 = custom8.getItemMeta();
             meta8.setDisplayName("§6");

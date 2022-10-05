@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -60,7 +61,7 @@ public class GuiManager implements Listener {
                             MuteGui.mutegui(player, cible);
                         } else {
                             RsGui.SsMainGui(player, cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                         }
                         break;
                     case DIAMOND_SWORD:
@@ -68,7 +69,7 @@ public class GuiManager implements Listener {
                             BanGui.bangui(player, cible);
                         } else {
                             RsGui.SsMainGui(player, cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                         }
                         break;
                     case ANVIL:
@@ -76,7 +77,7 @@ public class GuiManager implements Listener {
                             BanIpGui.banipgui(player, cible);
                         } else {
                             RsGui.SsMainGui(player, cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                         }
                         break;
                     case PAPER:
@@ -84,12 +85,12 @@ public class GuiManager implements Listener {
                             EndGui.endgui(player, cible);
                         } else {
                             RsGui.SsMainGui(player, cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                         }
                         break;
                     case BARRIER:
                         event.setCancelled(true);
-                        player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                         break;
                 }
                 break;
@@ -99,44 +100,44 @@ public class GuiManager implements Listener {
                 if (player.hasPermission("mod")) {
                     switch (currenttype) {
                         case BOW:
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Bow.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Bow.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case DIAMOND_SWORD:
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.DiamondSword.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.DiamondSword.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case ANVIL:
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Anvil.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Anvil.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case REDSTONE_BLOCK:
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.RedstoneBlock.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.RedstoneBlock.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case ACTIVATOR_RAIL:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.ActivatorRail.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.ActivatorRail.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case ARMOR_STAND:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.ArmorStand.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.ArmorStand.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case COMPASS:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Compass.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.Compass.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case FLINT_AND_STEEL:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.FlintAndSteel.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Mutes.FlintAndSteel.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:
                             RsGui.SsMainGui(player, cible);
@@ -144,7 +145,7 @@ public class GuiManager implements Listener {
                     }
                 } else {
                     RsGui.SsMainGui(player, cible);
-                    player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                 }
                 break;
             case "§4ReaperSanction Bans":
@@ -155,53 +156,53 @@ public class GuiManager implements Listener {
                     switch (currenttype) {
                         case DIAMOND_SWORD:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.DiamondSword.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.DiamondSword.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case WOOD_SWORD:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.WoodSword.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.WoodSword.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case FEATHER:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Feather.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Feather.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case IRON_BOOTS:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.IronBoots.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.IronBoots.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.IronBoots.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.IronBoots.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case GOLD_AXE:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.GoldAxe.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.GoldAxe.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case ARMOR_STAND:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.ArmorStand.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.ArmorStand.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case TNT:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Tnt.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Tnt.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Tnt.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Tnt.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case LEATHER:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Leather.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Leather.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Leather.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Leather.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case DIAMOND_CHESTPLATE:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.DiamondChestPlate.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.DiamondChestPlate.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case DIRT:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Dirt.Duration") + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Bans.Dirt.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Dirt.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Dirt.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:
                             RsGui.SsMainGui(player, cible);
@@ -209,7 +210,7 @@ public class GuiManager implements Listener {
                     }
                 } else {
                     RsGui.SsMainGui(player, cible);
-                    player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                 }
                 break;
             case "§4ReaperSanction Bans-ip":
@@ -220,13 +221,13 @@ public class GuiManager implements Listener {
                     switch (currenttype) {
                         case NAME_TAG:
                             player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Banip.NameTag.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/ban-ip " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Banip.NameTag.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case CLAY_BALL:
                             player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Menu.Banip.ClayBall.Reason"));
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitForApplication").replace("&", "§"));
+                            player.chat("/ban-ip " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Banip.ClayBall.Reason"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:
                             RsGui.SsMainGui(player, cible);
@@ -234,7 +235,7 @@ public class GuiManager implements Listener {
                     }
                 } else {
                     RsGui.SsMainGui(player, cible);
-                    player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.NoPermission").replace("&", "§"));
+                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                 }
                 break;
             case "§4ReaperSanction Unbans/Unmutes":
@@ -246,20 +247,20 @@ public class GuiManager implements Listener {
                         case BOW:
                             player.closeInventory();
                             player.chat("/unmute " + cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitEnd").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
                             break;
                         case DIAMOND_SWORD:
                             player.closeInventory();
                             player.chat("/unban " + cible);
                             player.chat("/unbanip " + cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitEnd").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
                             break;
                         case ANVIL:
                             player.closeInventory();
                             player.chat("/unmute " + cible);
                             player.chat("/unban " + cible);
                             player.chat("/unbanip " + cible);
-                            player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.SanctionWaitEnd").replace("&", "§"));
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
                             break;
                         default:
                             RsGui.SsMainGui(player, cible);
@@ -287,12 +288,12 @@ public class GuiManager implements Listener {
     }
 
     public void sendMessageReported(Player player, String cible, String ReportReason) {
-        player.sendMessage(ReaperSanction.instance.Preffix + ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.sended").replace("&", "§").replace("%player%", cible).replace("%reason%", ReportReason));
+        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
         player.closeInventory();
         for (Player all : Bukkit.getServer().getOnlinePlayers()) {
             bc.append(part).append(" ");
             if (all.hasPermission("reportview")) {
-                all.sendMessage(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Report.Obtain").replace("&", "§").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
+                all.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
                 bc.delete(0, 100);
             }
         }

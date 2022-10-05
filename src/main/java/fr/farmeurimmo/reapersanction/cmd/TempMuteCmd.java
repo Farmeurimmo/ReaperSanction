@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +11,8 @@ public class TempMuteCmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempMuteArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorTempMuteArg"));
         } else {
             StringBuilder sb = new StringBuilder();
             for (String s : args) {
@@ -33,19 +33,19 @@ public class TempMuteCmd implements CommandExecutor {
                     String type = args[1];
                     String reason;
                     if (args.length == 2) {
-                        reason = ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.UnkownReasonSpecified").replace("&", "§").trim();
+                        reason = MessageManager.instance.getMessage("UnkownReasonSpecified").trim();
                     } else {
                         reason = sb.toString().replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
                     }
                     ApplySanction.instance.ApplyTempMute(args[0], reason.trim(),
                             sender, cb.toString(), type.replace(cb, ""));
                 } else {
-                    sender.sendMessage(ReaperSanction.instance.Preffix +
-                            ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempMuteArg").replace("&", "§"));
+                    sender.sendMessage(MessageManager.prefix +
+                            MessageManager.instance.getMessage("ErrorTempMuteArg"));
                 }
             } else {
-                sender.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempMuteArg").replace("&", "§"));
+                sender.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("ErrorTempMuteArg"));
             }
         }
         return false;

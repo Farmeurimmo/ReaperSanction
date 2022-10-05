@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.events;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,20 +13,20 @@ public class ChatEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void AsyncChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        if (ReaperSanction.instance.getData().getBoolean(e.getPlayer().getName() + ".mute.ismuted")) {
+        if (ConfigManager.instance.getData().getBoolean(e.getPlayer().getName() + ".mute.ismuted")) {
             e.setCancelled(true);
-            player.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.PermaMutedPlayerChat").replace("&", "§")
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("PermaMutedPlayerChat")
                             .replace("%player%", player.getName()).replace("%banner%",
-                                    ReaperSanction.instance.getData().getString(player.getName() + ".mute.banner").replace("&", "§")));
+                                    ConfigManager.instance.getData().getString(player.getName() + ".mute.banner")));
             return;
         }
-        if (ReaperSanction.instance.getData().getBoolean(e.getPlayer().getName() + ".tempmute.istempmuted")) {
+        if (ConfigManager.instance.getData().getBoolean(e.getPlayer().getName() + ".tempmute.istempmuted")) {
             e.setCancelled(true);
-            player.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.TempMutedPlayerChat").replace("&", "§")
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("TempMutedPlayerChat")
                             .replace("%player%", player.getName()).replace("%banner%",
-                                    ReaperSanction.instance.getData().getString(player.getName() + ".tempmute.banner").replace("&", "§")));
+                                    ConfigManager.instance.getData().getString(player.getName() + ".tempmute.banner")));
         }
     }
 

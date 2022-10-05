@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
@@ -20,8 +21,8 @@ public class TempBanCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0 || args.length == 1) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempBanArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorTempBanArg"));
         } else {
             StringBuilder sb = new StringBuilder();
             for (String s : args) {
@@ -62,14 +63,14 @@ public class TempBanCmd implements CommandExecutor {
                     }
                     String reason;
                     if (args.length == 2) {
-                        reason = ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.UnkownReasonSpecified").replace("&", "§");
+                        reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
                     } else {
                         reason = sb.toString().replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
                     }
                     Player p = Bukkit.getPlayer(args[0]);
                     assert p != null;
                     if (p.isOnline()) {
-                        Bukkit.getPlayer(args[0]).kickPlayer(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.TempBan.lines").replace("&", "§")
+                        Bukkit.getPlayer(args[0]).kickPlayer(ConfigManager.instance.getFromConfigFormatted("TempBan.lines")
                                 .replace("%banner%", sender.getName())
                                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                                 .replace("%reason%", reason)
@@ -82,12 +83,12 @@ public class TempBanCmd implements CommandExecutor {
                             TimeConverter.getFormatTimeWithTZ(Mydate), endDate.format(formatter), args[1].replace(type, ""),
                             type);
                 } else {
-                    sender.sendMessage(ReaperSanction.instance.Preffix +
-                            ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempBanArg").replace("&", "§"));
+                    sender.sendMessage(MessageManager.prefix +
+                            MessageManager.instance.getMessage("ErrorTempBanArg"));
                 }
             } else {
-                sender.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorTempBanArg").replace("&", "§"));
+                sender.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("ErrorTempBanArg"));
             }
         }
         return false;

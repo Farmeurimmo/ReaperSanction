@@ -1,5 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.events;
 
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.BanRevoker;
 import org.bukkit.Bukkit;
@@ -12,6 +14,8 @@ import org.bukkit.event.player.PlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.HashMap;
+
 @SuppressWarnings("deprecation")
 public class JoinLeaveEvent implements Listener {
 
@@ -20,73 +24,73 @@ public class JoinLeaveEvent implements Listener {
         String ip = e.getAddress().getHostAddress();
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         if (ReaperSanction.instance.ipblocked.containsKey(partialIp)) {
-            e.disallow(Result.KICK_BANNED, ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.BanIp.lines").replace("&", "§")
-                    .replace("%banner%", ReaperSanction.instance.getData().getString(
+            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+                    .replace("%banner%", ConfigManager.instance.getData().getString(
                             ReaperSanction.instance.ipblocked.get(partialIp) + ".ban-ip.banner"))
-                    .replace("%date%", ReaperSanction.instance.getData().getString(
+                    .replace("%date%", ConfigManager.instance.getData().getString(
                             ReaperSanction.instance.ipblocked.get(partialIp) + ".ban-ip.date").replace("T", " "))
-                    .replace("%reason%", ReaperSanction.instance.getData().getString(
+                    .replace("%reason%", ConfigManager.instance.getData().getString(
                             ReaperSanction.instance.ipblocked.get(partialIp) + ".ban-ip.reason")));
             return;
         }
-        if (ReaperSanction.instance.getData().get(e.getName() + ".ban-ip.isipbanned") == null) {
-            ReaperSanction.instance.getData().set(e.getName() + ".ban-ip.banner", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban-ip.date", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban-ip.reason", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban-ip.ip", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban-ip.isipbanned", false);
+        if (ConfigManager.instance.getData().get(e.getName() + ".ban-ip.isipbanned") == null) {
+            HashMap<String, Object> values = new HashMap<>();
+            values.put(e.getName() + ".ban-ip.isipbanned", false);
+            values.put(e.getName() + ".ban-ip.banner", "");
+            values.put(e.getName() + ".ban-ip.date", "");
+            values.put(e.getName() + ".ban-ip.reason", "");
+            values.put(e.getName() + ".ban-ip.ip", "");
 
-            ReaperSanction.instance.getData().set(e.getName() + ".ban.banner", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban.date", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban.reason", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".ban.isbanned", false);
+            values.put(e.getName() + ".ban.isbanned", false);
+            values.put(e.getName() + ".ban.banner", "");
+            values.put(e.getName() + ".ban.date", "");
+            values.put(e.getName() + ".ban.reason", "");
 
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.banner", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.date", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.timemillis", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.duration", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.reason", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempban.istempbanned", false);
+            values.put(e.getName() + ".mute.ismuted", false);
+            values.put(e.getName() + ".mute.date", "");
+            values.put(e.getName() + ".mute.reason", "");
 
-            ReaperSanction.instance.getData().set(e.getName() + ".mute.ismuted", false);
-            ReaperSanction.instance.getData().set(e.getName() + ".mute.banner", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".mute.reason", "");
+            values.put(e.getName() + ".tempban.istempbanned", false);
+            values.put(e.getName() + ".tempban.banner", "");
+            values.put(e.getName() + ".tempban.date", "");
+            values.put(e.getName() + ".tempban.reason", "");
+            values.put(e.getName() + ".tempban.duration", "");
+            values.put(e.getName() + ".tempban.timemillis", "");
 
-            ReaperSanction.instance.getData().set(e.getName() + ".tempmute.istempmuted", false);
-            ReaperSanction.instance.getData().set(e.getName() + ".tempmute.banner", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempmute.timemillis", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempmute.reason", "");
-            ReaperSanction.instance.getData().set(e.getName() + ".tempmute.duration", "");
+            values.put(e.getName() + ".tempmute.istempmuted", false);
+            values.put(e.getName() + ".tempmute.banner", "");
+            values.put(e.getName() + ".tempmute.duration", "");
+            values.put(e.getName() + ".tempmute.timemillis", "");
+            values.put(e.getName() + ".tempmute.reason", "");
 
-
-            ReaperSanction.instance.saveData();
+            ConfigManager.instance.setAndSaveAsyncData(values);
         }
-        if (ReaperSanction.instance.getData().getBoolean(e.getName() + ".ban-ip.isipbanned")) {
-            e.disallow(Result.KICK_BANNED, ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.BanIp.lines").replace("&", "§")
-                    .replace("%banner%", ReaperSanction.instance.getData().getString(e.getName() + ".ban-ip.banner"))
-                    .replace("%date%", ReaperSanction.instance.getData().getString(e.getName() + ".ban-ip.date").replace("T", " "))
-                    .replace("%reason%", ReaperSanction.instance.getData().getString(e.getName() + ".ban-ip.reason")));
+        if (ConfigManager.instance.getData().getBoolean(e.getName() + ".ban-ip.isipbanned")) {
+            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+                    .replace("%banner%", ConfigManager.instance.getData().getString(e.getName() + ".ban-ip.banner"))
+                    .replace("%date%", ConfigManager.instance.getData().getString(e.getName() + ".ban-ip.date").replace("T", " "))
+                    .replace("%reason%", ConfigManager.instance.getData().getString(e.getName() + ".ban-ip.reason")));
             return;
         }
-        if (ReaperSanction.instance.getData().getBoolean(e.getName() + ".ban.isbanned")) {
-            e.disallow(Result.KICK_BANNED, ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Ban.lines").replace("&", "§")
-                    .replace("%banner%", ReaperSanction.instance.getData().getString(e.getName() + ".ban.banner"))
-                    .replace("%date%", ReaperSanction.instance.getData().getString(e.getName() + ".ban.date").replace("T", " "))
-                    .replace("%reason%", ReaperSanction.instance.getData().getString(e.getName() + ".ban.reason")));
+        if (ConfigManager.instance.getData().getBoolean(e.getName() + ".ban.isbanned")) {
+            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("Ban.lines")
+                    .replace("%banner%", ConfigManager.instance.getData().getString(e.getName() + ".ban.banner"))
+                    .replace("%date%", ConfigManager.instance.getData().getString(e.getName() + ".ban.date").replace("T", " "))
+                    .replace("%reason%", ConfigManager.instance.getData().getString(e.getName() + ".ban.reason")));
             return;
         }
-        if (ReaperSanction.instance.getData().getBoolean(e.getName() + ".tempban.istempbanned")) {
-            String aaaa = ReaperSanction.instance.getData().getString(e.getName() + ".tempban.expiration");
-            if (ReaperSanction.instance.getData().getLong(e.getName() + ".tempban.timemillis") <= System.currentTimeMillis()) {
+        if (ConfigManager.instance.getData().getBoolean(e.getName() + ".tempban.istempbanned")) {
+            String aaaa = ConfigManager.instance.getData().getString(e.getName() + ".tempban.expiration");
+            if (ConfigManager.instance.getData().getLong(e.getName() + ".tempban.timemillis") <= System.currentTimeMillis()) {
                 BanRevoker.UnTempBan(e.getName(), Bukkit.getConsoleSender());
             } else {
-                e.disallow(Result.KICK_BANNED, ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.TempBan.lines").replace("&", "§")
-                        .replace("%banner%", ReaperSanction.instance.getData().getString(e.getName() + ".tempban.banner"))
-                        .replace("%date%", ReaperSanction.instance.getData().getString(e.getName() + ".tempban.date").replace("T", " "))
-                        .replace("%reason%", ReaperSanction.instance.getData().getString(e.getName() + ".tempban.reason"))
+                e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("TempBan.lines")
+                        .replace("%banner%", ConfigManager.instance.getData().getString(e.getName() + ".tempban.banner"))
+                        .replace("%date%", ConfigManager.instance.getData().getString(e.getName() + ".tempban.date").replace("T", " "))
+                        .replace("%reason%", ConfigManager.instance.getData().getString(e.getName() + ".tempban.reason"))
                         .replace("%expiration%", aaaa)
-                        .replace("%duration%", ReaperSanction.instance.getData().getString(e.getName() + ".tempban.duration") +
-                                ReaperSanction.instance.getData().getString(e.getName() + ".tempban.unit").replace("sec", " second(s)").replace("min", " minute(s)")
+                        .replace("%duration%", ConfigManager.instance.getData().getString(e.getName() + ".tempban.duration") +
+                                ConfigManager.instance.getData().getString(e.getName() + ".tempban.unit").replace("sec", " second(s)").replace("min", " minute(s)")
                                         .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)")));
             }
         }
@@ -98,7 +102,7 @@ public class JoinLeaveEvent implements Listener {
         if (ReaperSanction.vanished.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             ReaperSanction.vanished.remove(player);
-            player.sendMessage(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Vanish.Isoff").replace("&", "§"));
+            player.sendMessage(MessageManager.instance.getMessage("Vanish-Isoff"));
         }
     }
 }

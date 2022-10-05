@@ -26,7 +26,7 @@ public class UpdateChecker {
                     consumer.accept(scanner.next());
                 }
             } catch (IOException exception) {
-                System.out.println("Auto updater crashed, please go to https://reaper.farmeurimmo.fr/reapersanction and find the new plugin link (Plugin name may have changed/change very soon)");
+                System.out.println("Auto updater crashed, please go to https://reaper.farmeurimmo.fr/reapersanction and check for updates manually.");
             }
         });
     }

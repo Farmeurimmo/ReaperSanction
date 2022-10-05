@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.gui.RsGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,20 +21,20 @@ public class RsCmd implements CommandExecutor, TabCompleter {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length == 0) {
-                player.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorArg").replace("&", "§"));
+                player.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("ErrorArg"));
                 return true;
             }
             if (args.length >= 2) {
-                player.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorArg").replace("&", "§"));
+                player.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("ErrorArg"));
                 return true;
             }
             if (Bukkit.getPlayer(args[0]) != null) {
                 RsGui.SsMainGui(player, args[0]);
             } else {
-                player.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.InvalidPlayer").replace("&", "§"));
+                player.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("InvalidPlayer"));
             }
             return true;
         }

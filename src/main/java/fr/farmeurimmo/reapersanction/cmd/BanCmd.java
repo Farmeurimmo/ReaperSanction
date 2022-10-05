@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
@@ -18,15 +19,15 @@ public class BanCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
-            sender.sendMessage(ReaperSanction.instance.Preffix +
-                    ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.ErrorBanArg").replace("&", "§"));
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorBanArg"));
         } else if (args.length == 1) {
             Date Mydate = new Date(System.currentTimeMillis());
             Player p = Bukkit.getPlayer(args[0]);
-            String reason = ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.UnkownReasonSpecified").replace("&", "§");
+            String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
             if (p.isOnline()) {
-                p.kickPlayer(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Ban.lines").replace("&", "§")
+                p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("Ban.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason.trim()));
@@ -43,7 +44,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                 String reason = sb.toString().replace(args[0] + " ", "").trim();
                 assert p != null;
                 if (p.isOnline()) {
-                    p.kickPlayer(ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.Ban.lines").replace("&", "§")
+                    p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("Ban.lines")
                             .replace("%banner%", sender.getName())
                             .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                             .replace("%reason%", reason));
@@ -52,8 +53,8 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                 ApplySanction.instance.ApplyPermaBan(p, reason, sender.getName(),
                         TimeConverter.getFormatTimeWithTZ(Mydate));
             } else {
-                sender.sendMessage(ReaperSanction.instance.Preffix +
-                        ReaperSanction.instance.getConfig().getString("ReaperSanction.Settings.InvalidPlayer").replace("&", "§"));
+                sender.sendMessage(MessageManager.prefix +
+                        MessageManager.instance.getMessage("InvalidPlayer"));
             }
         }
         return true;

@@ -1,160 +1,114 @@
-#Config version 1.1.0
-ReaperSanction:
-  Settings:
-    Prefix:
-      #Show this prefix in console
-      Inconsole: "ReaperSanction"
-      #Show this prefix in game
-      game: "&6[&4ReaperSanction&6] "
-    IP:
-      ShowIpForAdmin: true
-      ShowIpForMod: true
-    StartMessage: "Plugin enabled !"
-    StopMessage: "Plugin disabled !"
-    ErrorArg: "Usage, /rs <player-name>"
-    ErrorArgAdminCommands: "Usage, /rsadmin <command>"
-    ErrorBanArg: "Usage, /ban <player-name> [Reason]"
-    ErrorTempBanArg: "Usage, /tempban <player-name> <number + sec/min/day/year> [Reason]"
-    ErrorMuteArg: "Usage, /mute <player-name> [Reason]"
-    ErrorTempMuteArg: "Usage, /tempmute <player-name> <number + sec/min/day/year> [Reason]"
-    ErrorUnMuteArg: "Usage, /unmute <player-name>"
-    ErrorBanIpArg: "Usage, /ban-ip <player-name> [Reason]"
-    ErrorUnBanArg: "Usage, /unban <player-name>"
-    SanctionWaitForApplication: "&6The sanction has been successfuly set !"
-    SanctionWaitEnd: "&6All sanctions has been removed !"
-    AlreadyMuted: "&cThis player is already muted !"
-    AlreadyBanned: "&cThis player is already banned !"
-    NotBanned: "&cThis player is not banned !"
-    NotMuted: "&cThis player is not muted !"
-    PlayerGotPermaBan: "&c%player% got banned by %banner% for %reason% !"
-    PlayerGotTempBan: "&c%player% got tempbanned for %duration% by %banner% for %reason% !"
-    PlayerGotTempMute: "&c%player% got tempmuted for %duration% by %banner% for %reason% !"
-    PlayerGotPermaBanIp: "&c%player% got banned ip by %banner% for %reason% !"
-    PlayerGotPermaMute: "&c%player% got perma mute by %banner% for %reason% !"
-    MessageToPlayerGotPermaMuted: "&cYou got perma muted by %banner% !"
-    MessageToPlayerGotTempMuted: "&cYou got muted for %duration% by %banner% !"
-    PermaMutedPlayerChat: "&cYou can't talk because you are perma muted by %banner% !"
-    TempMutedPlayerChat: "&cYou can't talk because you are tempmuted by %banner% !"
-    MuteEnded: "&cYour mute is now done !"
-    SuccefullyUnbanned: "&c%player% has been unbanned !"
-    SuccefullyUnmuted: "&c%player% has been unmuted !"
-    UnkownReasonSpecified: "N/A"
-    ReloadMessage: "&6Reload done !"
-    InvalidPlayer: "&6Player unkown"
-    FillInventoryWithGlassPane: false
-    
-    Seconds: "second(s)"
-    Minutes: "minute(s)"
-    Hours: "hour(s)"
-    Days: "day(s)"
-    Years: "year(s)"
-    
-    #Use \n to go to the next line (max ~25)
-    BanIp:
-      lines: "&cConnection refused \n \n&4You are permantly ip banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Reason: &e%reason%"
-    
-    Ban:
-      lines: "&cConnection refused \n \n&4You are permantly banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Reason: &e%reason%"
-    
-    TempBan:
-      lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Expiration: &e%expiration% \n&6Reason: &e%reason% \n&6Duration: &e%duration%"
+#Config version 1.2.0
+IP:
+  ShowIpForAdmin: true
+  ShowIpForMod: true
 
+FillInventoryWithGlassPane: false
 
-    Vanish:
-      Enabled: true
-      Ison: "&4Vanish on"
-      Isoff: "&4Vanish off"
-      #Change gamemode when enter in vanish mode
-      #Gamemode 0 to 3
-      ChangeGamemode: true
-      Gamemode: 2
-      #Gamemode after going out of the vanish
-      ExitGamemode: true
-      ExGamemode: 0
-      Fly: true
-    Report:
-      Enabled: true
-      sended: "&eYou have successfuly report &6%player% &efor %reason% &e!"
-      ErrorArg: "&6Usage, /report <player-name>"
-      Disabled: "&6This command is disabled !"
-      Obtain: "&6The player %sender% has report %player% for %reason% !"
-      PlayerNotonline: "&6This player is not online !"
-      Reason:
-        grass: "&6Incorrect skin/name"
-        DiamondSword: "&6Hacks"
-        apple: "&6Cross team"
-        beacon: "&6Others"
-    Menu:
-      RsMenu:
-        GrassBlock: "&6Mutes"
-        DiamondSword: "&6Bans"
-        SkullLore:
-          line1: "&eIP: %ip%"
-          line2: "&eDisplay name: %displayname%"
-          #You can't add more line for the moment
-        Anvil: "&6Ban-ip"
-        Paper: "&6Unbans and Unmutes"
-        Barrier: "&4No Permission"
-        GoBackDoor: "&6Go Back"
-        #You need to add s for second or m for minute or d for day or w for week or y for year
-      Mutes:
-        Bow:
-          Reason: "Spam"
-          Duration: "20min"
-        DiamondSword:
-          Reason: "Flood"
-          Duration: "20min"
-        Anvil:
-          Reason: "Insults"
-          Duration: "30min"
-        RedstoneBlock:
-          Reason: "Provocation"
-          Duration: "30min"
-        ActivatorRail:
-          Reason: "Incitement to crimine"
-          Duration: "1hour"
-        ArmorStand:
-          Reason: "Sanction evading"
-          Duration: "30min"
-        Compass:
-          Reason: "Pub"
-          Duration: "1day"
-        FlintAndSteel:
-          Reason: "Threat"
-          Duration: "1day"
-      Bans:
-        DiamondSword:
-          Reason: "Killaura"
-          Duration: "7day"
-        WoodSword:
-          Reason: "CPS"
-          Duration: "7day"
-        Feather:
-          Reason: "Fly"
-          Duration: "7day"
-        IronBoots:
-          Reason: "Anti knockback"
-          Duration: "7day"
-        GoldAxe:
-          Reason: "Reach"
-          Duration: "7day"
-        ArmorStand:
-          Reason: "Others hacks"
-          Duration: "7day"
-        Tnt:
-          Reason: "Incorrect player name"
-          Duration: "10year"
-        Leather:
-          Reason: "Incorrect skin"
-          Duration: "1day"
-        DiamondChestPlate:
-          Reason: "Other"
-          Duration: "7day"
-        Dirt:
-          Reason: "Incorrect build"
-          Duration: "5day"
-      Banip:
-        NameTag:
-          Reason: "Usurpation"
-        ClayBall:
-          Reason: "Multiple account"
+Seconds: "second(s)"
+Minutes: "minute(s)"
+Hours: "hour(s)"
+Days: "day(s)"
+Years: "year(s)"
+
+#Use \n to go to the next line (max ~25)
+BanIp:
+  lines: "&cConnection refused \n \n&4You are permantly ip banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Reason: &e%reason%"
+
+Ban:
+  lines: "&cConnection refused \n \n&4You are permantly banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Reason: &e%reason%"
+
+TempBan:
+  lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban: &e%date% \n&6By: &e%banner% \n&6Expiration: &e%expiration% \n&6Reason: &e%reason% \n&6Duration: &e%duration%"
+
+Vanish:
+  Enabled: true
+  #Change gamemode when enter in vanish mode
+  #Gamemode 0 to 3
+  ChangeGamemode: true
+  Gamemode: 2
+  #Gamemode after going out of the vanish
+  ExitGamemode: true
+  ExGamemode: 0
+  Fly: true
+Report:
+  Enabled: true
+  Reason:
+    grass: "&6Incorrect skin/name"
+    DiamondSword: "&6Hacks"
+    apple: "&6Cross team"
+    beacon: "&6Others"
+Menu:
+  RsMenu:
+    GrassBlock: "&6Mutes"
+    DiamondSword: "&6Bans"
+    SkullLore:
+      line1: "&eIP: %ip%"
+      line2: "&eDisplay name: %displayname%"
+      #You can't add more line for the moment
+    Anvil: "&6Ban-ip"
+    Paper: "&6Unbans and Unmutes"
+    Barrier: "&4No Permission"
+    GoBackDoor: "&6Go Back"
+    #You need to add s for second or m for minute or d for day or w for week or y for year
+  Mutes:
+    Bow:
+      Reason: "Spam"
+      Duration: "20min"
+    DiamondSword:
+      Reason: "Flood"
+      Duration: "20min"
+    Anvil:
+      Reason: "Insults"
+      Duration: "30min"
+    RedstoneBlock:
+      Reason: "Provocation"
+      Duration: "30min"
+    ActivatorRail:
+      Reason: "Incitement to crimine"
+      Duration: "1hour"
+    ArmorStand:
+      Reason: "Sanction evading"
+      Duration: "30min"
+    Compass:
+      Reason: "Pub"
+      Duration: "1day"
+    FlintAndSteel:
+      Reason: "Threat"
+      Duration: "1day"
+  Bans:
+    DiamondSword:
+      Reason: "Killaura"
+      Duration: "7day"
+    WoodSword:
+      Reason: "CPS"
+      Duration: "7day"
+    Feather:
+      Reason: "Fly"
+      Duration: "7day"
+    IronBoots:
+      Reason: "Anti knockback"
+      Duration: "7day"
+    GoldAxe:
+      Reason: "Reach"
+      Duration: "7day"
+    ArmorStand:
+      Reason: "Others hacks"
+      Duration: "7day"
+    Tnt:
+      Reason: "Incorrect player name"
+      Duration: "10year"
+    Leather:
+      Reason: "Incorrect skin"
+      Duration: "1day"
+    DiamondChestPlate:
+      Reason: "Other"
+      Duration: "7day"
+    Dirt:
+      Reason: "Incorrect build"
+      Duration: "5day"
+  Banip:
+    NameTag:
+      Reason: "Usurpation"
+    ClayBall:
+      Reason: "Multiple account"

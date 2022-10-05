@@ -7,16 +7,10 @@ import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.BanRevoker;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,23 +18,33 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static ReaperSanction instance;
     public static ArrayList<Player> vanished = new ArrayList<>();
-    public static String aaa = "";
-    public FileConfiguration data;
-    public File dfile;
-    public String Preffix = null;
     public HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         instance = this;
-        aaa = Bukkit.getServer().getBukkitVersion();
+        String version = Bukkit.getServer().getBukkitVersion();
         System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("This server is using: " + aaa);
-        setup();
+        System.out.println("This server is using: " + version);
+        System.out.println("Starting configs files...");
+        new ConfigManager();
+        System.out.println("Looking for messages...");
+        new MessageManager();
+        System.out.println("Starting moderation module...");
+        new ApplySanction();
+        Vanish();
+        BanRevoker.CheckForUnban();
+        for (String a : ConfigManager.instance.getData().getConfigurationSection("").getKeys(false)) {
+            if (ConfigManager.instance.getData().getBoolean(a + ".ban-ip.isipbanned")) {
+                ipblocked.put(a, ConfigManager.instance.getData().getString(a + ".ban-ip.ip"));
+            }
+        }
+        System.out.println("Starting listeners...");
         getServer().getPluginManager().registerEvents(new GuiManager(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
+        System.out.println("Starting commands...");
         this.getCommand("vanish").setExecutor(new VanishCmd());
         this.getCommand("report").setExecutor(new ReportCmd());
         this.getCommand("rsadmin").setExecutor(new RsAdminCmd());
@@ -52,18 +56,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("tempmute").setExecutor(new TempMuteCmd());
         this.getCommand("unmute").setExecutor(new UnMuteCmd());
         this.getCommand("unban").setExecutor(new UnBanCmd());
-        new ApplySanction();
-        Vanish();
-        BanRevoker.CheckForUnban();
-        Preffix = getConfig().getString("ReaperSanction.Settings.Prefix.game").replace("&", "§");
 
-        for (String a : getData().getConfigurationSection("").getKeys(false)) {
-            if (getData().getBoolean(a + ".ban-ip.isipbanned")) {
-                ipblocked.put(a, getData().getString(a + ".ban-ip.ip"));
-            }
-        }
-
-        System.out.println("[" + getConfig().getString("ReaperSanction.Settings.Prefix.Inconsole") + "] " + getConfig().getString("ReaperSanction.Settings.StartMessage"));
+        System.out.println("[ReaperSanction] Plugin enabled !");
         System.out.println("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
         System.out.println("-----------------------------------------------------------------------------------------------------");
 
@@ -73,8 +67,12 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("[" + getConfig().getString("ReaperSanction.Settings.Prefix.Inconsole") + "] " + getConfig().getString("ReaperSanction.Settings.StopMessage"));
+        System.out.println("[ReaperSanction] Plugin disabled !");
         System.out.println("-----------------------------------------------------------------------------------------------------");
+    }
+
+    public void reload() {
+        ConfigManager.instance.reloadData();
     }
 
     public void checkForUpdate() {
@@ -94,42 +92,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             }
         });
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);
-    }
-
-    public void setup() {
-        dfile = new File(this.getDataFolder(), "Sanctions.yml");
-
-        if (!dfile.exists()) {
-            try {
-                dfile.createNewFile();
-            } catch (IOException e) {
-                getLogger().info("§c§lError in creation of Sanctions.yml");
-            }
-        }
-
-        data = YamlConfiguration.loadConfiguration(dfile);
-
-    }
-
-    public FileConfiguration getData() {
-        return data;
-    }
-
-    public void reloadData() throws FileNotFoundException, IOException {
-        try {
-            data.load(dfile);
-        } catch (InvalidConfigurationException e) {
-            getLogger().info("§c§lError in reloading data for Sanctions.yml!");
-            e.printStackTrace();
-        }
-    }
-
-    public void saveData() {
-        try {
-            data.save(dfile);
-        } catch (IOException e) {
-            getLogger().info("§c§lError in save for Sanctions.yml!");
-        }
     }
 
 
