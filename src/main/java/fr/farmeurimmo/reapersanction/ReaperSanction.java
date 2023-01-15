@@ -31,6 +31,26 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         new ConfigManager();
         System.out.println("Looking for messages...");
         new MessageManager();
+        System.out.println("Looking for database...");
+
+        //TODO: Config check for method of storage -> MYSQL OR YAML
+        //TODO: Add user object manager to easily get user data and store it in database
+
+        System.out.println("Found MYSQL storage database, trying to connect...");
+
+        String db_url = "jdbc:mysql://192.168.1.53:3306";
+        String db_user = "root";
+        String db_password = "root";
+
+        try {
+            new DatabaseManager(db_url, db_user, db_password);
+        } catch (Exception e) {
+            e.printStackTrace();
+            getLogger().severe("§c§lUnable to connect to the database, disabling plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         System.out.println("Starting moderation module...");
         new ApplySanction();
         Vanish();
@@ -57,7 +77,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("unmute").setExecutor(new UnMuteCmd());
         this.getCommand("unban").setExecutor(new UnBanCmd());
 
-        System.out.println("[ReaperSanction] Plugin enabled !");
+        System.out.println("[ReaperSanction] §aPlugin enabled !");
         System.out.println("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
         System.out.println("-----------------------------------------------------------------------------------------------------");
 
@@ -67,7 +87,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("[ReaperSanction] Plugin disabled !");
+        System.out.println("[ReaperSanction] §cPlugin disabled !");
         System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 
