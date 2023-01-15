@@ -22,7 +22,7 @@ public class ConfigManager {
         setup();
     }
 
-    public void setup() {
+    public void setup_YAML_Storage() {
         dfile = new File(ReaperSanction.instance.getDataFolder(), "Sanctions.yml");
 
         if (!dfile.exists()) {
@@ -34,7 +34,9 @@ public class ConfigManager {
         }
 
         ddata = YamlConfiguration.loadConfiguration(dfile);
+    }
 
+    public void setup() {
         messagesFile = new File(ReaperSanction.instance.getDataFolder(), "Messages.yml");
 
         if (!messagesFile.exists()) {

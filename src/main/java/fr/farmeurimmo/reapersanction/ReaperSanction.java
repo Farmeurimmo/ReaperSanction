@@ -4,8 +4,6 @@ import main.java.fr.farmeurimmo.reapersanction.cmd.*;
 import main.java.fr.farmeurimmo.reapersanction.events.ChatEvent;
 import main.java.fr.farmeurimmo.reapersanction.events.JoinLeaveEvent;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.BanRevoker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -18,6 +16,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static ReaperSanction instance;
     public static ArrayList<Player> vanished = new ArrayList<>();
+    public static String storageMethod = "YAML";
     public HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
@@ -26,44 +25,50 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         instance = this;
         String version = Bukkit.getServer().getBukkitVersion();
         System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("This server is using: " + version);
+        System.out.println("This server is using minecraft : " + version);
+
         System.out.println("Starting configs files...");
         new ConfigManager();
-        System.out.println("Looking for messages...");
-        new MessageManager();
-        System.out.println("Looking for database...");
 
-        //TODO: Config check for method of storage -> MYSQL OR YAML
-        //TODO: Add user object manager to easily get user data and store it in database
+        storageMethod = getConfig().getString("storage.method");
+        if (storageMethod.equalsIgnoreCase("MYSQL")) {
+            System.out.println("Found MYSQL storage database, trying to connect...");
 
-        System.out.println("Found MYSQL storage database, trying to connect...");
+            String db_url = "jdbc:mysql://" + getConfig().getString("storage.MYSQL.host") + ":" + getConfig().getString("storage.MYSQL.port");
+            String db_user = getConfig().getString("storage.MYSQL.username");
+            String db_password = getConfig().getString("storage.MYSQL.password");
 
-        String db_url = "jdbc:mysql://192.168.1.53:3306";
-        String db_user = "root";
-        String db_password = "root";
-
-        try {
-            new DatabaseManager(db_url, db_user, db_password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            getLogger().severe("§c§lUnable to connect to the database, disabling plugin...");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+            try {
+                new DatabaseManager(db_url, db_user, db_password);
+            } catch (Exception e) {
+                e.printStackTrace();
+                getLogger().severe("§c§lUnable to connect to the database, disabling plugin...");
+                Bukkit.getPluginManager().disablePlugin(this);
+                return;
+            }
+        } else {
+            System.out.println("Found YAML storage method, starting it...");
+            ConfigManager.instance.setup_YAML_Storage();
         }
 
         System.out.println("Starting moderation module...");
-        new ApplySanction();
+        //TODO: Add user object manager to easily get user data and store it in database
+        /*new ApplySanction();
         Vanish();
         BanRevoker.CheckForUnban();
         for (String a : ConfigManager.instance.getData().getConfigurationSection("").getKeys(false)) {
             if (ConfigManager.instance.getData().getBoolean(a + ".ban-ip.isipbanned")) {
                 ipblocked.put(a, ConfigManager.instance.getData().getString(a + ".ban-ip.ip"));
             }
-        }
+        }*/
+        System.out.println("Looking for messages...");
+        new MessageManager();
+
         System.out.println("Starting listeners...");
         getServer().getPluginManager().registerEvents(new GuiManager(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
+
         System.out.println("Starting commands...");
         this.getCommand("vanish").setExecutor(new VanishCmd());
         this.getCommand("report").setExecutor(new ReportCmd());
@@ -77,7 +82,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("unmute").setExecutor(new UnMuteCmd());
         this.getCommand("unban").setExecutor(new UnBanCmd());
 
-        System.out.println("[ReaperSanction] §aPlugin enabled !");
+        System.out.println("[ReaperSanction] Plugin enabled !");
         System.out.println("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
         System.out.println("-----------------------------------------------------------------------------------------------------");
 
@@ -87,7 +92,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("[ReaperSanction] §cPlugin disabled !");
+        System.out.println("[ReaperSanction] Plugin disabled !");
         System.out.println("-----------------------------------------------------------------------------------------------------");
     }
 

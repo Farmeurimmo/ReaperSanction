@@ -19,6 +19,7 @@ public class DatabaseManager {
 
         try {
             connection = getConnection();
+            System.out.println("§a§lSuccessfully connected to the database !");
         } catch (SQLException e) {
             throw new Exception("Unable to connect to the database");
         }
