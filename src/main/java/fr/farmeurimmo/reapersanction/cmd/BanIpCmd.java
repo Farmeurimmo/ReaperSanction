@@ -2,7 +2,7 @@ package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
@@ -37,7 +37,7 @@ public class BanIpCmd implements CommandExecutor {
                         .replace("%reason%", reason));
             }
             Date Mydate = new Date(System.currentTimeMillis());
-            ApplySanction.instance.ApplyPermaBanIp(p, reason, sender.getName(),
+            SanctionApplier.instance.ApplyPermaBanIp(p, reason, sender.getName(),
                     TimeConverter.getFormatTimeWithTZ(Mydate));
             Bukkit.getBanList(Type.IP).addBan(p.getAddress().getHostName(), reason,
                     null, sender.getName());
@@ -56,7 +56,7 @@ public class BanIpCmd implements CommandExecutor {
                         .replace("%reason%", reason));
             }
             Date Mydate = new Date(System.currentTimeMillis());
-            ApplySanction.instance.ApplyPermaBanIp(p, reason, sender.getName(),
+            SanctionApplier.instance.ApplyPermaBanIp(p, reason, sender.getName(),
                     TimeConverter.getFormatTimeWithTZ(Mydate));
         }
         return true;

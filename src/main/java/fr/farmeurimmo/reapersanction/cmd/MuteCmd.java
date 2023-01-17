@@ -1,7 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,29 +20,25 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorMuteArg"));
-        } else if (args.length == 1) {
-            if (Bukkit.getPlayer(args[0]) != null) {
-                Player p = Bukkit.getPlayer(args[0]);
-                String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
-                ApplySanction.instance.ApplyPermaMute(p.getName(), reason.trim(), sender.getName(), sender);
-            } else {
-                sender.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("InvalidPlayer"));
-            }
-        } else {
-            if (Bukkit.getPlayer(args[0]) != null) {
-                Player p = Bukkit.getPlayer(args[0]);
-                StringBuilder sb = new StringBuilder();
-                for (String s : args) {
-                    sb.append(s).append(' ');
-                }
-                String reason = sb.toString().replace(args[0] + " ", "").trim();
-                ApplySanction.instance.ApplyPermaMute(p.getName(), reason, sender.getName(), sender);
-            } else {
-                sender.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("InvalidPlayer"));
-            }
+            return false;
         }
+        Player p = Bukkit.getPlayer(args[0]);
+        if (p == null) {
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("InvalidPlayer"));
+            return false;
+        }
+        if (args.length == 1) {
+            String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
+            SanctionApplier.instance.ApplyPermaMute(p, reason.trim(), sender.getName(), sender);
+            return false;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : args) {
+            sb.append(s).append(' ');
+        }
+        String reason = sb.toString().replace(args[0] + " ", "").trim();
+        SanctionApplier.instance.ApplyPermaMute(p, reason, sender.getName(), sender);
         return false;
     }
 

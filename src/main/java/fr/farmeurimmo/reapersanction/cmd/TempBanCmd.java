@@ -2,7 +2,7 @@ package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -79,8 +79,7 @@ public class TempBanCmd implements CommandExecutor {
                                         .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)")));
                     }
                     Date Mydate = new Date(System.currentTimeMillis());
-                    ApplySanction.instance.ApplyTempBan(args[0], reason, sender,
-                            TimeConverter.getFormatTimeWithTZ(Mydate), endDate.format(formatter), args[1].replace(type, ""),
+                    SanctionApplier.instance.ApplyTempBan(p, reason, sender, args[1].replace(type, ""),
                             type);
                 } else {
                     sender.sendMessage(MessageManager.prefix +

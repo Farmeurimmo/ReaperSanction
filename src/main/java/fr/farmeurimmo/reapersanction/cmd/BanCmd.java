@@ -2,7 +2,7 @@ package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.ApplySanction;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -32,8 +32,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason.trim()));
             }
-            ApplySanction.instance.ApplyPermaBan(p, reason, sender.getName(),
-                    TimeConverter.getFormatTimeWithTZ(Mydate));
+            SanctionApplier.instance.ApplyPermaBan(p, reason, sender.getName());
         } else {
             if (Bukkit.getPlayer(args[0]) != null) {
                 Player p = Bukkit.getPlayer(args[0]);
@@ -50,8 +49,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                             .replace("%reason%", reason));
                 }
                 Date Mydate = new Date(System.currentTimeMillis());
-                ApplySanction.instance.ApplyPermaBan(p, reason, sender.getName(),
-                        TimeConverter.getFormatTimeWithTZ(Mydate));
+                SanctionApplier.instance.ApplyPermaBan(p, reason, sender.getName());
             } else {
                 sender.sendMessage(MessageManager.prefix +
                         MessageManager.instance.getMessage("InvalidPlayer"));

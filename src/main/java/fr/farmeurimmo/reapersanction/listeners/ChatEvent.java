@@ -1,4 +1,4 @@
-package main.java.fr.farmeurimmo.reapersanction.events;
+package main.java.fr.farmeurimmo.reapersanction.listeners;
 
 import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;

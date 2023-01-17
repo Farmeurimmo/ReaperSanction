@@ -1,9 +1,11 @@
-package main.java.fr.farmeurimmo.reapersanction.events;
+package main.java.fr.farmeurimmo.reapersanction.listeners;
 
 import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.BanRevoker;
+import main.java.fr.farmeurimmo.reapersanction.users.User;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +23,8 @@ public class JoinLeaveEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void AsyncPlayer(AsyncPlayerPreLoginEvent e) {
+        User user = UsersManager.instance.getUserAndCreateIfNotExists(e.getUniqueId(), e.getName());
+        user.setIp(e.getAddress().getHostAddress());
         String ip = e.getAddress().getHostAddress();
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         if (ReaperSanction.instance.ipblocked.containsKey(partialIp)) {
@@ -99,6 +103,7 @@ public class JoinLeaveEvent implements Listener {
     @EventHandler
     public void OnLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        User user = UsersManager.instance.getUser(player.getUniqueId());
         if (ReaperSanction.vanished.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             ReaperSanction.vanished.remove(player);

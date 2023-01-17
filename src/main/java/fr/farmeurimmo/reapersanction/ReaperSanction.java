@@ -1,9 +1,10 @@
 package main.java.fr.farmeurimmo.reapersanction;
 
 import main.java.fr.farmeurimmo.reapersanction.cmd.*;
-import main.java.fr.farmeurimmo.reapersanction.events.ChatEvent;
-import main.java.fr.farmeurimmo.reapersanction.events.JoinLeaveEvent;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
+import main.java.fr.farmeurimmo.reapersanction.listeners.ChatEvent;
+import main.java.fr.farmeurimmo.reapersanction.listeners.JoinLeaveEvent;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -29,6 +30,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
         System.out.println("Starting configs files...");
         new ConfigManager();
+
+        System.out.println("Starting users manager...");
+        new UsersManager();
 
         storageMethod = getConfig().getString("storage.method");
         if (storageMethod.equalsIgnoreCase("MYSQL")) {
@@ -61,6 +65,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 ipblocked.put(a, ConfigManager.instance.getData().getString(a + ".ban-ip.ip"));
             }
         }*/
+        UsersManager.instance.checkForOnlinePlayersIfTheyAreUsers();
+
         System.out.println("Looking for messages...");
         new MessageManager();
 
