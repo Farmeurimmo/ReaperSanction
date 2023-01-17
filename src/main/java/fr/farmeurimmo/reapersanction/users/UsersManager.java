@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
+import main.java.fr.farmeurimmo.reapersanction.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,6 +40,7 @@ public class UsersManager {
     public User getUserAndCreateIfNotExists(UUID uuid, String name) {
         User user = getUser(uuid);
         if (user == null) user = createUser(uuid, name);
+        DatabaseManager.instance.createUser(user);
         return user;
     }
 }

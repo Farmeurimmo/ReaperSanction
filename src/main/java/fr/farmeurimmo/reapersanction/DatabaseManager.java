@@ -1,5 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction;
 
+import main.java.fr.farmeurimmo.reapersanction.users.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,11 +28,19 @@ public class DatabaseManager {
 
         connection.prepareStatement("CREATE DATABASE IF NOT EXISTS reapersanction").executeUpdate();
         connection.prepareStatement("USE reapersanction").executeUpdate();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS users (uuid VARCHAR(36) primary key, mute JSON, ban JSON, history JSON)").executeUpdate();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS users (uuid VARCHAR(36) primary key, name VARCHAR(24), mutedAt BIGINT, mutedUntil BIGINT, mutedFor LONGTEXT," +
+                "mutedBy VARCHAR(24), bannedUntil BIGINT, bannedAt BIGINT, bannedBy VARCHAR(24), bannedFor LONGTEXT, ipBanned BOOL, ip VARCHAR(32), history JSON)").executeUpdate();
     }
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(host, user, password);
     }
 
+    public void createUser(User user) {
+        // TODO
+    }
+
+    public void updatePlayer(User user) {
+
+    }
 }
