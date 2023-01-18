@@ -14,6 +14,8 @@ public class UsersManager {
 
     public UsersManager() {
         instance = this;
+
+        users = DatabaseManager.instance.getUsers();
     }
 
     public void checkForOnlinePlayersIfTheyAreUsers() {
@@ -28,19 +30,28 @@ public class UsersManager {
                 return user;
             }
         }
+        return DatabaseManager.instance.getUser(uuid);
+    }
+
+    public User getUser(String name) {
+        for (User user : users) {
+            if (user.getName().equals(name)) {
+                return user;
+            }
+        }
         return null;
     }
 
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);
+        DatabaseManager.instance.createUser(user);
         return user;
     }
 
     public User getUserAndCreateIfNotExists(UUID uuid, String name) {
         User user = getUser(uuid);
         if (user == null) user = createUser(uuid, name);
-        DatabaseManager.instance.createUser(user);
         return user;
     }
 }

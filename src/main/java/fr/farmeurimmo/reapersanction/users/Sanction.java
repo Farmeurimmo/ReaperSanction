@@ -2,20 +2,28 @@ package main.java.fr.farmeurimmo.reapersanction.users;
 
 public class Sanction {
 
+    private int type;
     private String reason;
     private String by;
     private long at;
     private long until;
     private boolean isBan;
     private boolean isIp;
+    private String duration;
 
-    public Sanction(String reason, String by, long at, long until, boolean isBan, boolean isIp) {
+    public Sanction(int type, String reason, String by, long at, long until, boolean isBan, boolean isIp, String duration) {
+        this.type = type;
         this.reason = reason;
         this.by = by;
         this.at = at;
         this.until = until;
         this.isBan = isBan;
         this.isIp = isIp;
+        this.duration = duration;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public String getReason() {
@@ -40,5 +48,9 @@ public class Sanction {
 
     public boolean isIp() {
         return isIp;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 }

@@ -59,7 +59,8 @@ public class ConfigManager {
     }
 
     public String getFromConfigFormatted(String key) {
-        return getConfig().getString(key).replace("&", "§");
+        String toReturn = getConfig().getString(key);
+        return (toReturn == null) ? "" : toReturn.replace("&", "§");
     }
 
     public void reloadData() {

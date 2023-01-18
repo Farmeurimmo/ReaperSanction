@@ -1,7 +1,9 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.MuteRevoker;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
+import main.java.fr.farmeurimmo.reapersanction.users.User;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,10 +21,16 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorUnBanArg"));
-        } else {
-            MuteRevoker.revokepermamute(args[0], sender);
+                    MessageManager.instance.getMessage("ErrorUnMuteArg"));
+            return false;
         }
+        User user = UsersManager.instance.getUser(args[0]);
+        if (user == null) {
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("InvalidPlayer"));
+            return false;
+        }
+        SanctionRevoker.instance.revokeMuteAdmin(user, sender);
         return false;
     }
 

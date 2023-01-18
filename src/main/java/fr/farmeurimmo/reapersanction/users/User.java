@@ -1,9 +1,13 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
+import main.java.fr.farmeurimmo.reapersanction.DatabaseManager;
+
 import java.util.LinkedList;
 import java.util.UUID;
 
 public class User {
+
+    private final static String separator = "§";
 
     private final UUID uuid;
     private final String name;
@@ -11,11 +15,13 @@ public class User {
     private String mutedReason;
     private String mutedBy;
     private long mutedAt;
+    private String mutedDuration;
     private long bannedUntil;
     private String bannedReason;
     private String bannedBy;
     private long bannedAt;
     private boolean isIpBanned;
+    private String bannedDuration;
     private String ip;
     private LinkedList<Sanction> history;
 
@@ -25,28 +31,44 @@ public class User {
      * > 0 means the sanction will be removed at the given time
      */
 
-    public User(UUID uuid, String name, long mutedUntil, String mutedReason, String mutedBy, long mutedAt, long bannedUntil, String bannedReason, String bannedBy, long bannedAt, boolean isIpBanned, String ip, LinkedList<Sanction> history) {
+    public User(UUID uuid, String name) {
+        this.uuid = uuid;
+        this.name = name;
+        this.mutedUntil = 0;
+        this.mutedReason = null;
+        this.mutedBy = null;
+        this.mutedAt = 0;
+        this.mutedDuration = null;
+        this.bannedUntil = 0;
+        this.bannedReason = null;
+        this.bannedBy = null;
+        this.bannedAt = 0;
+        this.isIpBanned = false;
+        this.bannedDuration = null;
+        this.ip = null;
+        this.history = new LinkedList<>();
+    }
+
+    public User(UUID uuid, String name, long mutedUntil, String mutedReason, String mutedBy, long mutedAt, String mutedDuration, long bannedUntil, String bannedReason, String bannedBy, long bannedAt, boolean isIpBanned, String bannedDuration, String ip, LinkedList<Sanction> history) {
         this.uuid = uuid;
         this.name = name;
         this.mutedUntil = mutedUntil;
         this.mutedReason = mutedReason;
         this.mutedBy = mutedBy;
         this.mutedAt = mutedAt;
+        this.mutedDuration = mutedDuration;
         this.bannedUntil = bannedUntil;
         this.bannedReason = bannedReason;
         this.bannedBy = bannedBy;
         this.bannedAt = bannedAt;
         this.isIpBanned = isIpBanned;
+        this.bannedDuration = bannedDuration;
         this.ip = ip;
         this.history = history;
     }
 
-    public User(UUID uuid, String name) {
-        this(uuid, name, 0, null, null, 0, 0, null, null, 0, false, null, new LinkedList<>());
-    }
-
     public void requestUserUpdate() {
-
+        DatabaseManager.instance.updatePlayer(this);
     }
 
     public UUID getUuid() {
@@ -191,5 +213,21 @@ public class User {
 
     public boolean hasHistory() {
         return !this.history.isEmpty();
+    }
+
+    public String getMutedDuration() {
+        return mutedDuration;
+    }
+
+    public void setMutedDuration(String mutedDuration) {
+        this.mutedDuration = mutedDuration;
+    }
+
+    public String getBannedDuration() {
+        return bannedDuration;
+    }
+
+    public void setBannedDuration(String bannedDuration) {
+        this.bannedDuration = bannedDuration;
     }
 }

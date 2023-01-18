@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.sanctions;
 
+import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
@@ -19,13 +20,14 @@ public class SanctionApplier {
 
     public void ApplyPermaBan(Player player, String reason, String banner) {
         User user = UsersManager.instance.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
-        Sanction sanction = new Sanction(reason, banner, System.currentTimeMillis(), -1, true, false);
+        Sanction sanction = new Sanction(1, reason, banner, System.currentTimeMillis(), -1, true, false, "Permanent");
         user.setBannedAt(sanction.getAt());
         user.setBannedUntil(sanction.getUntil());
         user.setBannedBy(sanction.getBy());
         user.setBannedReason(sanction.getReason());
         user.setIpBanned(sanction.isIp());
         user.setIp(player.getAddress().getAddress().getHostAddress());
+        user.setBannedDuration(sanction.getDuration());
         user.addSanction(sanction);
         user.requestUserUpdate();
 
@@ -40,13 +42,14 @@ public class SanctionApplier {
         ReaperSanction.instance.ipblocked.put(partialIp, player.getName());*/
 
         User user = UsersManager.instance.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
-        Sanction sanction = new Sanction(reason, banner, System.currentTimeMillis(), -1, true, true);
+        Sanction sanction = new Sanction(0, reason, banner, System.currentTimeMillis(), -1, true, true, "Permanent");
         user.setBannedUntil(sanction.getUntil());
         user.setBannedBy(sanction.getBy());
         user.setBannedReason(sanction.getReason());
         user.setBannedAt(sanction.getAt());
         user.setIpBanned(sanction.isIp());
         user.setIp(player.getAddress().getAddress().getHostAddress());
+        user.setBannedDuration(sanction.getDuration());
         user.addSanction(sanction);
         user.requestUserUpdate();
 
@@ -61,22 +64,33 @@ public class SanctionApplier {
         if (user.isPermaBan()) {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("AlreadyBanned"));
+            return;
         }
         long timemillis = getDurationFromType(duration, type);
 
-        Sanction sanction = new Sanction(reason, sender.getName(), System.currentTimeMillis(), timemillis, false, false);
+        duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
+                .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
+        Sanction sanction = new Sanction(2, reason, sender.getName(), System.currentTimeMillis(), timemillis, true, false, duration);
         user.setBannedBy(sanction.getBy());
         user.setBannedUntil(sanction.getUntil());
-        user.setBannedReason(sanction.getReason());
         user.setBannedAt(sanction.getAt());
         user.setIpBanned(sanction.isIp());
+        user.setBannedReason(sanction.getReason());
         user.setIp(player.getAddress().getAddress().getHostAddress());
+        user.setBannedDuration(sanction.getDuration());
         user.addSanction(sanction);
         user.requestUserUpdate();
 
         Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
                         + MessageManager.instance.getMessage("PlayerGotTempBan"),
                 duration, type, player.getName(), sender.getName(), reason));
+
+        player.kickPlayer(ConfigManager.instance.getFromConfigFormatted("TempBan.lines")
+                .replace("%banner%", sanction.getBy())
+                .replace("%date%", TimeConverter.getDateFormatted(sanction.getAt()))
+                .replace("%reason%", reason)
+                .replace("%expiration%", TimeConverter.getDateFormatted(sanction.getUntil()))
+                .replace("%duration%", sanction.getDuration()));
     }
 
     public void ApplyTempMute(Player player, String reason, CommandSender sender, String duration, String type) {
@@ -87,12 +101,15 @@ public class SanctionApplier {
             return;
         }
         long timemillis = getDurationFromType(duration, type);
-        Sanction sanction = new Sanction(reason, sender.getName(), System.currentTimeMillis(), timemillis, false, false);
+        duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
+                .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
+        Sanction sanction = new Sanction(4, reason, sender.getName(), System.currentTimeMillis(), timemillis, false, false, duration);
         user.setMutedBy(sanction.getBy());
         user.setMutedUntil(sanction.getUntil());
         user.setMutedReason(sanction.getReason());
         user.setMutedAt(sanction.getAt());
         user.setIpBanned(sanction.isIp());
+        user.setMutedDuration(sanction.getDuration());
         user.setIp(player.getAddress().getAddress().getHostAddress());
         user.addSanction(sanction);
         user.requestUserUpdate();
@@ -108,12 +125,13 @@ public class SanctionApplier {
 
     public void ApplyPermaMute(Player player, String reason, String banner, CommandSender sender) {
         User user = UsersManager.instance.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
-        Sanction sanction = new Sanction(reason, banner, System.currentTimeMillis(), -1, false, false);
+        Sanction sanction = new Sanction(3, reason, banner, System.currentTimeMillis(), -1, false, false, "Permanent");
         user.setMutedUntil(sanction.getUntil());
         user.setMutedBy(sanction.getBy());
-        user.setMutedReason(sanction.getReason());
         user.setMutedAt(sanction.getAt());
+        user.setMutedReason(sanction.getReason());
         user.setIpBanned(sanction.isIp());
+        user.setMutedDuration(sanction.getDuration());
         user.setIp(player.getAddress().getAddress().getHostAddress());
         user.addSanction(sanction);
         user.requestUserUpdate();

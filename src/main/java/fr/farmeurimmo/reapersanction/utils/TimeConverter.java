@@ -25,4 +25,8 @@ public class TimeConverter {
                 .replaceAll("%reason%", reason.trim());
         return toReplace;
     }
+
+    public static String getDateFormatted(long time) {
+        return getFormatTimeWithTZ(new Date(time));
+    }
 }

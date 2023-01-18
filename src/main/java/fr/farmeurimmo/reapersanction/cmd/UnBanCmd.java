@@ -1,7 +1,9 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.sanctions.BanRevoker;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
+import main.java.fr.farmeurimmo.reapersanction.users.User;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,9 +22,15 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorUnBanArg"));
-        } else {
-            BanRevoker.UnTempBan(args[0], sender);
+            return false;
         }
+        User user = UsersManager.instance.getUser(args[0]);
+        if (user == null) {
+            sender.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("InvalidPlayer"));
+            return false;
+        }
+        SanctionRevoker.instance.revokeBanAdmin(user, sender);
         return false;
     }
 

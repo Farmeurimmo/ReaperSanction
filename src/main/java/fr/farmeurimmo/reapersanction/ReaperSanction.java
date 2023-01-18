@@ -4,6 +4,8 @@ import main.java.fr.farmeurimmo.reapersanction.cmd.*;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
 import main.java.fr.farmeurimmo.reapersanction.listeners.ChatEvent;
 import main.java.fr.farmeurimmo.reapersanction.listeners.JoinLeaveEvent;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,9 +33,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         System.out.println("Starting configs files...");
         new ConfigManager();
 
-        System.out.println("Starting users manager...");
-        new UsersManager();
-
         storageMethod = getConfig().getString("storage.method");
         if (storageMethod.equalsIgnoreCase("MYSQL")) {
             System.out.println("Found MYSQL storage database, trying to connect...");
@@ -55,11 +54,15 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             ConfigManager.instance.setup_YAML_Storage();
         }
 
+        System.out.println("Starting users manager...");
+        new UsersManager();
+
         System.out.println("Starting moderation module...");
         //TODO: Add user object manager to easily get user data and store it in database
-        /*new ApplySanction();
+        new SanctionApplier();
+        new SanctionRevoker();
         Vanish();
-        BanRevoker.CheckForUnban();
+        /*BanRevoker.CheckForUnban();
         for (String a : ConfigManager.instance.getData().getConfigurationSection("").getKeys(false)) {
             if (ConfigManager.instance.getData().getBoolean(a + ".ban-ip.isipbanned")) {
                 ipblocked.put(a, ConfigManager.instance.getData().getString(a + ".ban-ip.ip"));

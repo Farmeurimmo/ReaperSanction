@@ -1,13 +1,17 @@
 package main.java.fr.farmeurimmo.reapersanction;
 
+import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.UUID;
 
 public class DatabaseManager {
 
+    private static final String separator = "§";
+    private static final String separator_G = "§§";
     public static DatabaseManager instance;
     private final String host, user, password;
     public Connection connection;
@@ -28,8 +32,9 @@ public class DatabaseManager {
 
         connection.prepareStatement("CREATE DATABASE IF NOT EXISTS reapersanction").executeUpdate();
         connection.prepareStatement("USE reapersanction").executeUpdate();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS users (uuid VARCHAR(36) primary key, name VARCHAR(24), mutedAt BIGINT, mutedUntil BIGINT, mutedFor LONGTEXT," +
-                "mutedBy VARCHAR(24), bannedUntil BIGINT, bannedAt BIGINT, bannedBy VARCHAR(24), bannedFor LONGTEXT, ipBanned BOOL, ip VARCHAR(32), history JSON)").executeUpdate();
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS users (uuid VARCHAR(36) primary key, name VARCHAR(24), mutedAt BIGINT, mutedUntil BIGINT, " +
+                "mutedFor LONGTEXT, mutedBy VARCHAR(24), mutedDuration LONGTEXT, bannedUntil BIGINT, bannedAt BIGINT, bannedBy VARCHAR(24), bannedFor LONGTEXT, ipBanned BOOL, " +
+                "bannedDuration LONGTEXT, ip VARCHAR(32), history LONGTEXT)").executeUpdate();
     }
 
     public Connection getConnection() throws SQLException {
@@ -37,10 +42,128 @@ public class DatabaseManager {
     }
 
     public void createUser(User user) {
-        // TODO
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO users (uuid, name, mutedAt, mutedUntil, mutedFor, mutedBy, mutedDuration, bannedUntil, bannedAt, bannedBy, bannedFor, ipBanned, bannedDuration, ip, history) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            statement.setString(1, user.getUuid().toString());
+            statement.setString(2, user.getName());
+            statement.setLong(3, user.getMutedAt());
+            statement.setLong(4, user.getMutedUntil());
+            statement.setString(5, user.getMutedReason());
+            statement.setString(6, user.getMutedBy());
+            statement.setString(7, user.getMutedDuration());
+            statement.setLong(8, user.getBannedUntil());
+            statement.setLong(9, user.getBannedAt());
+            statement.setString(10, user.getBannedBy());
+            statement.setString(11, user.getBannedReason());
+            statement.setBoolean(12, user.isIpBanned());
+            statement.setString(13, user.getBannedDuration());
+            statement.setString(14, user.getIp());
+            statement.setString(15, getHistoryAsString(user.getHistory()));
+
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updatePlayer(User user) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE users SET name = ?, mutedAt = ?, mutedUntil = ?, mutedFor = ?, mutedBy = ?, mutedDuration = ?, bannedUntil = ?, bannedAt = ?, bannedBy = ?, bannedFor = ?, ipBanned = ?, bannedDuration = ?, ip = ?, history = ? WHERE uuid = ?");
+            statement.setString(1, user.getName());
+            statement.setLong(2, user.getMutedAt());
+            statement.setLong(3, user.getMutedUntil());
+            statement.setString(4, user.getMutedReason());
+            statement.setString(5, user.getMutedBy());
+            statement.setString(6, user.getMutedDuration());
+            statement.setLong(7, user.getBannedUntil());
+            statement.setLong(8, user.getBannedAt());
+            statement.setString(9, user.getBannedBy());
+            statement.setString(10, user.getBannedReason());
+            statement.setBoolean(11, user.isIpBanned());
+            statement.setString(12, user.getBannedDuration());
+            statement.setString(13, user.getIp());
+            statement.setString(14, getHistoryAsString(user.getHistory()));
+            statement.setString(15, user.getUuid().toString());
 
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<User> getUsers() {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<User> users = new ArrayList<>();
+
+            while (resultSet.next()) {
+                users.add(new User(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"), resultSet.getLong("mutedUntil"),
+                        resultSet.getString("mutedFor"), resultSet.getString("mutedBy"), resultSet.getLong("mutedAt"),
+                        resultSet.getString("mutedDuration"), resultSet.getLong("bannedUntil"), resultSet.getString("bannedFor"),
+                        resultSet.getString("bannedBy"), resultSet.getLong("bannedAt"), resultSet.getBoolean("ipBanned"),
+                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), getHistoryFromString(resultSet.getString("history"))));
+            }
+
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public User getUser(UUID uuid) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uuid = ?");
+            statement.setString(1, uuid.toString());
+            statement.executeQuery();
+
+            ResultSet resultSet = statement.getResultSet();
+
+            if (resultSet.next()) {
+                return new User(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"), resultSet.getLong("mutedUntil"),
+                        resultSet.getString("mutedFor"), resultSet.getString("mutedBy"), resultSet.getLong("mutedAt"),
+                        resultSet.getString("mutedDuration"), resultSet.getLong("bannedUntil"), resultSet.getString("bannedFor"),
+                        resultSet.getString("bannedBy"), resultSet.getLong("bannedAt"), resultSet.getBoolean("ipBanned"),
+                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), getHistoryFromString(resultSet.getString("history")));
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String sanctionAsString(Sanction sanction) {
+        return sanction.getType() + separator + sanction.getReason() + separator + sanction.getBy() + separator + sanction.getAt() + separator + sanction.getUntil() +
+                separator + sanction.isBan() + separator + sanction.isIp() + separator + sanction.getDuration();
+    }
+
+    public Sanction sanctionFromString(String sanction) {
+        String[] args = sanction.split(separator);
+        return new Sanction(Integer.parseInt(args[0]), args[1], args[2], Long.parseLong(args[3]), Long.parseLong(args[4]), Boolean.parseBoolean(args[5]), Boolean.parseBoolean(args[6]), args[7]);
+    }
+
+    public String getHistoryAsString(LinkedList<Sanction> history) {
+        StringBuilder builder = new StringBuilder();
+        for (Sanction sanction : history) {
+            builder.append(sanctionAsString(sanction)).append(separator_G);
+        }
+        return builder.toString();
+    }
+
+    public LinkedList<Sanction> getHistoryFromString(String history) {
+        LinkedList<Sanction> sanctions = new LinkedList<>();
+        String[] args = history.split(separator_G);
+        for (String sanction : args) {
+            if (sanction == null) continue;
+            if (sanction.isEmpty()) continue;
+            sanctions.add(sanctionFromString(sanction));
+        }
+        return sanctions;
     }
 }
