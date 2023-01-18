@@ -26,7 +26,7 @@ Ban:
   lines: "&cConnection refused \n \n&4You are permantly banned from this server \n\n&6Date of ban : &e%date% \n&6By : &e%banner% \n&6Reason : &e%reason%"
 
 TempBan:
-  lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban : &e%date% \n&6By: &e%banner% \n&6Expiration : &e%expiration% \n&6Reason : &e%reason% \n§6Duration : §e%duration%"
+  lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban : &e%date% \n&6By: &e%banner% \n&6Expiration : &e%expiration% \n&6Reason : &e%reason% \n&6Duration : &e%duration%"
 
 Vanish:
   Enabled: true
