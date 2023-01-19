@@ -1,8 +1,8 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class BanIpCmd implements CommandExecutor {
             String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
             if (p != null & p.isOnline()) {
-                p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+                p.kickPlayer(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason));
@@ -50,7 +50,7 @@ public class BanIpCmd implements CommandExecutor {
             String reason = sb.toString().replace(args[0] + " ", "").trim();
             assert p != null;
             if (p.isOnline()) {
-                p.kickPlayer(ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+                p.kickPlayer(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                         .replace("%reason%", reason));

@@ -6,6 +6,10 @@ import main.java.fr.farmeurimmo.reapersanction.listeners.ChatEvent;
 import main.java.fr.farmeurimmo.reapersanction.listeners.JoinLeaveEvent;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
+import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,31 +35,31 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         System.out.println("This server is using minecraft : " + version);
 
         System.out.println("Starting configs files...");
-        new ConfigManager();
+        new FilesManager();
+        new LocalStorageManager();
+
+        System.out.println("Starting users manager...");
+        new UsersManager();
 
         storageMethod = getConfig().getString("storage.method");
         if (storageMethod.equalsIgnoreCase("MYSQL")) {
             System.out.println("Found MYSQL storage database, trying to connect...");
 
-            String db_url = "jdbc:mysql://" + getConfig().getString("storage.MYSQL.host") + ":" + getConfig().getString("storage.MYSQL.port");
-            String db_user = getConfig().getString("storage.MYSQL.username");
-            String db_password = getConfig().getString("storage.MYSQL.password");
+            getCredentialsAndInitialize();
 
             try {
-                new DatabaseManager(db_url, db_user, db_password);
+                DatabaseManager.instance.startConnection();
+                DatabaseManager.instance.loadUsers();
             } catch (Exception e) {
                 e.printStackTrace();
-                getLogger().severe("§c§lUnable to connect to the database, disabling plugin...");
-                Bukkit.getPluginManager().disablePlugin(this);
+                getLogger().severe("§c§lUnable to connect to the database, stopping server...");
+                Bukkit.shutdown();
                 return;
             }
         } else {
             System.out.println("Found YAML storage method, starting it...");
-            ConfigManager.instance.setup_YAML_Storage();
+            LocalStorageManager.instance.setup();
         }
-
-        System.out.println("Starting users manager...");
-        new UsersManager();
 
         System.out.println("Starting moderation module...");
         //TODO: Add user object manager to easily get user data and store it in database
@@ -106,7 +110,19 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     }
 
     public void reload() {
-        ConfigManager.instance.reloadData();
+        FilesManager.instance.reloadData();
+    }
+
+    public void getCredentialsAndInitialize() {
+        String db_url = "jdbc:mysql://" + getConfig().getString("storage.MYSQL.host") + ":" + getConfig().getString("storage.MYSQL.port");
+        String db_user = getConfig().getString("storage.MYSQL.username");
+        String db_password = getConfig().getString("storage.MYSQL.password");
+
+        new DatabaseManager(db_url, db_user, db_password);
+    }
+
+    public boolean matchRequirementsToMigrateToMYSQL() {
+        return getConfig().getString("storage.method").equalsIgnoreCase("MYSQL");
     }
 
     public void checkForUpdate() {

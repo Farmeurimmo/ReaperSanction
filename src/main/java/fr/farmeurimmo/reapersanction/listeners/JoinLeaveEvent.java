@@ -1,9 +1,9 @@
 package main.java.fr.farmeurimmo.reapersanction.listeners;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import main.java.fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -27,28 +27,28 @@ public class JoinLeaveEvent implements Listener {
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         SanctionRevoker.instance.checkForSanctionExpiration(user);
         if (ReaperSanction.instance.ipblocked.containsKey(partialIp)) {
-            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
             return;
         }
         if (user.isIpBanned()) {
-            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("BanIp.lines")
+            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
             return;
         }
         if (user.isPermaBan()) {
-            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("Ban.lines")
+            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("Ban.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
             return;
         }
         if (user.isBanned() && !user.isPermaBan()) {
-            e.disallow(Result.KICK_BANNED, ConfigManager.instance.getFromConfigFormatted("TempBan.lines")
+            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("TempBan.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason())

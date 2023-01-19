@@ -1,8 +1,8 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,8 +25,8 @@ public class EndGui {
                     ItemMeta meta = stack.getItemMeta();
                     ((SkullMeta) meta).setOwner(cible);
                     meta.setDisplayName("§6" + cible);
-                    meta.setLore(Arrays.asList(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
-                            ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
                     stack.setItemMeta(meta);
                     inv.setItem(13, stack);
                 } else {
@@ -34,8 +34,8 @@ public class EndGui {
                     ItemMeta meta = stack.getItemMeta();
                     ((SkullMeta) meta).setOwner(cible);
                     meta.setDisplayName("§6" + cible);
-                    meta.setLore(Arrays.asList(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
-                            ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
                     stack.setItemMeta(meta);
                     inv.setItem(13, stack);
                 }
@@ -45,8 +45,8 @@ public class EndGui {
                     ItemMeta meta = stack.getItemMeta();
                     ((SkullMeta) meta).setOwner(cible);
                     meta.setDisplayName("§6" + cible);
-                    meta.setLore(Arrays.asList(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
-                            ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
                     stack.setItemMeta(meta);
                     inv.setItem(13, stack);
                 } else {
@@ -54,8 +54,8 @@ public class EndGui {
                     ItemMeta meta = stack.getItemMeta();
                     ((SkullMeta) meta).setOwner(cible);
                     meta.setDisplayName("§6" + cible);
-                    meta.setLore(Arrays.asList(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
-                            ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
                     stack.setItemMeta(meta);
                     inv.setItem(13, stack);
                 }
@@ -81,13 +81,13 @@ public class EndGui {
 
             ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta customd = custom5.getItemMeta();
-            customd.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom5.setItemMeta(customd);
             inv.setItem(18, custom5);
 
             ItemStack custom6 = new ItemStack(Material.IRON_DOOR, 1);
             ItemMeta custome = custom6.getItemMeta();
-            custome.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+            custome.setDisplayName(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
             custom6.setItemMeta(custome);
             inv.setItem(26, custom6);
 

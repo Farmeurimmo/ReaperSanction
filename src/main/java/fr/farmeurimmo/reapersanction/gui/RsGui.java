@@ -1,7 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,14 +20,14 @@ public class RsGui {
         ItemStack custom1 = new ItemStack(Material.GRASS, 1);
         ItemMeta customS = custom1.getItemMeta();
         customS.setDisplayName(
-                ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.GrassBlock"));
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GrassBlock"));
         custom1.setItemMeta(customS);
         inv.setItem(10, custom1);
 
         ItemStack custom2 = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta customa = custom2.getItemMeta();
         customa.setDisplayName(
-                ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.DiamondSword"));
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.DiamondSword"));
         custom2.setItemMeta(customa);
         inv.setItem(11, custom2);
 
@@ -38,8 +38,8 @@ public class RsGui {
                 ((SkullMeta) meta).setOwner(target);
                 meta.setDisplayName("§6" + target);
                 meta.setLore(Arrays.asList(
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
                 stack.setItemMeta(meta);
                 inv.setItem(13, stack);
             } else {
@@ -48,8 +48,8 @@ public class RsGui {
                 ((SkullMeta) meta).setOwner(target);
                 meta.setDisplayName("§6" + target);
                 meta.setLore(Arrays.asList(
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
                 stack.setItemMeta(meta);
                 inv.setItem(13, stack);
             }
@@ -60,8 +60,8 @@ public class RsGui {
                 ((SkullMeta) meta).setOwner(target);
                 meta.setDisplayName("§6" + target);
                 meta.setLore(Arrays.asList(
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName()),
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", player.getAddress().getHostName())));
                 stack.setItemMeta(meta);
                 inv.setItem(13, stack);
             } else {
@@ -70,8 +70,8 @@ public class RsGui {
                 ((SkullMeta) meta).setOwner(target);
                 meta.setDisplayName("§6" + target);
                 meta.setLore(Arrays.asList(
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
-                        ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled"),
+                        FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", player.getDisplayName()).replace("%ip%", "Disabled")));
                 stack.setItemMeta(meta);
                 inv.setItem(13, stack);
             }
@@ -80,14 +80,14 @@ public class RsGui {
         ItemStack custom3 = new ItemStack(Material.BARRIER, 1);
         ItemMeta customb = custom3.getItemMeta();
         customb.setDisplayName(
-                ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.Barrier"));
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.Barrier"));
         custom3.setItemMeta(customb);
         inv.setItem(15, custom3);
 
         ItemStack custom4 = new ItemStack(Material.BARRIER, 1);
         ItemMeta customc = custom4.getItemMeta();
         customc.setDisplayName(
-                ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.Barrier"));
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.Barrier"));
         custom4.setItemMeta(customc);
         inv.setItem(16, custom4);
 
@@ -96,14 +96,14 @@ public class RsGui {
             ItemStack custom5 = new ItemStack(Material.ANVIL, 1);
             ItemMeta customd = custom5.getItemMeta();
             customd.setDisplayName(
-                    ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.Anvil"));
+                    FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.Anvil"));
             custom5.setItemMeta(customd);
             inv.setItem(15, custom5);
 
             ItemStack custom6 = new ItemStack(Material.PAPER, 1);
             ItemMeta custome = custom6.getItemMeta();
             custome.setDisplayName(
-                    ConfigManager.instance.getFromConfigFormatted("Menu.RsMenu.Paper"));
+                    FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.Paper"));
             custom6.setItemMeta(custome);
             inv.setItem(16, custom6);
 

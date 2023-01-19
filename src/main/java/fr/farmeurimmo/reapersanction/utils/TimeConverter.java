@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.utils;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,11 +15,11 @@ public class TimeConverter {
 
     public static String replaceArgs(String toReplace, String duration, String type, String player, String sender, String reason) {
         toReplace = toReplace.replaceAll("%duration%", duration + " " + type.replaceAll("sec",
-                        ConfigManager.instance.getFromConfigFormatted("Seconds")).replaceAll("min",
-                        ConfigManager.instance.getFromConfigFormatted("Minutes")).replaceAll("hour",
-                        ConfigManager.instance.getFromConfigFormatted("Hours")).replaceAll("day",
-                        ConfigManager.instance.getFromConfigFormatted("Days")).replaceAll("year",
-                        ConfigManager.instance.getFromConfigFormatted("Years")))
+                        FilesManager.instance.getFromConfigFormatted("Seconds")).replaceAll("min",
+                        FilesManager.instance.getFromConfigFormatted("Minutes")).replaceAll("hour",
+                        FilesManager.instance.getFromConfigFormatted("Hours")).replaceAll("day",
+                        FilesManager.instance.getFromConfigFormatted("Days")).replaceAll("year",
+                        FilesManager.instance.getFromConfigFormatted("Years")))
 
                 .replaceAll("%player%", player).replaceAll("%banner%", sender.trim())
                 .replaceAll("%reason%", reason.trim());

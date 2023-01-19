@@ -1,7 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.sanctions;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
@@ -85,7 +85,7 @@ public class SanctionApplier {
                         + MessageManager.instance.getMessage("PlayerGotTempBan"),
                 duration, type, player.getName(), sender.getName(), reason));
 
-        player.kickPlayer(ConfigManager.instance.getFromConfigFormatted("TempBan.lines")
+        player.kickPlayer(FilesManager.instance.getFromConfigFormatted("TempBan.lines")
                 .replace("%banner%", sanction.getBy())
                 .replace("%date%", TimeConverter.getDateFormatted(sanction.getAt()))
                 .replace("%reason%", reason)

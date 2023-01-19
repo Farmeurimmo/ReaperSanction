@@ -1,7 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,13 +17,13 @@ public class ReportGui {
 
         ItemStack custom1 = new ItemStack(Material.GRASS, 1);
         ItemMeta customS = custom1.getItemMeta();
-        customS.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.grass"));
+        customS.setDisplayName(FilesManager.instance.getFromConfigFormatted("Report.Reason.grass"));
         custom1.setItemMeta(customS);
         inv.setItem(10, custom1);
 
         ItemStack custom2 = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta customa = custom2.getItemMeta();
-        customa.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.DiamondSword"));
+        customa.setDisplayName(FilesManager.instance.getFromConfigFormatted("Report.Reason.DiamondSword"));
         custom2.setItemMeta(customa);
         inv.setItem(11, custom2);
 
@@ -36,13 +36,13 @@ public class ReportGui {
 
         ItemStack custom3 = new ItemStack(Material.APPLE, 1);
         ItemMeta customb = custom3.getItemMeta();
-        customb.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.apple"));
+        customb.setDisplayName(FilesManager.instance.getFromConfigFormatted("Report.Reason.apple"));
         custom3.setItemMeta(customb);
         inv.setItem(15, custom3);
 
         ItemStack custom4 = new ItemStack(Material.BEACON, 1);
         ItemMeta customc = custom4.getItemMeta();
-        customc.setDisplayName(ConfigManager.instance.getFromConfigFormatted("Report.Reason.beacon"));
+        customc.setDisplayName(FilesManager.instance.getFromConfigFormatted("Report.Reason.beacon"));
         custom4.setItemMeta(customc);
         inv.setItem(16, custom4);
 

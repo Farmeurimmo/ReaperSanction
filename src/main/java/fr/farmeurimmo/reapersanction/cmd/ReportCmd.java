@@ -1,8 +1,8 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.gui.ReportGui;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,7 +32,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
-                if (ConfigManager.instance.getConfig().getBoolean("Report.Enabled")) {
+                if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
                     ReportGui.MakeReportGui(player, args[0]);
                 } else {
                     player.sendMessage(MessageManager.prefix +

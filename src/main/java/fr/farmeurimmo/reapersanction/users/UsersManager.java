@@ -1,6 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
-import main.java.fr.farmeurimmo.reapersanction.DatabaseManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -10,12 +10,10 @@ import java.util.UUID;
 public class UsersManager {
 
     public static UsersManager instance;
-    public ArrayList<User> users;
+    public ArrayList<User> users = new ArrayList<>();
 
     public UsersManager() {
         instance = this;
-
-        users = DatabaseManager.instance.getUsers();
     }
 
     public void checkForOnlinePlayersIfTheyAreUsers() {

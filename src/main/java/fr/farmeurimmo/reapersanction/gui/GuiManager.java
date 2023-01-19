@@ -1,7 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ConfigManager;
-import main.java.fr.farmeurimmo.reapersanction.MessageManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -100,43 +100,43 @@ public class GuiManager implements Listener {
                 if (player.hasPermission("mod")) {
                     switch (currenttype) {
                         case BOW:
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case DIAMOND_SWORD:
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case ANVIL:
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case REDSTONE_BLOCK:
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             player.closeInventory();
                             break;
                         case ACTIVATOR_RAIL:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case ARMOR_STAND:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case COMPASS:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case FLINT_AND_STEEL:
                             player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Reason"));
+                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:
@@ -156,52 +156,52 @@ public class GuiManager implements Listener {
                     switch (currenttype) {
                         case DIAMOND_SWORD:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case WOOD_SWORD:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case FEATHER:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Duration") + " " + ConfigManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case IRON_BOOTS:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.IronBoots.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.IronBoots.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.IronBoots.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.IronBoots.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case GOLD_AXE:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case ARMOR_STAND:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case TNT:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Tnt.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Tnt.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Tnt.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Tnt.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case LEATHER:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Leather.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Leather.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Leather.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Leather.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case DIAMOND_CHESTPLATE:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case DIRT:
                             player.closeInventory();
-                            player.chat("/tempban " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Dirt.Duration") + " " + ConfigManager.instance.getConfig().getString("Menu.Bans.Dirt.Reason"));
+                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Dirt.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Dirt.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:
@@ -221,12 +221,12 @@ public class GuiManager implements Listener {
                     switch (currenttype) {
                         case NAME_TAG:
                             player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Banip.NameTag.Reason"));
+                            player.chat("/ban-ip " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Banip.NameTag.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         case CLAY_BALL:
                             player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + ConfigManager.instance.getConfig().getString("Menu.Banip.ClayBall.Reason"));
+                            player.chat("/ban-ip " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Banip.ClayBall.Reason"));
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                             break;
                         default:

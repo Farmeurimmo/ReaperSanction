@@ -1,5 +1,6 @@
-package main.java.fr.farmeurimmo.reapersanction;
+package main.java.fr.farmeurimmo.reapersanction.storage;
 
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -17,7 +18,7 @@ public class MessageManager {
         instance = this;
 
         int count = 0;
-        for (String ignored : ConfigManager.instance.messagesData.getKeys(false)) {
+        for (String ignored : FilesManager.instance.messagesData.getKeys(false)) {
             count++;
         }
 
@@ -52,14 +53,14 @@ public class MessageManager {
     }
 
     public void regenConfig() {
-        if (ConfigManager.instance.messagesFile.exists()) {
+        if (FilesManager.instance.messagesFile.exists()) {
             File old = new File(ReaperSanction.instance.getDataFolder(), "OLD-Messages.yml");
             try {
                 if (old.exists()) old.delete();
                 old.createNewFile();
                 FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(old);
-                for (String key : ConfigManager.instance.messagesData.getKeys(false)) {
-                    oldConfig.set(key, ConfigManager.instance.messagesData.get(key));
+                for (String key : FilesManager.instance.messagesData.getKeys(false)) {
+                    oldConfig.set(key, FilesManager.instance.messagesData.get(key));
                 }
                 oldConfig.save(old);
             } catch (Exception e) {
@@ -67,10 +68,10 @@ public class MessageManager {
             }
         }
 
-        for (String key : ConfigManager.instance.messagesData.getKeys(false)) {
-            ConfigManager.instance.messagesData.set(key, null);
+        for (String key : FilesManager.instance.messagesData.getKeys(false)) {
+            FilesManager.instance.messagesData.set(key, null);
         }
-        ConfigManager.instance.saveMessages();
+        FilesManager.instance.saveMessages();
 
         save();
         readFromFile();
@@ -119,17 +120,17 @@ public class MessageManager {
     }
 
     public void readFromFile() {
-        for (String key : ConfigManager.instance.messagesData.getKeys(false)) {
-            messages.put(key, ConfigManager.instance.messagesData.getString(key));
+        for (String key : FilesManager.instance.messagesData.getKeys(false)) {
+            messages.put(key, FilesManager.instance.messagesData.getString(key));
         }
         save();
     }
 
     public void save() {
         for (String key : messages.keySet()) {
-            ConfigManager.instance.messagesData.set(key, messages.get(key));
+            FilesManager.instance.messagesData.set(key, messages.get(key));
         }
-        ConfigManager.instance.saveMessages();
+        FilesManager.instance.saveMessages();
     }
 
 }

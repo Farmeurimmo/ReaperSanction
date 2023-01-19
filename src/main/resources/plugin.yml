@@ -3,6 +3,7 @@ version: 1.3.0
 author: Farmeurimmo
 main: main.java.fr.farmeurimmo.reapersanction.ReaperSanction
 website: https://reaper.farmeurimmo.fr/reapersanction
+description: A plugin to punish players with simple gui
 commands:
   rs:
     description: Open sanctiongui

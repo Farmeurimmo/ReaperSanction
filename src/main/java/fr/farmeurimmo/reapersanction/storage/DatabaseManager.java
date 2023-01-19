@@ -1,28 +1,27 @@
-package main.java.fr.farmeurimmo.reapersanction;
+package main.java.fr.farmeurimmo.reapersanction.storage;
 
-import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.UUID;
 
 public class DatabaseManager {
 
-    private static final String separator = "§";
-    private static final String separator_G = "§§";
     public static DatabaseManager instance;
     private final String host, user, password;
     public Connection connection;
 
-    public DatabaseManager(String host, String user, String password) throws Exception {
+    public DatabaseManager(String host, String user, String password) {
         instance = this;
 
         this.host = host;
         this.user = user;
         this.password = password;
+    }
 
+    public void startConnection() throws Exception {
         try {
             connection = getConnection();
             System.out.println("§a§lSuccessfully connected to the database !");
@@ -44,7 +43,7 @@ public class DatabaseManager {
     public void createUser(User user) {
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO users (uuid, name, mutedAt, mutedUntil, mutedFor, mutedBy, mutedDuration, bannedUntil, bannedAt, bannedBy, bannedFor, ipBanned, bannedDuration, ip, history) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "INSERT IGNORE INTO users (uuid, name, mutedAt, mutedUntil, mutedFor, mutedBy, mutedDuration, bannedUntil, bannedAt, bannedBy, bannedFor, ipBanned, bannedDuration, ip, history) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, user.getUuid().toString());
             statement.setString(2, user.getName());
             statement.setLong(3, user.getMutedAt());
@@ -59,7 +58,7 @@ public class DatabaseManager {
             statement.setBoolean(12, user.isIpBanned());
             statement.setString(13, user.getBannedDuration());
             statement.setString(14, user.getIp());
-            statement.setString(15, getHistoryAsString(user.getHistory()));
+            statement.setString(15, User.getHistoryAsString(user.getHistory()));
 
             statement.execute();
         } catch (SQLException e) {
@@ -84,7 +83,7 @@ public class DatabaseManager {
             statement.setBoolean(11, user.isIpBanned());
             statement.setString(12, user.getBannedDuration());
             statement.setString(13, user.getIp());
-            statement.setString(14, getHistoryAsString(user.getHistory()));
+            statement.setString(14, User.getHistoryAsString(user.getHistory()));
             statement.setString(15, user.getUuid().toString());
 
             statement.executeUpdate();
@@ -93,7 +92,14 @@ public class DatabaseManager {
         }
     }
 
-    public ArrayList<User> getUsers() {
+    public void updateAllUsersFromMigratation() {
+        for (User user : UsersManager.instance.users) {
+            createUser(user);
+            updatePlayer(user);
+        }
+    }
+
+    public void loadUsers() {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
             ResultSet resultSet = statement.executeQuery();
@@ -105,14 +111,13 @@ public class DatabaseManager {
                         resultSet.getString("mutedFor"), resultSet.getString("mutedBy"), resultSet.getLong("mutedAt"),
                         resultSet.getString("mutedDuration"), resultSet.getLong("bannedUntil"), resultSet.getString("bannedFor"),
                         resultSet.getString("bannedBy"), resultSet.getLong("bannedAt"), resultSet.getBoolean("ipBanned"),
-                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), getHistoryFromString(resultSet.getString("history"))));
+                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), User.getHistoryFromString(resultSet.getString("history"))));
             }
 
-            return users;
+            UsersManager.instance.users = users;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<>();
     }
 
     public User getUser(UUID uuid) {
@@ -128,7 +133,7 @@ public class DatabaseManager {
                         resultSet.getString("mutedFor"), resultSet.getString("mutedBy"), resultSet.getLong("mutedAt"),
                         resultSet.getString("mutedDuration"), resultSet.getLong("bannedUntil"), resultSet.getString("bannedFor"),
                         resultSet.getString("bannedBy"), resultSet.getLong("bannedAt"), resultSet.getBoolean("ipBanned"),
-                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), getHistoryFromString(resultSet.getString("history")));
+                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), User.getHistoryFromString(resultSet.getString("history")));
             }
 
             statement.close();
@@ -136,34 +141,5 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public String sanctionAsString(Sanction sanction) {
-        return sanction.getType() + separator + sanction.getReason() + separator + sanction.getBy() + separator + sanction.getAt() + separator + sanction.getUntil() +
-                separator + sanction.isBan() + separator + sanction.isIp() + separator + sanction.getDuration();
-    }
-
-    public Sanction sanctionFromString(String sanction) {
-        String[] args = sanction.split(separator);
-        return new Sanction(Integer.parseInt(args[0]), args[1], args[2], Long.parseLong(args[3]), Long.parseLong(args[4]), Boolean.parseBoolean(args[5]), Boolean.parseBoolean(args[6]), args[7]);
-    }
-
-    public String getHistoryAsString(LinkedList<Sanction> history) {
-        StringBuilder builder = new StringBuilder();
-        for (Sanction sanction : history) {
-            builder.append(sanctionAsString(sanction)).append(separator_G);
-        }
-        return builder.toString();
-    }
-
-    public LinkedList<Sanction> getHistoryFromString(String history) {
-        LinkedList<Sanction> sanctions = new LinkedList<>();
-        String[] args = history.split(separator_G);
-        for (String sanction : args) {
-            if (sanction == null) continue;
-            if (sanction.isEmpty()) continue;
-            sanctions.add(sanctionFromString(sanction));
-        }
-        return sanctions;
     }
 }

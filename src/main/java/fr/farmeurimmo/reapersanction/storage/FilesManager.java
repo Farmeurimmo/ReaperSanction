@@ -1,5 +1,6 @@
-package main.java.fr.farmeurimmo.reapersanction;
+package main.java.fr.farmeurimmo.reapersanction.storage;
 
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -8,15 +9,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
-public class ConfigManager {
+public class FilesManager {
 
-    public static ConfigManager instance;
+    public static FilesManager instance;
     public FileConfiguration ddata;
     public File dfile;
     public FileConfiguration messagesData;
     public File messagesFile;
 
-    public ConfigManager() {
+    public FilesManager() {
         instance = this;
 
         setup();
@@ -61,6 +62,15 @@ public class ConfigManager {
     public String getFromConfigFormatted(String key) {
         String toReturn = getConfig().getString(key);
         return (toReturn == null) ? "" : toReturn.replace("&", "§");
+    }
+
+    public void deleteAndRecreateDataFile() {
+        try {
+            dfile.delete();
+        } catch (Exception e) {
+            ReaperSanction.instance.getLogger().info("§c§lError in deletion of Sanctions.yml");
+        }
+        setup_YAML_Storage();
     }
 
     public void reloadData() {
@@ -118,6 +128,13 @@ public class ConfigManager {
             }
             saveData();
         });
+    }
+
+    public void setAndSaveAsyncDataBlockThread(HashMap<String, Object> values) {
+        for (String key : values.keySet()) {
+            ddata.set(key, values.get(key));
+        }
+        saveData();
     }
 
 }

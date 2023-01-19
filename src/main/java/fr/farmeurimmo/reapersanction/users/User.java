@@ -1,6 +1,8 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
-import main.java.fr.farmeurimmo.reapersanction.DatabaseManager;
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
+import main.java.fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
 
 import java.util.LinkedList;
 import java.util.UUID;
@@ -8,6 +10,7 @@ import java.util.UUID;
 public class User {
 
     private final static String separator = "§";
+    private static final String separator_G = "§§";
 
     private final UUID uuid;
     private final String name;
@@ -67,8 +70,38 @@ public class User {
         this.history = history;
     }
 
+    public static String getHistoryAsString(LinkedList<Sanction> history) {
+        StringBuilder builder = new StringBuilder();
+        for (Sanction sanction : history) {
+            builder.append(sanctionAsString(sanction)).append(separator_G);
+        }
+        return builder.toString();
+    }
+
+    public static LinkedList<Sanction> getHistoryFromString(String history) {
+        LinkedList<Sanction> sanctions = new LinkedList<>();
+        String[] args = history.split(separator_G);
+        for (String sanction : args) {
+            if (sanction == null) continue;
+            if (sanction.isEmpty()) continue;
+            sanctions.add(sanctionFromString(sanction));
+        }
+        return sanctions;
+    }
+
+    public static String sanctionAsString(Sanction sanction) {
+        return sanction.getType() + separator + sanction.getReason() + separator + sanction.getBy() + separator + sanction.getAt() + separator + sanction.getUntil() +
+                separator + sanction.isBan() + separator + sanction.isIp() + separator + sanction.getDuration();
+    }
+
+    public static Sanction sanctionFromString(String sanction) {
+        String[] args = sanction.split(separator);
+        return new Sanction(Integer.parseInt(args[0]), args[1], args[2], Long.parseLong(args[3]), Long.parseLong(args[4]), Boolean.parseBoolean(args[5]), Boolean.parseBoolean(args[6]), args[7]);
+    }
+
     public void requestUserUpdate() {
-        DatabaseManager.instance.updatePlayer(this);
+        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) DatabaseManager.instance.updatePlayer(this);
+        else LocalStorageManager.instance.saveUser(this, true);
     }
 
     public UUID getUuid() {
@@ -163,6 +196,10 @@ public class User {
         return ip;
     }
 
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public LinkedList<Sanction> getHistory() {
         return history;
     }
@@ -201,14 +238,6 @@ public class User {
 
     public boolean isSanctioned() {
         return this.isBanned() || this.isMuted();
-    }
-
-    public boolean isIp() {
-        return this.ip != null;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
     }
 
     public boolean hasHistory() {
