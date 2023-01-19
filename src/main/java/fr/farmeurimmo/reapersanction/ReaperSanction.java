@@ -66,12 +66,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         new SanctionApplier();
         new SanctionRevoker();
         Vanish();
-        /*BanRevoker.CheckForUnban();
-        for (String a : ConfigManager.instance.getData().getConfigurationSection("").getKeys(false)) {
-            if (ConfigManager.instance.getData().getBoolean(a + ".ban-ip.isipbanned")) {
-                ipblocked.put(a, ConfigManager.instance.getData().getString(a + ".ban-ip.ip"));
-            }
-        }*/
         UsersManager.instance.checkForOnlinePlayersIfTheyAreUsers();
 
         System.out.println("Looking for messages...");
@@ -125,20 +119,21 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         return getConfig().getString("storage.method").equalsIgnoreCase("MYSQL");
     }
 
-    public void checkForUpdate() {
+    public void checkForUpdate() {;
         new UpdateChecker(this, 89580).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
                 getLogger().info("§6No update found.");
             } else {
                 getLogger().warning("A new update is available please consider updating if you want to receive support !");
-                getLogger().info("Newest version: " + version);
-                getLogger().info("Your version: " + this.getDescription().getVersion());
-                getLogger().info("Download link: https://www.spigotmc.org/resources/reapersanction.89580/");
+                getLogger().info("Newest version detected at spigot : " + version);
+                getLogger().info("Your version : " + this.getDescription().getVersion());
+                getLogger().info("Download link : https://www.spigotmc.org/resources/reapersanction.89580/");
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.hasPermission("reapersanction.rsadmin")) {
                         player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
                     }
                 }
+                System.out.println("§4§lA new update is available please consider updating if you want to receive support !");
             }
         });
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);
