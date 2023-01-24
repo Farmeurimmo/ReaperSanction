@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.storage;
 
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
@@ -37,11 +38,10 @@ public class LocalStorageManager {
         ArrayList<User> users = new ArrayList<>();
         for (String str : FilesManager.instance.getData().getKeys(false)) {
             if (str == null) continue;
-            String name = str;
             UUID uuid;
-            if (FilesManager.instance.getData().get(name + ".uuid") != null)
-                uuid = UUID.fromString(FilesManager.instance.getData().getString(name + ".uuid"));
-            else uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
+            if (FilesManager.instance.getData().get(str + ".uuid") != null)
+                uuid = UUID.fromString(FilesManager.instance.getData().getString(str + ".uuid"));
+            else uuid = Bukkit.getOfflinePlayer(str).getUniqueId();
             if (uuid == null) continue;
             long mutedUntil = 0;
             long mutedAt = 0;
@@ -55,7 +55,7 @@ public class LocalStorageManager {
                 mutedBy = FilesManager.instance.getData().getString(str + ".tempmute.banner");
                 mutedDuration = FilesManager.instance.getData().getString(str + ".tempmute.duration");
                 mutedType = FilesManager.instance.getData().getString(str + ".tempmute.unit");
-                mutedAt = getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
+                mutedAt = SanctionApplier.instance.getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
             }
             if (FilesManager.instance.getData().getBoolean(str + ".mute.ismuted")) {
                 mutedUntil = -1;
@@ -79,7 +79,7 @@ public class LocalStorageManager {
                 bannedBy = FilesManager.instance.getData().getString(str + ".tempban.banner");
                 bannedDuration = FilesManager.instance.getData().getString(str + ".tempban.duration");
                 bannedType = FilesManager.instance.getData().getString(str + ".tempban.unit");
-                bannedAt = getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
+                bannedAt = SanctionApplier.instance.getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
             }
             if (FilesManager.instance.getData().getBoolean(str + ".ban.isbanned")) {
                 bannedUntil = 0;
@@ -102,7 +102,7 @@ public class LocalStorageManager {
             LinkedList<Sanction> history = new LinkedList<>();
             bannedDuration += bannedType;
 
-            users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
+            users.add(new User(uuid, str, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
         }
         return users;
     }
@@ -112,15 +112,6 @@ public class LocalStorageManager {
         FilesManager.instance.deleteAndRecreateDataFile();
         UsersManager.instance.users = users;
         saveAllUsers(true);
-    }
-
-    public long getMillisOfEmission(long until, String duration, String type) {
-        if (type.equalsIgnoreCase("sec")) until += Integer.parseInt(duration) * 1000L;
-        if (type.equalsIgnoreCase("min")) until += Integer.parseInt(duration) * 60000L;
-        if (type.equalsIgnoreCase("hour")) until += Integer.parseInt(duration) * 360000L;
-        if (type.equalsIgnoreCase("day")) until += Integer.parseInt(duration) * 86400000L;
-        if (type.equalsIgnoreCase("year")) until += Integer.parseInt(duration) * 31536000000L;
-        return until;
     }
 
     public void saveUser(User user, boolean async) {

@@ -23,12 +23,7 @@ public class RsCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         Player player = (Player) sender;
-        if (args.length == 0) {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorArg"));
-            return false;
-        }
-        if (args.length >= 2) {
+        if (args.length != 1) {
             player.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorArg"));
             return false;

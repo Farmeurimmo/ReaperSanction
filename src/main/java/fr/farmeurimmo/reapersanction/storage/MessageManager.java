@@ -18,9 +18,7 @@ public class MessageManager {
         instance = this;
 
         int count = 0;
-        for (String ignored : FilesManager.instance.messagesData.getKeys(false)) {
-            count++;
-        }
+        for (String ignored : FilesManager.instance.messagesData.getKeys(false)) count++;
 
         load();
 
@@ -45,11 +43,8 @@ public class MessageManager {
     }*/
 
     public String getMessage(String key) {
-        if (messages.containsKey(key) && key != null) {
-            return messages.get(key).replace("&", "§");
-        } else {
-            return "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)";
-        }
+        return (messages.containsKey(key) && key != null ? messages.get(key).replace("&", "§") :
+                "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)");
     }
 
     public void regenConfig() {
@@ -68,9 +63,8 @@ public class MessageManager {
             }
         }
 
-        for (String key : FilesManager.instance.messagesData.getKeys(false)) {
+        for (String key : FilesManager.instance.messagesData.getKeys(false))
             FilesManager.instance.messagesData.set(key, null);
-        }
         FilesManager.instance.saveMessages();
 
         save();
@@ -120,6 +114,7 @@ public class MessageManager {
         messages.put("Vanish-Isoff", "§cVanish off");
         messages.put("NotAvailableInConsole", "&cThis command is not available in console !");
         messages.put("PlayerNoHistoryAvailable", "&cThis player has no history available !");
+        messages.put("Command-Disabled", "&cThis command is disabled !");
     }
 
     public void readFromFile() {
