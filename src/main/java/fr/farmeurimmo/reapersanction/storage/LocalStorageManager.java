@@ -39,9 +39,9 @@ public class LocalStorageManager {
         for (String name : FilesManager.instance.getData().getKeys(false)) {
             if (name == null) continue;
             UUID uuid;
-            if (FilesManager.instance.getData().get(str + ".uuid") != null)
-                uuid = UUID.fromString(FilesManager.instance.getData().getString(str + ".uuid"));
-            else uuid = Bukkit.getOfflinePlayer(str).getUniqueId();
+            if (FilesManager.instance.getData().get(name + ".uuid") != null)
+                uuid = UUID.fromString(FilesManager.instance.getData().getString(name + ".uuid"));
+            else uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
             if (uuid == null) continue;
             long mutedUntil = 0;
             long mutedAt = 0;
@@ -55,7 +55,7 @@ public class LocalStorageManager {
                 mutedBy = FilesManager.instance.getData().getString(name + ".tempmute.banner");
                 mutedDuration = FilesManager.instance.getData().getString(name + ".tempmute.duration");
                 mutedType = FilesManager.instance.getData().getString(name + ".tempmute.unit");
-                mutedAt = getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
+                mutedAt = SanctionApplier.instance.getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
             }
             if (FilesManager.instance.getData().getBoolean(name + ".mute.ismuted")) {
                 mutedUntil = -1;
@@ -79,7 +79,7 @@ public class LocalStorageManager {
                 bannedBy = FilesManager.instance.getData().getString(name + ".tempban.banner");
                 bannedDuration = FilesManager.instance.getData().getString(name + ".tempban.duration");
                 bannedType = FilesManager.instance.getData().getString(name + ".tempban.unit");
-                bannedAt = getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
+                bannedAt = SanctionApplier.instance.getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
             }
             if (FilesManager.instance.getData().getBoolean(name + ".ban.isbanned")) {
                 bannedUntil = 0;
@@ -102,7 +102,7 @@ public class LocalStorageManager {
             LinkedList<Sanction> history = new LinkedList<>();
             bannedDuration += bannedType;
 
-            users.add(new User(uuid, str, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
+            users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
         }
         return users;
     }

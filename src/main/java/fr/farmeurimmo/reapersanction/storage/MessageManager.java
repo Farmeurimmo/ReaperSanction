@@ -9,9 +9,8 @@ import java.util.HashMap;
 
 public class MessageManager {
 
-    public static MessageManager instance;
-
     public static final HashMap<String, String> messages = new HashMap<>();
+    public static MessageManager instance;
     public static String prefix = "";
 
     public MessageManager() {

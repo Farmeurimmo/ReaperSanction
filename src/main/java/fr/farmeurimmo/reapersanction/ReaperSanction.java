@@ -22,8 +22,8 @@ import java.util.HashMap;
 
 public class ReaperSanction extends JavaPlugin implements Listener {
 
-    public static ReaperSanction instance;
     public static final ArrayList<Player> vanished = new ArrayList<>();
+    public static ReaperSanction instance;
     public static String storageMethod = "YAML";
     public final HashMap<String, String> ipblocked = new HashMap<>();
 
@@ -63,7 +63,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         }
 
         getLogger().info("Starting moderation module...");
-        //TODO: Add user object manager to easily get user data and store it in database
         new SanctionApplier();
         new SanctionRevoker();
         Vanish();
@@ -75,7 +74,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getLogger().info("Initializing GUIs...");
         new GuiManager();
 
-        System.out.println("Starting listeners...");
+        getLogger().info("Starting listeners...");
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
@@ -94,9 +93,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("unban").setExecutor(new UnBanCmd());
         this.getCommand("history").setExecutor(new HistoryCmd());
 
-        System.out.println("[ReaperSanction] Plugin enabled !");
-        System.out.println("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
-        System.out.println("-----------------------------------------------------------------------------------------------------");
+        getLogger().info("[ReaperSanction] Plugin enabled !");
+        getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
+        getLogger().info("-----------------------------------------------------------------------------------------------------");
 
         checkForUpdate();
     }
