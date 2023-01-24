@@ -22,7 +22,6 @@ public class BanCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorBanArg"));
         } else if (args.length == 1) {
-            Date Mydate = new Date(System.currentTimeMillis());
             Player p = Bukkit.getPlayer(args[0]);
             String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
@@ -48,7 +47,6 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                             .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                             .replace("%reason%", reason));
                 }
-                Date Mydate = new Date(System.currentTimeMillis());
                 SanctionApplier.instance.ApplyPermaBan(p, reason, sender.getName());
             } else {
                 sender.sendMessage(MessageManager.prefix +
