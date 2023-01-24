@@ -2,6 +2,7 @@ package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import main.java.fr.farmeurimmo.reapersanction.utils.StrUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,10 +17,6 @@ public class TempBanCmd implements CommandExecutor {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorTempBanArg"));
             return false;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (String s : args) {
-            sb.append(s).append(' ');
         }
         String sample = args[1];
         char[] chars = sample.toCharArray();
@@ -45,7 +42,7 @@ public class TempBanCmd implements CommandExecutor {
         if (args.length == 2) {
             reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
         } else {
-            reason = sb.toString().replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
+            reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
         Player p = Bukkit.getPlayer(args[0]);
         if (p == null) {

@@ -19,13 +19,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorArgAdminCommands"));
-            sender.sendMessage("Subs commands available: infos, reload, rl");
-            return true;
-        }
-        if (args.length >= 2) {
+        if (args.length != 1) {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorArgAdminCommands"));
             sender.sendMessage("Subs commands available: infos, reload, rl");

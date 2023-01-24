@@ -2,6 +2,7 @@ package main.java.fr.farmeurimmo.reapersanction.cmd;
 
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import main.java.fr.farmeurimmo.reapersanction.utils.StrUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,11 +34,7 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
             SanctionApplier.instance.ApplyPermaMute(p, reason.trim(), sender.getName(), sender);
             return false;
         }
-        StringBuilder sb = new StringBuilder();
-        for (String s : args) {
-            sb.append(s).append(' ');
-        }
-        String reason = sb.toString().replace(args[0] + " ", "").trim();
+        String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         SanctionApplier.instance.ApplyPermaMute(p, reason, sender.getName(), sender);
         return false;
     }

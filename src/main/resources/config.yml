@@ -1,4 +1,4 @@
-#Config version 1.3.1
+#Config version 1.3.2
 IP:
   ShowIpForAdmin: true
   ShowIpForMod: true
@@ -68,7 +68,7 @@ Menu:
     Barrier: "&4No Permission"
     GoBackDoor: "&6Go Back"
     History: "&6History"
-  #You need to add s for second or m for minute or d for day or w for week or y for year
+  #You need to add sec for second or min for minute or day for day or y for year
   Mutes:
     Bow:
       Reason: "Spam"

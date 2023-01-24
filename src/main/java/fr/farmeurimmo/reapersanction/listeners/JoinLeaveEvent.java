@@ -12,11 +12,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
-@SuppressWarnings("deprecation")
 public class JoinLeaveEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -27,40 +25,43 @@ public class JoinLeaveEvent implements Listener {
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         SanctionRevoker.instance.checkForSanctionExpiration(user);
         if (ReaperSanction.instance.ipblocked.containsKey(partialIp)) {
-            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
+            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             return;
         }
         if (user.isIpBanned()) {
-            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
+            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             return;
         }
         if (user.isPermaBan()) {
-            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("Ban.lines")
+            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("Ban.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
+            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             return;
         }
         if (user.isBanned() && !user.isPermaBan()) {
-            e.disallow(Result.KICK_BANNED, FilesManager.instance.getFromConfigFormatted("TempBan.lines")
+            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("TempBan.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason())
                     .replace("%expiration%", TimeConverter.getDateFormatted(user.getBannedUntil()))
                     .replace("%duration%", user.getBannedDuration()));
+            e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
         }
     }
 
     @EventHandler
     public void OnLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        User user = UsersManager.instance.getUser(player.getUniqueId());
         if (ReaperSanction.vanished.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             ReaperSanction.vanished.remove(player);

@@ -36,7 +36,7 @@ public class SanctionApplier {
                 "null", player.getName(), banner, reason, user.getBannedAt(), user.getBannedUntil()));
     }
 
-    public void ApplyPermaBanIp(Player player, String reason, String banner, String string) {
+    public void ApplyPermaBanIp(Player player, String reason, String banner) {
         /*String ip = player.getAddress().getHostString();
         String partialIp = (ip.contains("l") ? ip : ip.substring(0, ip.lastIndexOf(".")));
         ReaperSanction.instance.ipblocked.put(partialIp, player.getName());*/
@@ -66,7 +66,7 @@ public class SanctionApplier {
                     MessageManager.instance.getMessage("AlreadyBanned"));
             return;
         }
-        long timemillis = getDurationFromType(duration, type);
+        long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
 
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
@@ -100,7 +100,7 @@ public class SanctionApplier {
                     MessageManager.instance.getMessage("AlreadyMuted"));
             return;
         }
-        long timemillis = getDurationFromType(duration, type);
+        long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
         Sanction sanction = new Sanction(4, reason, sender.getName(), System.currentTimeMillis(), timemillis, false, false, duration);
@@ -143,13 +143,12 @@ public class SanctionApplier {
                 "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
     }
 
-    public long getDurationFromType(String duration, String type) {
-        long timemillis = System.currentTimeMillis();
-        if (type.equalsIgnoreCase("sec")) timemillis += Integer.parseInt(duration) * 1000L;
-        if (type.equalsIgnoreCase("min")) timemillis += Integer.parseInt(duration) * 60000L;
-        if (type.equalsIgnoreCase("hour")) timemillis += Integer.parseInt(duration) * 360000L;
-        if (type.equalsIgnoreCase("day")) timemillis += Integer.parseInt(duration) * 86400000L;
-        if (type.equalsIgnoreCase("year")) timemillis += Integer.parseInt(duration) * 31536000000L;
-        return timemillis;
+    public long getMillisOfEmission(long until, String duration, String type) {
+        if (type.equalsIgnoreCase("sec")) until += Integer.parseInt(duration) * 1000L;
+        if (type.equalsIgnoreCase("min")) until += Integer.parseInt(duration) * 60000L;
+        if (type.equalsIgnoreCase("hour")) until += Integer.parseInt(duration) * 360000L;
+        if (type.equalsIgnoreCase("day")) until += Integer.parseInt(duration) * 86400000L;
+        if (type.equalsIgnoreCase("year")) until += Integer.parseInt(duration) * 31536000000L;
+        return until;
     }
 }

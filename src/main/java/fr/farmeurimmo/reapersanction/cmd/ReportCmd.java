@@ -19,32 +19,26 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
     @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (args.length == 0) {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("Report-ErrorArg"));
-                return true;
-            }
-            if (args.length >= 2) {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("Report-ErrorArg"));
-                return true;
-            }
-            if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
-                if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
-                    ReportGui.MakeReportGui(player, args[0]);
-                } else {
-                    player.sendMessage(MessageManager.prefix +
-                            MessageManager.instance.getMessage("Report-Disabled"));
-                }
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            return false;
+        }
+        Player player = (Player) sender;
+        if (args.length != 1) {
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("Report-ErrorArg"));
+            return true;
+        }
+        if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
+            if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
+                ReportGui.instance.makeReportGui(player, args[0]);
             } else {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("Report-PlayerNotonline"));
+                player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Disabled"));
             }
             return true;
         }
-        return false;
+        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-PlayerNotonline"));
+        return true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.storage;
 
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
@@ -38,9 +39,9 @@ public class LocalStorageManager {
         for (String name : FilesManager.instance.getData().getKeys(false)) {
             if (name == null) continue;
             UUID uuid;
-            if (FilesManager.instance.getData().get(name + ".uuid") != null)
-                uuid = UUID.fromString(FilesManager.instance.getData().getString(name + ".uuid"));
-            else uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
+            if (FilesManager.instance.getData().get(str + ".uuid") != null)
+                uuid = UUID.fromString(FilesManager.instance.getData().getString(str + ".uuid"));
+            else uuid = Bukkit.getOfflinePlayer(str).getUniqueId();
             if (uuid == null) continue;
             long mutedUntil = 0;
             long mutedAt = 0;
@@ -101,7 +102,7 @@ public class LocalStorageManager {
             LinkedList<Sanction> history = new LinkedList<>();
             bannedDuration += bannedType;
 
-            users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
+            users.add(new User(uuid, str, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
         }
         return users;
     }
@@ -111,15 +112,6 @@ public class LocalStorageManager {
         FilesManager.instance.deleteAndRecreateDataFile();
         UsersManager.instance.users = users;
         saveAllUsers(true);
-    }
-
-    public long getMillisOfEmission(long until, String duration, String type) {
-        if (type.equalsIgnoreCase("sec")) until += Integer.parseInt(duration) * 1000L;
-        if (type.equalsIgnoreCase("min")) until += Integer.parseInt(duration) * 60000L;
-        if (type.equalsIgnoreCase("hour")) until += Integer.parseInt(duration) * 360000L;
-        if (type.equalsIgnoreCase("day")) until += Integer.parseInt(duration) * 86400000L;
-        if (type.equalsIgnoreCase("year")) until += Integer.parseInt(duration) * 31536000000L;
-        return until;
     }
 
     public void saveUser(User user, boolean async) {

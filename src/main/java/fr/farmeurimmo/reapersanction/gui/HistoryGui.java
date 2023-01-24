@@ -1,6 +1,5 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
@@ -31,6 +30,11 @@ public class HistoryGui {
     }
 
     public void openHistoryGui(Player player, User targetUser, int page) {
+        if (!player.hasPermission("mod")) {
+            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
+            return;
+        }
+
         Inventory inv = Bukkit.createInventory(null, 54, GUI_NAME.replace("%player%", targetUser.getName()).replace("%page%", String.valueOf(page + 1)));
 
         if (targetUser.getHistory().size() == 0) {
@@ -70,25 +74,8 @@ public class HistoryGui {
         next.setItemMeta(nextMeta);
         inv.setItem(50, next);*/
 
-        ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
-        ItemMeta customd = custom5.getItemMeta();
-        customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
-        custom5.setItemMeta(customd);
-        inv.setItem(45, custom5);
-        inv.setItem(53, custom5);
-
-        if (ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) {
-            ItemStack custom0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
-            ItemMeta meta0 = custom0.getItemMeta();
-            meta0.setDisplayName("§6");
-            custom0.setItemMeta(meta0);
-
-            for (int i = 0; i < inv.getSize(); i++) {
-                if (inv.getItem(i) == null || inv.getItem(i).getType().equals(Material.AIR)) {
-                    inv.setItem(i, custom0);
-                }
-            }
-        }
+        GuiManager.instance.applyDoorsFromInvSize(inv);
+        GuiManager.instance.applyGlass(inv);
 
         player.openInventory(inv);
     }

@@ -23,18 +23,13 @@ public class RsCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         Player player = (Player) sender;
-        if (args.length == 0) {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorArg"));
-            return false;
-        }
-        if (args.length >= 2) {
+        if (args.length != 1) {
             player.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorArg"));
             return false;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            RsGui.SsMainGui(player, args[0]);
+            RsGui.instance.ssMainGui(player, args[0]);
         } else {
             player.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("InvalidPlayer"));

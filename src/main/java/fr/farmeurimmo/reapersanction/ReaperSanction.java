@@ -1,8 +1,8 @@
 package main.java.fr.farmeurimmo.reapersanction;
 
 import main.java.fr.farmeurimmo.reapersanction.cmd.*;
+import main.java.fr.farmeurimmo.reapersanction.gui.GuiListener;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
-import main.java.fr.farmeurimmo.reapersanction.gui.HistoryGui;
 import main.java.fr.farmeurimmo.reapersanction.listeners.ChatEvent;
 import main.java.fr.farmeurimmo.reapersanction.listeners.JoinLeaveEvent;
 import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
@@ -72,8 +72,11 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getLogger().info("Looking for messages...");
         new MessageManager();
 
-        getLogger().info("Starting listeners...");
-        getServer().getPluginManager().registerEvents(new GuiManager(), this);
+        getLogger().info("Initializing GUIs...");
+        new GuiManager();
+
+        System.out.println("Starting listeners...");
+        getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 
@@ -91,12 +94,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("unban").setExecutor(new UnBanCmd());
         this.getCommand("history").setExecutor(new HistoryCmd());
 
-        getLogger().info("Initializing GUIs...");
-        new HistoryGui();
-
-        getLogger().info("[ReaperSanction] Plugin enabled !");
-        getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
-        getLogger().info("-----------------------------------------------------------------------------------------------------");
+        System.out.println("[ReaperSanction] Plugin enabled !");
+        System.out.println("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
 
         checkForUpdate();
     }
@@ -144,8 +144,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);
     }
 
-
-    @SuppressWarnings("deprecation")
     public void Vanish() {
         ArrayList<Player> vanish = vanished;
         for (Player players : Bukkit.getOnlinePlayers()) {
@@ -153,6 +151,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 players.hidePlayer(pl);
             }
         }
-        Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(ReaperSanction.instance, this::Vanish, 20);
+        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.instance, this::Vanish, 20);
     }
 }

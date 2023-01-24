@@ -1,6 +1,5 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +11,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class ReportGui {
 
-    public static void MakeReportGui(Player player, String target) {
+    public static ReportGui instance;
+
+    public ReportGui() {
+        instance = this;
+    }
+
+    public void makeReportGui(Player player, String target) {
         Inventory inv = Bukkit.createInventory(null, 27, "§4Report " + target);
 
         ItemStack custom1 = new ItemStack(Material.GRASS, 1);
@@ -46,18 +51,7 @@ public class ReportGui {
         custom4.setItemMeta(customc);
         inv.setItem(16, custom4);
 
-        if (ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) {
-            ItemStack custom8 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
-            ItemMeta meta8 = custom8.getItemMeta();
-            meta8.setDisplayName("§6");
-            custom8.setItemMeta(meta8);
-
-            for (int i = 0; i < inv.getSize(); i++) {
-                if (inv.getItem(i) == null || inv.getItem(i).getType().equals(Material.AIR)) {
-                    inv.setItem(i, custom8);
-                }
-            }
-        }
+        GuiManager.instance.applyGlass(inv);
 
         player.openInventory(inv);
     }

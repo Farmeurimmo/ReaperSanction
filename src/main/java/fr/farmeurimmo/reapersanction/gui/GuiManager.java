@@ -1,309 +1,91 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
-public class GuiManager implements Listener {
+import java.util.Arrays;
+import java.util.Collections;
 
-    final StringBuilder bc = new StringBuilder();
-    String part;
+public class GuiManager {
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack current = event.getCurrentItem();
+    public static GuiManager instance;
 
-        if (current == null) return;
+    public GuiManager() {
+        instance = this;
 
-        Material currenttype = current.getType();
+        new HistoryGui();
+        new BanGui();
+        new MuteGui();
+        new BanIpGui();
+        new ReportGui();
+        new RsGui();
+        new EndGui();
+    }
 
-        if (current.getItemMeta() == null) return;
-        if (event.getSlot() <= -1) return;
+    public void applyGlass(Inventory inv) {
+        if (!ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) return;
+        ItemStack custom8 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
+        ItemMeta meta8 = custom8.getItemMeta();
+        meta8.setDisplayName("§6");
+        custom8.setItemMeta(meta8);
 
-        String title = event.getView().getTitle();
-
-        if (title.length() < 4) return;
-
-        if (title.contains("§c§lHistory of ")) {
-            event.setCancelled(true);
-            if (currenttype == Material.IRON_DOOR) {
-                RsGui.SsMainGui(player, HistoryGui.instance.getPlayerFromGuiName(title));
-            }
-        }
-
-        if (event.getInventory().getItem(13) == null) return;
-
-        ItemStack cibleitem = event.getInventory().getItem(13);
-        if (!cibleitem.hasItemMeta()) return;
-        String cible = cibleitem.getItemMeta().getDisplayName().replace("§6", "");
-
-        User targetUser = UsersManager.instance.getUser(cible);
-
-        switch (title) {
-            case "§4ReaperSanction":
-                event.setCancelled(true);
-
-                switch (currenttype) {
-                    case GRASS:
-                        if (player.hasPermission("mod")) {
-                            MuteGui.mutegui(player, cible);
-                        } else {
-                            RsGui.SsMainGui(player, cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        }
-                        break;
-                    case DIAMOND_SWORD:
-                        if (player.hasPermission("mod")) {
-                            BanGui.bangui(player, cible);
-                        } else {
-                            RsGui.SsMainGui(player, cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        }
-                        break;
-                    case ANVIL:
-                        if (player.hasPermission("mod+")) {
-                            BanIpGui.banipgui(player, cible);
-                        } else {
-                            RsGui.SsMainGui(player, cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        }
-                        break;
-                    case PAPER:
-                        if (player.hasPermission("mod+")) {
-                            EndGui.endgui(player, cible);
-                        } else {
-                            RsGui.SsMainGui(player, cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        }
-                        break;
-                    case BOOK:
-                        if (player.hasPermission("mod+")) {
-                            if (targetUser == null) return;
-                            HistoryGui.instance.openHistoryGui(player, targetUser, 0);
-                        } else {
-                            RsGui.SsMainGui(player, cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        }
-                        break;
-                    case BARRIER:
-                        event.setCancelled(true);
-                        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                        break;
-                }
-                break;
-            case "§4ReaperSanction Mutes":
-                event.setCancelled(true);
-
-                if (player.hasPermission("mod")) {
-                    switch (currenttype) {
-                        case BOW:
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            player.closeInventory();
-                            break;
-                        case DIAMOND_SWORD:
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.DiamondSword.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            player.closeInventory();
-                            break;
-                        case ANVIL:
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Anvil.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            player.closeInventory();
-                            break;
-                        case REDSTONE_BLOCK:
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.RedstoneBlock.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            player.closeInventory();
-                            break;
-                        case ACTIVATOR_RAIL:
-                            player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ActivatorRail.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case ARMOR_STAND:
-                            player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.ArmorStand.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case COMPASS:
-                            player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Compass.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case FLINT_AND_STEEL:
-                            player.closeInventory();
-                            player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.FlintAndSteel.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        default:
-                            RsGui.SsMainGui(player, cible);
-                            break;
-                    }
-                } else {
-                    RsGui.SsMainGui(player, cible);
-                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                }
-                break;
-            case "§4ReaperSanction Bans":
-                event.setCancelled(true);
-
-                if (player.hasPermission("mod")) {
-
-                    switch (currenttype) {
-                        case DIAMOND_SWORD:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case WOOD_SWORD:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.WoodSword.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case FEATHER:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.Feather.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case IRON_BOOTS:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.IronBoots.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.IronBoots.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case GOLD_AXE:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.GoldAxe.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case ARMOR_STAND:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.ArmorStand.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case TNT:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Tnt.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Tnt.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case LEATHER:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Leather.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Leather.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case DIAMOND_CHESTPLATE:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.DiamondChestPlate.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case DIRT:
-                            player.closeInventory();
-                            player.chat("/tempban " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Dirt.Duration") + " " + FilesManager.instance.getConfig().getString("Menu.Bans.Dirt.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        default:
-                            RsGui.SsMainGui(player, cible);
-                            break;
-                    }
-                } else {
-                    RsGui.SsMainGui(player, cible);
-                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                }
-                break;
-            case "§4ReaperSanction Bans-ip":
-                event.setCancelled(true);
-
-                if (player.hasPermission("mod+")) {
-
-                    switch (currenttype) {
-                        case NAME_TAG:
-                            player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Banip.NameTag.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        case CLAY_BALL:
-                            player.closeInventory();
-                            player.chat("/ban-ip " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Banip.ClayBall.Reason"));
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
-                            break;
-                        default:
-                            RsGui.SsMainGui(player, cible);
-                            break;
-                    }
-                } else {
-                    RsGui.SsMainGui(player, cible);
-                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
-                }
-                break;
-            case "§4ReaperSanction Unbans/Unmutes":
-                event.setCancelled(true);
-
-                if (player.hasPermission("mod+")) {
-
-                    switch (currenttype) {
-                        case BOW:
-                            player.closeInventory();
-                            player.chat("/unmute " + cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
-                            break;
-                        case DIAMOND_SWORD:
-                            player.closeInventory();
-                            player.chat("/unban " + cible);
-                            player.chat("/unbanip " + cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
-                            break;
-                        case ANVIL:
-                            player.closeInventory();
-                            player.chat("/unmute " + cible);
-                            player.chat("/unban " + cible);
-                            player.chat("/unbanip " + cible);
-                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
-                            break;
-                        default:
-                            RsGui.SsMainGui(player, cible);
-                            break;
-                    }
-                }
-                break;
-            default:
-                if (!title.equalsIgnoreCase("§4Report " + cible)) {
-                    return;
-                }
-                event.setCancelled(true);
-                String ReportReason = current.getItemMeta().getDisplayName();
-                part = ReportReason;
-
-                switch (currenttype) {
-                    case GRASS:
-                    case DIAMOND_SWORD:
-                    case APPLE:
-                    case BEACON:
-                        sendMessageReported(player, cible, ReportReason);
-                        break;
-                }
+        for (int i = 0; i < inv.getSize(); i++) {
+            if (inv.getItem(i) == null || inv.getItem(i).getType().equals(Material.AIR)) inv.setItem(i, custom8);
         }
     }
 
-    public void sendMessageReported(Player player, String cible, String ReportReason) {
-        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
-        player.closeInventory();
-        for (Player all : Bukkit.getServer().getOnlinePlayers()) {
-            bc.append(part).append(" ");
-            if (all.hasPermission("reportview")) {
-                all.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
-                bc.delete(0, 100);
-            }
-        }
+    public void applyDoorsFromInvSize(Inventory inv) {
+        ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
+        ItemMeta customd = custom5.getItemMeta();
+        customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+        custom5.setItemMeta(customd);
+
+        int firstItem = 0;
+        if (inv.getSize() == 18) firstItem = 9;
+        else if (inv.getSize() == 27) firstItem = 18;
+        else if (inv.getSize() == 36) firstItem = 27;
+        else if (inv.getSize() == 45) firstItem = 36;
+        else if (inv.getSize() == 54) firstItem = 45;
+        inv.setItem(firstItem, custom5);
+        inv.setItem(firstItem + 8, custom5);
     }
 
+    public void applyHead(Inventory inv, String cible, Player player) {
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+        ItemMeta meta = stack.getItemMeta();
+        ((SkullMeta) meta).setOwner(cible);
+        meta.setDisplayName("§6" + cible);
+        Player target = Bukkit.getOfflinePlayer(cible).getPlayer();
+        if (target == null)
+            meta.setLore(Collections.singletonList(MessageManager.instance.getMessage("InvalidPlayer")));
+        else {
+            String hostname = target.getAddress().getHostName();
+            String displayname = target.getDisplayName();
+            if (player.hasPermission("mod+")) {
+                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForAdmin"))
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
+                else
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
+            } else {
+                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForMod"))
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
+                else
+                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
+                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
+            }
+        }
+        stack.setItemMeta(meta);
+        inv.setItem(13, stack);
+    }
 }
-
