@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class GuiManager implements Listener {
 
-    StringBuilder bc = new StringBuilder();
+    final StringBuilder bc = new StringBuilder();
     String part;
 
     @EventHandler

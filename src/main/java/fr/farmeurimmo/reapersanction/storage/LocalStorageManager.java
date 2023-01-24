@@ -35,9 +35,8 @@ public class LocalStorageManager {
 
     public ArrayList<User> getUsersFromOldYAML() {
         ArrayList<User> users = new ArrayList<>();
-        for (String str : FilesManager.instance.getData().getKeys(false)) {
-            if (str == null) continue;
-            String name = str;
+        for (String name : FilesManager.instance.getData().getKeys(false)) {
+            if (name == null) continue;
             UUID uuid;
             if (FilesManager.instance.getData().get(name + ".uuid") != null)
                 uuid = UUID.fromString(FilesManager.instance.getData().getString(name + ".uuid"));
@@ -49,17 +48,17 @@ public class LocalStorageManager {
             String mutedBy = "";
             String mutedDuration = "";
             String mutedType = "";
-            if (FilesManager.instance.getData().getBoolean(str + ".tempmute.istempmuted")) {
-                mutedUntil = FilesManager.instance.getData().getLong(str + ".tempmute.timemillis");
-                mutedReason = FilesManager.instance.getData().getString(str + ".tempmute.reason");
-                mutedBy = FilesManager.instance.getData().getString(str + ".tempmute.banner");
-                mutedDuration = FilesManager.instance.getData().getString(str + ".tempmute.duration");
-                mutedType = FilesManager.instance.getData().getString(str + ".tempmute.unit");
+            if (FilesManager.instance.getData().getBoolean(name + ".tempmute.istempmuted")) {
+                mutedUntil = FilesManager.instance.getData().getLong(name + ".tempmute.timemillis");
+                mutedReason = FilesManager.instance.getData().getString(name + ".tempmute.reason");
+                mutedBy = FilesManager.instance.getData().getString(name + ".tempmute.banner");
+                mutedDuration = FilesManager.instance.getData().getString(name + ".tempmute.duration");
+                mutedType = FilesManager.instance.getData().getString(name + ".tempmute.unit");
                 mutedAt = getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
             }
-            if (FilesManager.instance.getData().getBoolean(str + ".mute.ismuted")) {
+            if (FilesManager.instance.getData().getBoolean(name + ".mute.ismuted")) {
                 mutedUntil = -1;
-                mutedReason = FilesManager.instance.getData().getString(str + ".mute.reason");
+                mutedReason = FilesManager.instance.getData().getString(name + ".mute.reason");
                 mutedBy = "";
                 mutedAt = -1;
                 mutedDuration = "Permanent";
@@ -73,32 +72,32 @@ public class LocalStorageManager {
             String bannedDuration = "";
             String bannedType = "";
             boolean isIpBanned = false;
-            if (FilesManager.instance.getData().getBoolean(str + ".tempban.istempbanned")) {
-                bannedUntil = FilesManager.instance.getData().getLong(str + ".tempban.timemillis");
-                bannedReason = FilesManager.instance.getData().getString(str + ".tempban.reason");
-                bannedBy = FilesManager.instance.getData().getString(str + ".tempban.banner");
-                bannedDuration = FilesManager.instance.getData().getString(str + ".tempban.duration");
-                bannedType = FilesManager.instance.getData().getString(str + ".tempban.unit");
+            if (FilesManager.instance.getData().getBoolean(name + ".tempban.istempbanned")) {
+                bannedUntil = FilesManager.instance.getData().getLong(name + ".tempban.timemillis");
+                bannedReason = FilesManager.instance.getData().getString(name + ".tempban.reason");
+                bannedBy = FilesManager.instance.getData().getString(name + ".tempban.banner");
+                bannedDuration = FilesManager.instance.getData().getString(name + ".tempban.duration");
+                bannedType = FilesManager.instance.getData().getString(name + ".tempban.unit");
                 bannedAt = getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
             }
-            if (FilesManager.instance.getData().getBoolean(str + ".ban.isbanned")) {
+            if (FilesManager.instance.getData().getBoolean(name + ".ban.isbanned")) {
                 bannedUntil = 0;
-                bannedReason = FilesManager.instance.getData().getString(str + ".ban.reason");
-                bannedBy = FilesManager.instance.getData().getString(str + ".ban.banner");
+                bannedReason = FilesManager.instance.getData().getString(name + ".ban.reason");
+                bannedBy = FilesManager.instance.getData().getString(name + ".ban.banner");
                 bannedAt = 0;
                 bannedDuration = "Permanent";
                 bannedType = "";
             }
-            if (FilesManager.instance.getData().getBoolean(str + ".ipban.isipbanned")) {
+            if (FilesManager.instance.getData().getBoolean(name + ".ipban.isipbanned")) {
                 bannedUntil = -1;
-                bannedReason = FilesManager.instance.getData().getString(str + ".ipban.reason");
-                bannedBy = FilesManager.instance.getData().getString(str + ".ipban.banner");
+                bannedReason = FilesManager.instance.getData().getString(name + ".ipban.reason");
+                bannedBy = FilesManager.instance.getData().getString(name + ".ipban.banner");
                 bannedAt = -1;
                 bannedDuration = "Permanent";
                 bannedType = "";
                 isIpBanned = true;
             }
-            String ip = FilesManager.instance.getData().getString(str + ".ip");
+            String ip = FilesManager.instance.getData().getString(name + ".ip");
             LinkedList<Sanction> history = new LinkedList<>();
             bannedDuration += bannedType;
 

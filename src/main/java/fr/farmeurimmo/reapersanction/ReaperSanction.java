@@ -23,9 +23,9 @@ import java.util.HashMap;
 public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static ReaperSanction instance;
-    public static ArrayList<Player> vanished = new ArrayList<>();
+    public static final ArrayList<Player> vanished = new ArrayList<>();
     public static String storageMethod = "YAML";
-    public HashMap<String, String> ipblocked = new HashMap<>();
+    public final HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -125,7 +125,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     }
 
     public void checkForUpdate() {
-        ;
         new UpdateChecker(this, 89580).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
                 getLogger().info("§6No update found.");

@@ -7,7 +7,6 @@ import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class DatabaseManager {
 

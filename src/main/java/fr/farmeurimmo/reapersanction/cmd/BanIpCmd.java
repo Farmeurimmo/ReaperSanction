@@ -24,10 +24,6 @@ public class BanIpCmd implements CommandExecutor {
                     MessageManager.instance.getMessage("ErrorBanIpArg"));
         } else if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
-            StringBuilder sb = new StringBuilder();
-            for (String s : args) {
-                sb.append(s).append(' ');
-            }
             String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
             if (p.isOnline()) {

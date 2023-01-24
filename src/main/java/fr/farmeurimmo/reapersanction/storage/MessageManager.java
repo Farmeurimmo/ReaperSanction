@@ -11,7 +11,7 @@ public class MessageManager {
 
     public static MessageManager instance;
 
-    public static HashMap<String, String> messages = new HashMap<>();
+    public static final HashMap<String, String> messages = new HashMap<>();
     public static String prefix = "";
 
     public MessageManager() {

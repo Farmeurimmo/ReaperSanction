@@ -4,14 +4,14 @@ import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 
 public class Sanction {
 
-    private int type;
-    private String reason;
-    private String by;
-    private long at;
-    private long until;
-    private boolean isBan;
-    private boolean isIp;
-    private String duration;
+    private final int type;
+    private final String reason;
+    private final String by;
+    private final long at;
+    private final long until;
+    private final boolean isBan;
+    private final boolean isIp;
+    private final String duration;
 
     public Sanction(int type, String reason, String by, long at, long until, boolean isBan, boolean isIp, String duration) {
         this.type = type;
