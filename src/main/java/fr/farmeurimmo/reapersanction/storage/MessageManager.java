@@ -11,7 +11,7 @@ public class MessageManager {
 
     public static MessageManager instance;
 
-    public static HashMap<String, String> messages = new HashMap<>();
+    public static final HashMap<String, String> messages = new HashMap<>();
     public static String prefix = "";
 
     public MessageManager() {
@@ -59,7 +59,7 @@ public class MessageManager {
                 }
                 oldConfig.save(old);
             } catch (Exception e) {
-                System.out.println("§c§lError in creation of OLD-Messages.yml");
+                ReaperSanction.instance.getLogger().info("§c§lError in creation of OLD-Messages.yml");
             }
         }
 

@@ -15,7 +15,7 @@ public class SanctionRevoker {
     public SanctionRevoker() {
         instance = this;
 
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(ReaperSanction.instance, () -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ReaperSanction.instance, () -> {
             for (User user : UsersManager.instance.users) {
                 checkForSanctionExpiration(user);
             }

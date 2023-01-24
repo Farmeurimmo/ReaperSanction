@@ -23,28 +23,28 @@ import java.util.HashMap;
 public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static ReaperSanction instance;
-    public static ArrayList<Player> vanished = new ArrayList<>();
+    public static final ArrayList<Player> vanished = new ArrayList<>();
     public static String storageMethod = "YAML";
-    public HashMap<String, String> ipblocked = new HashMap<>();
+    public final HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         instance = this;
         String version = Bukkit.getServer().getBukkitVersion();
-        System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("This server is using minecraft : " + version);
+        getLogger().info("-----------------------------------------------------------------------------------------------------");
+        getLogger().info("This server is using minecraft : " + version);
 
-        System.out.println("Starting configs files...");
+        getLogger().info("Starting configs files...");
         new FilesManager();
         new LocalStorageManager();
 
-        System.out.println("Starting users manager...");
+        getLogger().info("Starting users manager...");
         new UsersManager();
 
         storageMethod = getConfig().getString("storage.method");
         if (storageMethod.equalsIgnoreCase("MYSQL")) {
-            System.out.println("Found MYSQL storage database, trying to connect...");
+            getLogger().info("Found MYSQL storage database, trying to connect...");
 
             getCredentialsAndInitialize();
 
@@ -58,21 +58,21 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 return;
             }
         } else {
-            System.out.println("Found YAML storage method, starting it...");
+            getLogger().info("Found YAML storage method, starting it...");
             LocalStorageManager.instance.setup();
         }
 
-        System.out.println("Starting moderation module...");
+        getLogger().info("Starting moderation module...");
         //TODO: Add user object manager to easily get user data and store it in database
         new SanctionApplier();
         new SanctionRevoker();
         Vanish();
         UsersManager.instance.checkForOnlinePlayersIfTheyAreUsers();
 
-        System.out.println("Looking for messages...");
+        getLogger().info("Looking for messages...");
         new MessageManager();
 
-        System.out.println("Initializing GUIs...");
+        getLogger().info("Initializing GUIs...");
         new GuiManager();
 
         System.out.println("Starting listeners...");
@@ -80,7 +80,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 
-        System.out.println("Starting commands...");
+        getLogger().info("Starting commands...");
         this.getCommand("vanish").setExecutor(new VanishCmd());
         this.getCommand("report").setExecutor(new ReportCmd());
         this.getCommand("rsadmin").setExecutor(new RsAdminCmd());
@@ -103,9 +103,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        System.out.println("-----------------------------------------------------------------------------------------------------");
-        System.out.println("[ReaperSanction] Plugin disabled !");
-        System.out.println("-----------------------------------------------------------------------------------------------------");
+        getLogger().info("-----------------------------------------------------------------------------------------------------");
+        getLogger().info("[ReaperSanction] Plugin disabled !");
+        getLogger().info("-----------------------------------------------------------------------------------------------------");
     }
 
     public void reload() {
@@ -125,7 +125,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     }
 
     public void checkForUpdate() {
-        ;
         new UpdateChecker(this, 89580).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
                 getLogger().info("§6No update found.");
@@ -139,7 +138,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                         player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
                     }
                 }
-                System.out.println("§4§lA new update is available please consider updating if you want to receive support !");
+                getLogger().info("§4§lA new update is available please consider updating if you want to receive support !");
             }
         });
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);
