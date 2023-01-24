@@ -1,11 +1,13 @@
 package main.java.fr.farmeurimmo.reapersanction.storage;
 
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.users.User;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class DatabaseManager {
 
@@ -24,7 +26,7 @@ public class DatabaseManager {
     public void startConnection() throws Exception {
         try {
             connection = getConnection();
-            System.out.println("§a§lSuccessfully connected to the database !");
+            ReaperSanction.instance.getLogger().info("§a§lSuccessfully connected to the database !");
         } catch (SQLException e) {
             throw new Exception("Unable to connect to the database");
         }

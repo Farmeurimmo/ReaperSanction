@@ -64,7 +64,7 @@ public class MessageManager {
                 }
                 oldConfig.save(old);
             } catch (Exception e) {
-                System.out.println("§c§lError in creation of OLD-Messages.yml");
+                ReaperSanction.instance.getLogger().info("§c§lError in creation of OLD-Messages.yml");
             }
         }
 
