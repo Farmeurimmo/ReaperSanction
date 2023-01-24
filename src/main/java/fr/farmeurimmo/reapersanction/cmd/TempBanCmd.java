@@ -8,13 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Calendar;
-
 public class TempBanCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Calendar calendar = Calendar.getInstance();
         if (args.length == 0 || args.length == 1) {
             sender.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("ErrorTempBanArg"));

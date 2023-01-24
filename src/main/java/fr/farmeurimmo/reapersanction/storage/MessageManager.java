@@ -88,6 +88,7 @@ public class MessageManager {
         messages.put("ErrorUnMuteArg", "&cUsage, /unmute <player-name>");
         messages.put("ErrorBanIpArg", "&cUsage, /ban-ip <player-name> [Reason]");
         messages.put("ErrorUnBanArg", "&cUsage, /unban <player-name>");
+        messages.put("ErrorHistoryArg", "&cUsage, /history <player-name>");
         messages.put("SanctionWaitForApplication", "&6The sanction has been successfuly set !");
         messages.put("SanctionWaitEnd", "&6All sanctions has been removed !");
         messages.put("AlreadyMuted", "&cThis player is already muted !");
@@ -117,6 +118,8 @@ public class MessageManager {
         messages.put("Report-PlayerNotonline", "&6This player is not online !");
         messages.put("Vanish-Ison", "§aVanish on");
         messages.put("Vanish-Isoff", "§cVanish off");
+        messages.put("NotAvailableInConsole", "&cThis command is not available in console !");
+        messages.put("PlayerNoHistoryAvailable", "&cThis player has no history available !");
     }
 
     public void readFromFile() {

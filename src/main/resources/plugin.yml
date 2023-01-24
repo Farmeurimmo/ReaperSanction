@@ -33,3 +33,5 @@ commands:
     permission: reapersanction.tempmute
   unban:
     permission: reapersanction.unban
+  history:
+    permission: reapersanction.history

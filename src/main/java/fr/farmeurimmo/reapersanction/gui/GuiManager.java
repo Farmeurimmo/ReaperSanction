@@ -2,6 +2,8 @@ package main.java.fr.farmeurimmo.reapersanction.gui;
 
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import main.java.fr.farmeurimmo.reapersanction.users.User;
+import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,36 +22,31 @@ public class GuiManager implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
 
-        if (current == null) {
-            return;
-        }
+        if (current == null) return;
 
         Material currenttype = current.getType();
 
-        if (current.getItemMeta() == null) {
-            return;
-        }
-
-        int slot = event.getSlot();
-        if (slot <= -1) {
-            return;
-        }
+        if (current.getItemMeta() == null) return;
+        if (event.getSlot() <= -1) return;
 
         String title = event.getView().getTitle();
 
-        if (title.length() < 4) {
-            return;
+        if (title.length() < 4) return;
+
+        if (title.contains("§c§lHistory of ")) {
+            event.setCancelled(true);
+            if (currenttype == Material.IRON_DOOR) {
+                RsGui.SsMainGui(player, HistoryGui.instance.getPlayerFromGuiName(title));
+            }
         }
 
-        if (event.getInventory().getItem(13) == null) {
-            return;
-        }
+        if (event.getInventory().getItem(13) == null) return;
 
         ItemStack cibleitem = event.getInventory().getItem(13);
-        if (!cibleitem.hasItemMeta()) {
-            return;
-        }
+        if (!cibleitem.hasItemMeta()) return;
         String cible = cibleitem.getItemMeta().getDisplayName().replace("§6", "");
+
+        User targetUser = UsersManager.instance.getUser(cible);
 
         switch (title) {
             case "§4ReaperSanction":
@@ -83,6 +80,15 @@ public class GuiManager implements Listener {
                     case PAPER:
                         if (player.hasPermission("mod+")) {
                             EndGui.endgui(player, cible);
+                        } else {
+                            RsGui.SsMainGui(player, cible);
+                            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
+                        }
+                        break;
+                    case BOOK:
+                        if (player.hasPermission("mod+")) {
+                            if (targetUser == null) return;
+                            HistoryGui.instance.openHistoryGui(player, targetUser, 0);
                         } else {
                             RsGui.SsMainGui(player, cible);
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));

@@ -28,6 +28,9 @@ Ban:
 TempBan:
   lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban : &e%date% \n&6By: &e%banner% \n&6Expiration : &e%expiration% \n&6Reason : &e%reason% \n&6Duration : &e%duration%"
 
+History:
+  displayname: "&6%sanctiontype% §e%player% %date%"
+  lore: "&6By : &e%banner% %%&6Reason : &e%reason% %%&6Duration : &e%duration% %%&6Expiration : &e%expiration%"
 Vanish:
   Enabled: true
   #Change gamemode when enter in vanish mode
@@ -57,7 +60,8 @@ Menu:
     Paper: "&6Unbans and Unmutes"
     Barrier: "&4No Permission"
     GoBackDoor: "&6Go Back"
-    #You need to add s for second or m for minute or d for day or w for week or y for year
+    History: "&6History"
+  #You need to add s for second or m for minute or d for day or w for week or y for year
   Mutes:
     Bow:
       Reason: "Spam"

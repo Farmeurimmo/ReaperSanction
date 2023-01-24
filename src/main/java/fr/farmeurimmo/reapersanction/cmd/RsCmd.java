@@ -18,25 +18,26 @@ public class RsCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (args.length == 0) {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("ErrorArg"));
-                return true;
-            }
-            if (args.length >= 2) {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("ErrorArg"));
-                return true;
-            }
-            if (Bukkit.getPlayer(args[0]) != null) {
-                RsGui.SsMainGui(player, args[0]);
-            } else {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("InvalidPlayer"));
-            }
-            return true;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            return false;
+        }
+        Player player = (Player) sender;
+        if (args.length == 0) {
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorArg"));
+            return false;
+        }
+        if (args.length >= 2) {
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("ErrorArg"));
+            return false;
+        }
+        if (Bukkit.getPlayer(args[0]) != null) {
+            RsGui.SsMainGui(player, args[0]);
+        } else {
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.instance.getMessage("InvalidPlayer"));
         }
         return false;
     }

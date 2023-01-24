@@ -53,4 +53,18 @@ public class Sanction {
     public String getDuration() {
         return duration;
     }
+
+    public String getDurationType() {
+        String duration = this.duration;
+        return duration.replaceAll("[^0-9]", "");
+    }
+
+    public String getSanctionTypeStr() {
+        if (this.type == 0) return "Ban-IP";
+        if (this.type == 1) return "Ban";
+        if (this.type == 2) return "TempBan";
+        if (this.type == 3) return "Mute";
+        if (this.type == 4) return "TempMute";
+        return "Unknown";
+    }
 }

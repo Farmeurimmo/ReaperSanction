@@ -33,7 +33,7 @@ public class SanctionApplier {
 
         Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
                         + MessageManager.instance.getMessage("PlayerGotPermaBan"),
-                "null", "null", player.getName(), banner, reason));
+                "null", player.getName(), banner, reason, user.getBannedAt(), user.getBannedUntil()));
     }
 
     public void ApplyPermaBanIp(Player player, String reason, String banner, String string) {
@@ -55,7 +55,7 @@ public class SanctionApplier {
 
         Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
                         + MessageManager.instance.getMessage("PlayerGotPermaBanIp"),
-                "null", "null", player.getName(), banner, reason));
+                "null", player.getName(), banner, reason, user.getBannedAt(), user.getBannedUntil()));
     }
 
     public void ApplyTempBan(Player player, String reason, CommandSender sender, String duration, String type) {
@@ -83,7 +83,7 @@ public class SanctionApplier {
 
         Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
                         + MessageManager.instance.getMessage("PlayerGotTempBan"),
-                duration, type, player.getName(), sender.getName(), reason));
+                duration, player.getName(), sender.getName(), reason, user.getBannedAt(), user.getBannedUntil()));
 
         player.kickPlayer(FilesManager.instance.getFromConfigFormatted("TempBan.lines")
                 .replace("%banner%", sanction.getBy())
@@ -116,11 +116,11 @@ public class SanctionApplier {
 
         player.sendMessage(TimeConverter.replaceArgs(MessageManager.prefix
                         + MessageManager.instance.getMessage("MessageToPlayerGotTempMuted"),
-                duration, type, player.getName(), sender.getName(), reason));
+                duration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
         Bukkit.broadcastMessage(MessageManager.prefix +
                 TimeConverter.replaceArgs(MessageManager.instance.getMessage("PlayerGotTempMute"),
-                        duration, type, player.getName(), sender.getName(), reason));
+                        duration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
     }
 
     public void ApplyPermaMute(Player player, String reason, String banner, CommandSender sender) {
@@ -137,10 +137,10 @@ public class SanctionApplier {
         user.requestUserUpdate();
 
         player.sendMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.instance.getMessage("MessageToPlayerGotPermaMuted"),
-                "null", "null", player.getName(), sender.getName(), reason));
+                "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
         Bukkit.broadcastMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.instance.getMessage("PlayerGotPermaMute"),
-                "null", "null", player.getName(), sender.getName(), reason));
+                "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
     }
 
     public long getDurationFromType(String duration, String type) {

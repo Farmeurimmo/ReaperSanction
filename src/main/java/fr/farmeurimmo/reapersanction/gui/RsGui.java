@@ -31,6 +31,13 @@ public class RsGui {
         custom2.setItemMeta(customa);
         inv.setItem(11, custom2);
 
+        ItemStack history = new ItemStack(Material.BOOK, 1);
+        ItemMeta historyMeta = history.getItemMeta();
+        historyMeta.setDisplayName(
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.History"));
+        history.setItemMeta(historyMeta);
+        inv.setItem(22, history);
+
         if (player.hasPermission("mod+")) {
             if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForAdmin")) {
                 ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);

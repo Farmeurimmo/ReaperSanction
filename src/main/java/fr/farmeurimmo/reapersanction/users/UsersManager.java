@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
+import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
 import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -28,7 +29,8 @@ public class UsersManager {
                 return user;
             }
         }
-        return DatabaseManager.instance.getUser(uuid);
+        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) return DatabaseManager.instance.getUser(uuid);
+        return null;
     }
 
     public User getUser(String name) {
@@ -43,7 +45,7 @@ public class UsersManager {
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);
-        DatabaseManager.instance.createUser(user);
+        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) DatabaseManager.instance.createUser(user);
         return user;
     }
 
