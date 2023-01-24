@@ -95,8 +95,9 @@ public class HistoryGui {
 
     public LinkedList<Sanction> getContentForPage(LinkedList<Sanction> history, int page) {
         LinkedList<Sanction> content = new LinkedList<>();
-        int start = history.size() - 45 - 1;
-        int end = history.size() - 1;
+        int start = history.size() - 45;
+        if (start < 0) start = 0;
+        int end = history.size();
         for (int i = start; i < end; i++) {
             content.add(history.get(i));
         }

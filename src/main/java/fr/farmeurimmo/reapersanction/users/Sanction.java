@@ -1,5 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.users;
 
+import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+
 public class Sanction {
 
     private int type;
@@ -60,11 +62,11 @@ public class Sanction {
     }
 
     public String getSanctionTypeStr() {
-        if (this.type == 0) return "Ban-IP";
-        if (this.type == 1) return "Ban";
-        if (this.type == 2) return "TempBan";
-        if (this.type == 3) return "Mute";
-        if (this.type == 4) return "TempMute";
-        return "Unknown";
+        if (this.type == 0) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.banip");
+        if (this.type == 1) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.ban");
+        if (this.type == 2) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempban");
+        if (this.type == 3) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.mute");
+        if (this.type == 4) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempmute");
+        return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.unknown");
     }
 }
