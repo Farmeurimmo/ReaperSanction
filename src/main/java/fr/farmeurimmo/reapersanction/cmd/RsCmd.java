@@ -29,7 +29,7 @@ public class RsCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            RsGui.SsMainGui(player, args[0]);
+            RsGui.instance.ssMainGui(player, args[0]);
         } else {
             player.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("InvalidPlayer"));

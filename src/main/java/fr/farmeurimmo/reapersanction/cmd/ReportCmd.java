@@ -31,7 +31,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
         }
         if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
             if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
-                ReportGui.MakeReportGui(player, args[0]);
+                ReportGui.instance.makeReportGui(player, args[0]);
             } else {
                 player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Disabled"));
             }

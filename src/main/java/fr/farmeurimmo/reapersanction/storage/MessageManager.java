@@ -104,7 +104,7 @@ public class MessageManager {
         messages.put("UnkownReasonSpecified", "N/A");
         messages.put("NoPermission", "&cYou don't have the permission to do this !");
         messages.put("ReloadMessage", "&6Reload done !");
-        messages.put("InvalidPlayer", "&6Player unkown");
+        messages.put("InvalidPlayer", "&6Player unknown or offline !");
         messages.put("Report-Sended", "&eYou have successfuly report &6%player% &efor %reason% &e!");
         messages.put("Report-ErrorArg", "&6Usage, /report <player-name>");
         messages.put("Report-Disabled", "&6This command is disabled !");
