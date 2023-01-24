@@ -30,7 +30,7 @@ public class BanIpCmd implements CommandExecutor {
             }
             String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
             assert p != null;
-            if (p != null & p.isOnline()) {
+            if (p.isOnline()) {
                 p.kickPlayer(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
                         .replace("%banner%", sender.getName())
                         .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
