@@ -34,6 +34,17 @@ public class GuiListener implements Listener {
             e.setCancelled(true);
             if (currenttype == Material.IRON_DOOR) {
                 RsGui.instance.ssMainGui(player, HistoryGui.instance.getPlayerFromGuiName(title));
+                return;
+            }
+            if (currenttype == Material.ARROW) {
+                if (current.getItemMeta().getDisplayName().contains("Next")) {
+                    HistoryGui.instance.openHistoryGui(player, UsersManager.instance.getUser(HistoryGui.instance.getPlayerFromGuiName(title)),
+                            HistoryGui.instance.getPageFromGuiName(title) + 1);
+                } else if (current.getItemMeta().getDisplayName().contains("Previous")) {
+                    HistoryGui.instance.openHistoryGui(player, UsersManager.instance.getUser(HistoryGui.instance.getPlayerFromGuiName(title)),
+                            HistoryGui.instance.getPageFromGuiName(title) - 1);
+                }
+                return;
             }
         }
 

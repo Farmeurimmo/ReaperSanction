@@ -22,9 +22,11 @@ public class TempBanCmd implements CommandExecutor {
         char[] chars = sample.toCharArray();
         StringBuilder cb = new StringBuilder();
         for (char c : chars) {
-            if (Character.isDigit(c)) {
-                cb.append(c);
+            if (c == '-') {
+                sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempBanArg"));
+                return false;
             }
+            if (Character.isDigit(c)) cb.append(c);
         }
         if (!(cb.length() > 0 && cb.length() < 6)) {
             sender.sendMessage(MessageManager.prefix +

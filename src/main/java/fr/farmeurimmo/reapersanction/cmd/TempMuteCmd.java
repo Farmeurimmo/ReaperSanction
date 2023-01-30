@@ -21,6 +21,10 @@ public class TempMuteCmd implements CommandExecutor {
         char[] chars = sample.toCharArray();
         StringBuilder cb = new StringBuilder();
         for (char c : chars) {
+            if (c == '-') {
+                sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempMuteArg"));
+                return false;
+            }
             if (Character.isDigit(c)) cb.append(c);
         }
         if (!(cb.length() > 0 && cb.length() < 6)) {

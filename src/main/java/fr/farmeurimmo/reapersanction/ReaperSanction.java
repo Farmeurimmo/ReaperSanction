@@ -137,7 +137,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                         player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
                     }
                 }
-                getLogger().info("§4§lA new update is available please consider updating if you want to receive support !");
+                getLogger().info("§4§lA new update is available please consider updating if you want to receive support ! (the spigot api is taking time to update the version)");
             }
         });
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);

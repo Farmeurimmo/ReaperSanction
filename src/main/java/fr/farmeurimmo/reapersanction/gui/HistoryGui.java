@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
+import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
@@ -18,8 +19,11 @@ import java.util.LinkedList;
 
 public class HistoryGui {
 
+    public static final String EXPIRED_YES = FilesManager.instance.getFromConfigFormatted("History.isExpired");
+    public static final String EXPIRED_NO = FilesManager.instance.getFromConfigFormatted("History.isNotExpired");
     public static HistoryGui instance;
     public static String GUI_NAME = "§c§lHistory of %player% #%page%";
+    public static int PER_PAGE = 46;
 
     public HistoryGui() {
         instance = this;
@@ -29,13 +33,19 @@ public class HistoryGui {
         return guiName.split(" ")[2];
     }
 
+    public int getPageFromGuiName(String guiName) {
+        return Integer.parseInt(guiName.split(" ")[3].replace("#", ""));
+    }
+
     public void openHistoryGui(Player player, User targetUser, int page) {
         if (!player.hasPermission("mod")) {
             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
             return;
         }
 
-        Inventory inv = Bukkit.createInventory(null, 54, GUI_NAME.replace("%player%", targetUser.getName()).replace("%page%", String.valueOf(page + 1)));
+        if (page < 1) page = 1;
+
+        Inventory inv = Bukkit.createInventory(null, 54, GUI_NAME.replace("%player%", targetUser.getName()).replace("%page%", String.valueOf(page)));
 
         if (targetUser.getHistory().size() == 0) {
             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("PlayerNoHistoryAvailable"));
@@ -44,7 +54,7 @@ public class HistoryGui {
 
         LinkedList<Sanction> historyForPage = getContentForPage(targetUser.getHistory(), page);
 
-        for (int i = 0; i <= 45; i++) {
+        for (int i = 0; i < PER_PAGE; i++) {
             if (historyForPage.size() == 0) break;
             ItemStack item = new ItemStack(Material.PAPER);
             ItemMeta meta = item.getItemMeta();
@@ -53,26 +63,32 @@ public class HistoryGui {
             meta.setDisplayName(TimeConverter.replaceArgs(FilesManager.instance.getFromConfigFormatted("History.displayname"),
                             sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr()));
+            boolean expired = SanctionApplier.instance.isSanctionStillActive(sanction, targetUser);
+            String expiredStr = expired ? EXPIRED_NO : EXPIRED_YES;
             String lore = TimeConverter.replaceArgs(FilesManager.instance.getFromConfigFormatted("History.lore"),
                             sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
-                    .replace("%sanctiontype%", sanction.getSanctionTypeStr());
+                    .replace("%sanctiontype%", sanction.getSanctionTypeStr()).replace("%expired%", expiredStr);
             ArrayList<String> loreList = new ArrayList<>(Arrays.asList(lore.split("%%")));
             meta.setLore(loreList);
             item.setItemMeta(meta);
             inv.setItem(i, item);
         }
 
-        /*ItemStack back = new ItemStack(Material.ARROW);
-        ItemMeta backMeta = back.getItemMeta();
-        backMeta.setDisplayName("§cPrevious page");
-        back.setItemMeta(backMeta);
-        inv.setItem(48, back);
+        if (getContentForPage(targetUser.getHistory(), page - 1).size() != 0) {
+            ItemStack back = new ItemStack(Material.ARROW);
+            ItemMeta backMeta = back.getItemMeta();
+            backMeta.setDisplayName("§cPrevious page");
+            back.setItemMeta(backMeta);
+            inv.setItem(48, back);
+        }
 
-        ItemStack next = new ItemStack(Material.ARROW);
-        ItemMeta nextMeta = next.getItemMeta();
-        nextMeta.setDisplayName("§aNext page");
-        next.setItemMeta(nextMeta);
-        inv.setItem(50, next);*/
+        if (getContentForPage(targetUser.getHistory(), page + 1).size() != 0) {
+            ItemStack next = new ItemStack(Material.ARROW);
+            ItemMeta nextMeta = next.getItemMeta();
+            nextMeta.setDisplayName("§aNext page");
+            next.setItemMeta(nextMeta);
+            inv.setItem(50, next);
+        }
 
         GuiManager.instance.applyDoorsFromInvSize(inv);
         GuiManager.instance.applyGlass(inv);
@@ -81,13 +97,20 @@ public class HistoryGui {
     }
 
     public LinkedList<Sanction> getContentForPage(LinkedList<Sanction> history, int page) {
-        LinkedList<Sanction> content = new LinkedList<>();
-        int start = history.size() - 45;
-        if (start < 0) start = 0;
-        int end = history.size();
-        for (int i = start; i < end; i++) {
-            content.add(history.get(i));
+        LinkedList<Sanction> content = new LinkedList<>(history);
+        content.descendingIterator();
+        if (page < 1) return new LinkedList<>();
+        if (page == 1) return content;
+        LinkedList<Sanction> toReturn = new LinkedList<>();
+        for (int i = 0; i < PER_PAGE * (page - 1); i++) {
+            if (content.size() == 0) break;
+            content.removeLast();
         }
-        return content;
+        for (int i = 0; i < PER_PAGE; i++) {
+            if (content.size() == 0) break;
+            toReturn.add(content.getFirst());
+            content.removeFirst();
+        }
+        return toReturn;
     }
 }

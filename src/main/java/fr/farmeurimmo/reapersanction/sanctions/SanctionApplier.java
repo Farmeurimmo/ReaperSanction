@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class SanctionApplier {
 
     public static SanctionApplier instance;
@@ -141,6 +143,24 @@ public class SanctionApplier {
 
         Bukkit.broadcastMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.instance.getMessage("PlayerGotPermaMute"),
                 "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
+    }
+
+    public boolean isSanctionStillActive(Sanction sanction, User user) {
+        if (sanction.getType() == 1 || sanction.getType() == 2 || sanction.getType() == 0) {
+            if (user.getBannedUntil() < 0) return false;
+            if (sanction.getUntil() < System.currentTimeMillis()) return false;
+            if (user.getBannedUntil() == sanction.getUntil() && user.getBannedAt() == sanction.getAt() &&
+                    Objects.equals(user.getBannedReason(), sanction.getReason()) && Objects.equals(user.getBannedBy(), sanction.getBy()))
+                return true;
+        }
+        if (sanction.getType() == 3 || sanction.getType() == 4) {
+            if (user.getMutedUntil() < 0) return false;
+            if (sanction.getUntil() < System.currentTimeMillis()) return false;
+            if (user.getMutedUntil() == sanction.getUntil() && user.getMutedAt() == sanction.getAt() &&
+                    Objects.equals(user.getMutedReason(), sanction.getReason()) && Objects.equals(user.getMutedBy(), sanction.getBy()))
+                return true;
+        }
+        return false;
     }
 
     public long getMillisOfEmission(long until, String duration, String type) {
