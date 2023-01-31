@@ -115,6 +115,7 @@ public class MessageManager {
         messages.put("PlayerNoHistoryAvailable", "&cThis player has no history available !");
         messages.put("Command-Disabled", "&cThis command is disabled !");
         messages.put("PlayerGotKicked", "&c%player% got kicked by %banner% for %reason% !");
+        messages.put("ErrorKickArg", "&cUsage, /kick <player-name> [Reason]");
     }
 
     public void readFromFile() {

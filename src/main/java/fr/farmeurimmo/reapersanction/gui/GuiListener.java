@@ -92,6 +92,9 @@ public class GuiListener implements Listener {
                         if (targetUser == null) break;
                         HistoryGui.instance.openHistoryGui(player, targetUser, 0);
                         break;
+                    case SLIME_BLOCK:
+                        if (targetUser == null) break;
+                        KickGui.instance.openKickGui(player, cible);
                 }
                 break;
             case "§4ReaperSanction Mutes":
@@ -268,6 +271,20 @@ public class GuiListener implements Listener {
                         break;
                 }
                 break;
+            case "§4ReaperSanction Kick":
+                e.setCancelled(true);
+
+                if (!player.hasPermission("mod")) {
+                    RsGui.instance.ssMainGui(player, cible);
+                    player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
+                    return;
+                }
+
+                switch (currenttype) {
+                    case IRON_DOOR:
+                        RsGui.instance.ssMainGui(player, cible);
+                        break;
+                }
             default:
                 if (!title.equalsIgnoreCase("§4Report " + cible)) return;
                 e.setCancelled(true);

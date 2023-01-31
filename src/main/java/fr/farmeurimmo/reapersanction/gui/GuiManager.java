@@ -28,6 +28,7 @@ public class GuiManager {
         new ReportGui();
         new RsGui();
         new EndGui();
+        new KickGui();
     }
 
     public void applyGlass(Inventory inv) {

@@ -67,6 +67,7 @@ public class Sanction {
         if (this.type == 2) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempban");
         if (this.type == 3) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.mute");
         if (this.type == 4) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempmute");
+        if (this.type == 5) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.kick");
         return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.unknown");
     }
 }

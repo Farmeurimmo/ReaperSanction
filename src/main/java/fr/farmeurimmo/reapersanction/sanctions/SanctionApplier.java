@@ -146,7 +146,11 @@ public class SanctionApplier {
     }
 
     public void kickPlayer(Player target, String reason, String banner) {
-        target.kickPlayer(reason);
+        String kickMessage = FilesManager.instance.getFromConfigFormatted("Kick.lines")
+                .replace("%banner%", banner)
+                .replace("%date%", TimeConverter.getDateFormatted(System.currentTimeMillis()))
+                .replace("%reason%", reason);
+        target.kickPlayer(kickMessage);
         User user = UsersManager.instance.getUser(target.getUniqueId());
         if (user != null) {
             Sanction sanction = new Sanction(5, reason, banner, System.currentTimeMillis(), -1, false, false, "N/A");

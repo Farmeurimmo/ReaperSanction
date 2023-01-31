@@ -60,6 +60,13 @@ public class RsGui {
         custom4.setItemMeta(customc);
         inv.setItem(16, custom4);
 
+        ItemStack kick = new ItemStack(Material.SLIME_BLOCK, 1);
+        ItemMeta kickMeta = kick.getItemMeta();
+        kickMeta.setDisplayName(
+                FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.Kick"));
+        kick.setItemMeta(kickMeta);
+        inv.setItem(4, kick);
+
         if (player.hasPermission("mod") && player.hasPermission("mod+")) {
 
             ItemStack custom5 = new ItemStack(Material.ANVIL, 1);
