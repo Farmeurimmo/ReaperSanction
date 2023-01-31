@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.storage;
 
 import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import main.java.fr.farmeurimmo.reapersanction.gui.CustomInventories;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -16,6 +17,8 @@ public class FilesManager {
     public File dfile;
     public FileConfiguration messagesData;
     public File messagesFile;
+    public File inventoryFile;
+    public FileConfiguration inventoryData;
 
     public FilesManager() {
         instance = this;
@@ -51,12 +54,30 @@ public class FilesManager {
         messagesData = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
+    public void setup_inventory_file() {
+        inventoryFile = new File(ReaperSanction.instance.getDataFolder(), "Inventories.yml");
+
+        if (!inventoryFile.exists()) {
+            try {
+                inventoryFile.createNewFile();
+            } catch (IOException e) {
+                ReaperSanction.instance.getLogger().info("§c§lError in creation of Inventories.yml");
+            }
+        }
+
+        inventoryData = YamlConfiguration.loadConfiguration(inventoryFile);
+    }
+
     public FileConfiguration getData() {
         return ddata;
     }
 
     public FileConfiguration getConfig() {
         return ReaperSanction.instance.getConfig();
+    }
+
+    public FileConfiguration getInventoryData() {
+        return inventoryData;
     }
 
     public String getFromConfigFormatted(String key) {
@@ -90,6 +111,7 @@ public class FilesManager {
             e.printStackTrace();
         }
         ReaperSanction.instance.reloadConfig();
+        CustomInventories.instance.loadInventories();
     }
 
     public void saveData() {
@@ -105,6 +127,14 @@ public class FilesManager {
             messagesData.save(messagesFile);
         } catch (IOException e) {
             ReaperSanction.instance.getLogger().info("§c§lError in save for Messages.yml!");
+        }
+    }
+
+    public void saveInventory() {
+        try {
+            inventoryData.save(inventoryFile);
+        } catch (IOException e) {
+            ReaperSanction.instance.getLogger().info("§c§lError in save for Inventories.yml!");
         }
     }
 

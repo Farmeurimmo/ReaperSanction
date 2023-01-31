@@ -88,6 +88,8 @@ public class RsGui {
         GuiManager.instance.applyHead(inv, cible, player);
         GuiManager.instance.applyGlass(inv);
 
-        player.openInventory(inv);
+        //player.openInventory(inv);
+
+        player.openInventory(CustomInventories.instance.getMainInventory(cible));
     }
 }

@@ -21,6 +21,7 @@ public class GuiManager {
     public GuiManager() {
         instance = this;
 
+        new CustomInventories();
         new HistoryGui();
         new BanGui();
         new MuteGui();
