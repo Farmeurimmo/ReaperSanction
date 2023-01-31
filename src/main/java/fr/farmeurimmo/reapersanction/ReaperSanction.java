@@ -92,6 +92,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("unmute").setExecutor(new UnMuteCmd());
         this.getCommand("unban").setExecutor(new UnBanCmd());
         this.getCommand("history").setExecutor(new HistoryCmd());
+        this.getCommand("kick").setExecutor(new KickCmd());
 
         getLogger().info("[ReaperSanction] Plugin enabled !");
         getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");

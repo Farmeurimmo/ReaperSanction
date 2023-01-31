@@ -35,3 +35,5 @@ commands:
     permission: reapersanction.unban
   history:
     permission: reapersanction.history
+  kick:
+    permission: reapersanction.kick

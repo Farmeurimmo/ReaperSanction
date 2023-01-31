@@ -145,6 +145,21 @@ public class SanctionApplier {
                 "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
     }
 
+    public void kickPlayer(Player target, String reason, String banner) {
+        String kickMessage = FilesManager.instance.getFromConfigFormatted("Kick.lines")
+                .replace("%banner%", banner)
+                .replace("%date%", TimeConverter.getDateFormatted(System.currentTimeMillis()))
+                .replace("%reason%", reason);
+        target.kickPlayer(kickMessage);
+        User user = UsersManager.instance.getUser(target.getUniqueId());
+        if (user != null) {
+            Sanction sanction = new Sanction(5, reason, banner, System.currentTimeMillis(), -1, false, false, "N/A");
+            user.addSanction(sanction);
+        }
+        Bukkit.broadcastMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.instance.getMessage("PlayerGotKicked"),
+                "null", target.getName(), banner, reason, System.currentTimeMillis(), -1));
+    }
+
     public boolean isSanctionStillActive(Sanction sanction, User user) {
         if (sanction.getType() == 1 || sanction.getType() == 2 || sanction.getType() == 0) {
             if (user.getBannedUntil() < 0) return false;
@@ -156,9 +171,8 @@ public class SanctionApplier {
         if (sanction.getType() == 3 || sanction.getType() == 4) {
             if (user.getMutedUntil() < 0) return false;
             if (sanction.getUntil() < System.currentTimeMillis()) return false;
-            if (user.getMutedUntil() == sanction.getUntil() && user.getMutedAt() == sanction.getAt() &&
-                    Objects.equals(user.getMutedReason(), sanction.getReason()) && Objects.equals(user.getMutedBy(), sanction.getBy()))
-                return true;
+            return user.getMutedUntil() == sanction.getUntil() && user.getMutedAt() == sanction.getAt() &&
+                    Objects.equals(user.getMutedReason(), sanction.getReason()) && Objects.equals(user.getMutedBy(), sanction.getBy());
         }
         return false;
     }
