@@ -1,8 +1,8 @@
-package main.java.fr.farmeurimmo.reapersanction.cmd;
+package fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.gui.ReportGui;
-import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.gui.ReportGui;
+import fr.farmeurimmo.reapersanction.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

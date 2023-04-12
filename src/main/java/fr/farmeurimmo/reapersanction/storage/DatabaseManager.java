@@ -1,8 +1,8 @@
-package main.java.fr.farmeurimmo.reapersanction.storage;
+package fr.farmeurimmo.reapersanction.storage;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.ReaperSanction;
+import fr.farmeurimmo.reapersanction.users.User;
+import fr.farmeurimmo.reapersanction.users.UsersManager;
 
 import java.sql.*;
 import java.util.ArrayList;

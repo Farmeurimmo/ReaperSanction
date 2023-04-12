@@ -1,6 +1,6 @@
-package main.java.fr.farmeurimmo.reapersanction.storage;
+package fr.farmeurimmo.reapersanction.storage;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
+import fr.farmeurimmo.reapersanction.ReaperSanction;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

@@ -1,9 +1,9 @@
-package main.java.fr.farmeurimmo.reapersanction.gui;
+package fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.users.User;
+import fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class GuiListener implements Listener {
 
         if (current == null) return;
 
-        Material currenttype = current.getType();
+        Material currentType = current.getType();
 
         if (current.getItemMeta() == null) return;
         if (e.getSlot() <= -1) return;
@@ -32,11 +32,11 @@ public class GuiListener implements Listener {
 
         if (title.contains("§c§lHistory of ")) {
             e.setCancelled(true);
-            if (currenttype == Material.IRON_DOOR) {
+            if (currentType == Material.IRON_DOOR) {
                 RsGui.instance.ssMainGui(player, HistoryGui.instance.getPlayerFromGuiName(title));
                 return;
             }
-            if (currenttype == Material.ARROW) {
+            if (currentType == Material.ARROW) {
                 if (current.getItemMeta().getDisplayName().contains("Next")) {
                     HistoryGui.instance.openHistoryGui(player, UsersManager.instance.getUser(HistoryGui.instance.getPlayerFromGuiName(title)),
                             HistoryGui.instance.getPageFromGuiName(title) + 1);
@@ -47,6 +47,8 @@ public class GuiListener implements Listener {
                 return;
             }
         }
+
+        if (e.getInventory().getSize() < 27) return;
 
         if (e.getInventory().getItem(13) == null) return;
 
@@ -65,7 +67,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                switch (currenttype) {
+                switch (currentType) {
                     case GRASS:
                         MuteGui.instance.mutegui(player, cible);
                         break;
@@ -106,7 +108,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                switch (currenttype) {
+                switch (currentType) {
                     case BOW:
                         player.chat("/tempmute " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Mutes.Bow.Reason"));
                         player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
@@ -161,7 +163,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                switch (currenttype) {
+                switch (currentType) {
                     case DIAMOND_SWORD:
                         player.closeInventory();
                         player.chat("/tempban " + cible + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Duration") + " " + FilesManager.instance.getFromConfigFormatted("Menu.Bans.DiamondSword.Reason"));
@@ -226,7 +228,7 @@ public class GuiListener implements Listener {
                     break;
                 }
 
-                switch (currenttype) {
+                switch (currentType) {
                     case NAME_TAG:
                         player.closeInventory();
                         player.chat("/ban-ip " + cible + " " + FilesManager.instance.getConfig().getString("Menu.Banip.NameTag.Reason"));
@@ -247,7 +249,7 @@ public class GuiListener implements Listener {
 
                 if (!player.hasPermission("mod+")) break;
 
-                switch (currenttype) {
+                switch (currentType) {
                     case BOW:
                         player.closeInventory();
                         player.chat("/unmute " + cible);
@@ -280,7 +282,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                switch (currenttype) {
+                switch (currentType) {
                     case IRON_DOOR:
                         RsGui.instance.ssMainGui(player, cible);
                         break;
@@ -290,7 +292,7 @@ public class GuiListener implements Listener {
                 e.setCancelled(true);
                 String ReportReason = current.getItemMeta().getDisplayName();
 
-                switch (currenttype) {
+                switch (currentType) {
                     case GRASS:
                     case DIAMOND_SWORD:
                     case APPLE:
