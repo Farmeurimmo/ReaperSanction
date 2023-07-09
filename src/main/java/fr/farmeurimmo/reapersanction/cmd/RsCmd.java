@@ -1,8 +1,8 @@
-package main.java.fr.farmeurimmo.reapersanction.cmd;
+package fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.gui.CustomInventories;
-import main.java.fr.farmeurimmo.reapersanction.gui.InventoryType;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.gui.CustomInventories;
+import fr.farmeurimmo.reapersanction.gui.InventoryType;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

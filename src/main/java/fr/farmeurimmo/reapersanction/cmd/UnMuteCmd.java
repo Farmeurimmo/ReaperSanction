@@ -1,9 +1,9 @@
-package main.java.fr.farmeurimmo.reapersanction.cmd;
+package fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.users.User;
+import fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

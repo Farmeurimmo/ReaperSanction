@@ -1,6 +1,6 @@
-package main.java.fr.farmeurimmo.reapersanction.gui;
+package fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

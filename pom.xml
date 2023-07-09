@@ -69,7 +69,7 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastinv</pattern>
-                            <shadedPattern>main.java.fr.farmeurimmo.reapersanction</shadedPattern>
+                            <shadedPattern>fr.farmeurimmo.reapersanction</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

@@ -1,7 +1,7 @@
-package main.java.fr.farmeurimmo.reapersanction.users;
+package fr.farmeurimmo.reapersanction.users;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
-import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
+import fr.farmeurimmo.reapersanction.ReaperSanction;
+import fr.farmeurimmo.reapersanction.storage.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

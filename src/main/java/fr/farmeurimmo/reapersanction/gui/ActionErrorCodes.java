@@ -1,4 +1,4 @@
-package main.java.fr.farmeurimmo.reapersanction.gui;
+package fr.farmeurimmo.reapersanction.gui;
 
 public enum ActionErrorCodes {
 

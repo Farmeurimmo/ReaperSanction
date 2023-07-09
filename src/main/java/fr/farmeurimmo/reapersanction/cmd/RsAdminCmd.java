@@ -1,10 +1,10 @@
-package main.java.fr.farmeurimmo.reapersanction.cmd;
+package fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.ReaperSanction;
-import main.java.fr.farmeurimmo.reapersanction.storage.DatabaseManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.ReaperSanction;
+import fr.farmeurimmo.reapersanction.storage.DatabaseManager;
+import fr.farmeurimmo.reapersanction.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

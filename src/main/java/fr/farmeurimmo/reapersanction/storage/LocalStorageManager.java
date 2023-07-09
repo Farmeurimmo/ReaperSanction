@@ -1,9 +1,9 @@
-package main.java.fr.farmeurimmo.reapersanction.storage;
+package fr.farmeurimmo.reapersanction.storage;
 
-import main.java.fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
-import main.java.fr.farmeurimmo.reapersanction.users.Sanction;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.users.Sanction;
+import fr.farmeurimmo.reapersanction.users.User;
+import fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;

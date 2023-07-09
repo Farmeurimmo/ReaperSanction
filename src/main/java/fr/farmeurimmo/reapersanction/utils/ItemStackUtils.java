@@ -1,4 +1,4 @@
-package main.java.fr.farmeurimmo.reapersanction.utils;
+package fr.farmeurimmo.reapersanction.utils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -1,4 +1,4 @@
-package main.java.fr.farmeurimmo.reapersanction.gui;
+package fr.farmeurimmo.reapersanction.gui;
 
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.Player;

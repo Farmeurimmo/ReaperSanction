@@ -1,14 +1,17 @@
-package main.java.fr.farmeurimmo.reapersanction.gui;
+package fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
+import fr.farmeurimmo.reapersanction.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomInventories {
 

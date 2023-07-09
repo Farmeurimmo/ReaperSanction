@@ -1,6 +1,6 @@
-package main.java.fr.farmeurimmo.reapersanction.users;
+package fr.farmeurimmo.reapersanction.users;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.storage.FilesManager;
 
 public class Sanction {
 

@@ -1,4 +1,4 @@
-package main.java.fr.farmeurimmo.reapersanction;
+package fr.farmeurimmo.reapersanction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

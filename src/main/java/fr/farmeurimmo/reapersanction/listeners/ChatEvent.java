@@ -1,8 +1,8 @@
-package main.java.fr.farmeurimmo.reapersanction.listeners;
+package fr.farmeurimmo.reapersanction.listeners;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
-import main.java.fr.farmeurimmo.reapersanction.users.User;
-import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.users.User;
+import fr.farmeurimmo.reapersanction.users.UsersManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
