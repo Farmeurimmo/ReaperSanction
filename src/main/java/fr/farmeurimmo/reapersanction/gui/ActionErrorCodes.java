@@ -8,7 +8,9 @@ public enum ActionErrorCodes {
     WHAT_GUI(3),
     NO_PLAYER_SELECTED(4),
     NO_GUI(5),
-    NO_INTRUCTION(6);
+    NO_INTRUCTION(6),
+    NO_REASON(7),
+    PLAYER_NOT_FOUND(8);
 
 
     private int code;

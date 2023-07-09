@@ -63,6 +63,7 @@ public class CustomInventory {
             ItemStack item = items.get(i);
             ItemMeta meta = item.getItemMeta();
             if (item.getType() == Material.SKULL_ITEM) ((SkullMeta) meta).setOwner(cible);
+            item.setItemMeta(meta);
             if (meta.getDisplayName() != null) meta.setDisplayName(meta.getDisplayName().replace("%player%", cible));
             if (meta.getLore() != null) {
                 List<String> lore = meta.getLore();

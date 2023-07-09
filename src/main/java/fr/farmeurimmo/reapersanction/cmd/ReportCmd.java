@@ -1,5 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
+import main.java.fr.farmeurimmo.reapersanction.gui.CustomInventories;
+import main.java.fr.farmeurimmo.reapersanction.gui.InventoryType;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
@@ -30,7 +32,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
         }
         if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
             if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
-                ReportGui.instance.makeReportGui(player, args[0]);
+                CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
             } else {
                 player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Disabled"));
             }

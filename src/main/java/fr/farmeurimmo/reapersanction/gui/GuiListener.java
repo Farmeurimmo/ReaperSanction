@@ -1,8 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction.gui;
 
-import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.users.UsersManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,15 +44,5 @@ public class GuiListener implements Listener {
             }
         }
     }
-
-    public void sendMessageReported(Player player, String cible, String ReportReason) {
-        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
-        player.closeInventory();
-        for (Player all : Bukkit.getServer().getOnlinePlayers()) {
-            if (all.hasPermission("reportview"))
-                all.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
-        }
-    }
-
 }
 

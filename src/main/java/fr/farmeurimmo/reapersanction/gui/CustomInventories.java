@@ -6,6 +6,7 @@ import main.java.fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,12 +50,12 @@ public class CustomInventories {
                             ActionGuiInterpreter.SEPARATOR + "KICK" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(22, ItemStackUtils.getItemStack(Material.BOOK, "§eHistory", null, 1));
-                    actions.put(22, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                    actions.put(22, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI_DYN" +
                             ActionGuiInterpreter.SEPARATOR + "HISTORY" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(15, ItemStackUtils.getItemStack(Material.ANVIL, "§cBan IP", null, 1));
                     actions.put(15, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
-                            ActionGuiInterpreter.SEPARATOR + "BANIP" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+                            ActionGuiInterpreter.SEPARATOR + "BAN_IP" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(16, ItemStackUtils.getItemStack(Material.PAPER, "§cEnd", null, 1));
                     actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
@@ -120,12 +121,12 @@ public class CustomInventories {
                 }
                 case BAN_IP: {
                     items.put(12, ItemStackUtils.getItemStack(Material.NAME_TAG, "Usurpation", null, 1));
-                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BANIP" +
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN_IP" +
                             ActionGuiInterpreter.SEPARATOR + items.get(12).getItemMeta().getDisplayName() +
                             ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(14, ItemStackUtils.getItemStack(Material.CLAY_BALL, "Other", null, 2));
-                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BANIP" +
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN_IP" +
                             ActionGuiInterpreter.SEPARATOR + items.get(14).getItemMeta().getDisplayName() +
                             ActionGuiInterpreter.SEPARATOR + "%player%")));
 
@@ -217,10 +218,6 @@ public class CustomInventories {
                     inventories.put(type, new CustomInventory("§4ReaperSanction Mutes", 27, items, actions, true, type));
                     break;
                 }
-                case HISTORY: {
-                    //TODO
-                    break;
-                }
                 case END: {
                     items.put(4, ItemStackUtils.getItemStack(Material.BOW, "Unmute", null, 1));
                     actions.put(4, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNMUTE" +
@@ -231,7 +228,7 @@ public class CustomInventories {
                             ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(14, ItemStackUtils.getItemStack(Material.ANVIL, "UnbanIP", null, 1));
-                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNBANIP" +
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNBAN_IP" +
                             ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
@@ -240,6 +237,8 @@ public class CustomInventories {
 
                     items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
                     actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
 
                     inventories.put(type, new CustomInventory("§4ReaperSanction End", 27, items, actions, true, type));
                     break;
@@ -264,6 +263,10 @@ public class CustomInventories {
                     actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "REPORT" +
                             ActionGuiInterpreter.SEPARATOR + items.get(16).getItemMeta().getDisplayName() +
                             ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(13, ItemStackUtils.getSkull("Report %player%", null, null));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction Report", 27, items, actions, true, type));
                     break;
                 }
                 default:
@@ -293,6 +296,10 @@ public class CustomInventories {
             FilesManager.instance.getInventoryData().set(inv.getType() + ".isFill", inv.isFill());
             for (Map.Entry<Integer, ItemStack> entry : inv.getItems().entrySet()) {
                 FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".type", entry.getValue().getType().name());
+                if (entry.getValue().getType() == Material.SKULL_ITEM) {
+                    SkullMeta meta = (SkullMeta) entry.getValue().getItemMeta();
+                    FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".owner", meta.getOwner());
+                }
                 FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".amount", entry.getValue().getAmount());
                 FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".display", entry.getValue().getItemMeta().getDisplayName());
                 if (entry.getValue().getItemMeta().getLore() != null) {
@@ -332,7 +339,13 @@ public class CustomInventories {
                                 lore.add(FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".lore." + loreKey));
                             }
                         }
-                        ItemStack item = ItemStackUtils.getItemStack(material, display, lore, amount);
+                        ItemStack item;
+                        if (material != Material.SKULL_ITEM) {
+                            item = ItemStackUtils.getItemStack(material, display, lore, amount);
+                        } else {
+                            String owner = FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".owner");
+                            item = ItemStackUtils.getSkull(display, owner, lore);
+                        }
                         items.put(slot, item);
                         if (FilesManager.instance.getInventoryData().contains(type + ".items." + key + ".actions")) {
                             ArrayList<String> actionList = new ArrayList<>();
