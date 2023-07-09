@@ -25,11 +25,6 @@ public class GuiManager {
 
         new CustomInventories();
         new HistoryGui();
-        new BanGui();
-        new BanIpGui();
-        new ReportGui();
-        new EndGui();
-        new KickGui();
     }
 
     public void applyGlass(Inventory inv) {

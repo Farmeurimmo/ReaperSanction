@@ -1,6 +1,5 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.gui.ReportGui;
 import main.java.fr.farmeurimmo.reapersanction.storage.FilesManager;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;

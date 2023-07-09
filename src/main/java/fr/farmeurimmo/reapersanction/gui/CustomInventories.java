@@ -66,15 +66,102 @@ public class CustomInventories {
                     break;
                 }
                 case BAN: {
-                    //TODO
+                    items.put(4, ItemStackUtils.getItemStack(Material.GOLD_AXE, "Incorrect build", null, 1));
+                    actions.put(4, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(4).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(10, ItemStackUtils.getItemStack(Material.DIAMOND_CHESTPLATE, "Other", null, 1));
+                    actions.put(10, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(10).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "Kill aura", null, 1));
+                    actions.put(11, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(11).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(12, ItemStackUtils.getItemStack(Material.WOOD_SWORD, "CPS", null, 1));
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(12).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(14, ItemStackUtils.getItemStack(Material.NAME_TAG, "Incorrect player name", null, 1));
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(14).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(15, ItemStackUtils.getItemStack(Material.LEATHER, "Incorrect skin", null, 1));
+                    actions.put(15, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(15).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(16, ItemStackUtils.getItemStack(Material.FEATHER, "Fly", null, 1));
+                    actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(16).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(22, ItemStackUtils.getItemStack(Material.ARMOR_STAND, "Other hacks", null, 1));
+                    actions.put(22, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(22).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+
+                    items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(18, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
+                    actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction Bans", 27, items, actions, true, type));
                     break;
                 }
                 case BAN_IP: {
-                    //TODO
+                    items.put(12, ItemStackUtils.getItemStack(Material.NAME_TAG, "Usurpation", null, 1));
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BANIP" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(12).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(14, ItemStackUtils.getItemStack(Material.CLAY_BALL, "Other", null, 2));
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BANIP" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(14).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+
+                    items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(18, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
+                    actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction Bans IP", 27, items, actions, true, type));
                     break;
                 }
                 case KICK: {
-                    //TODO
+                    items.put(12, ItemStackUtils.getItemStack(Material.TNT, "Other", null, 1));
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "KICK" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(12).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(14, ItemStackUtils.getItemStack(Material.FEATHER, "Non specified reason", null, 1));
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "KICK" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(14).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+
+                    items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(18, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
+                    actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction Kicks", 27, items, actions, true, type));
                     break;
                 }
                 case MUTE: {
@@ -135,11 +222,48 @@ public class CustomInventories {
                     break;
                 }
                 case END: {
-                    //TODO
+                    items.put(4, ItemStackUtils.getItemStack(Material.BOW, "Unmute", null, 1));
+                    actions.put(4, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNMUTE" +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(12, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "Unban", null, 1));
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNBAN" +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(14, ItemStackUtils.getItemStack(Material.ANVIL, "UnbanIP", null, 1));
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "UNBANIP" +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(18, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
+                    actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction End", 27, items, actions, true, type));
                     break;
                 }
                 case REPORT: {
-                    //TODO
+                    items.put(10, ItemStackUtils.getItemStack(Material.NAME_TAG, "Incorrect skin/name", null, 1));
+                    actions.put(10, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "REPORT" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(10).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "Cheating", null, 1));
+                    actions.put(11, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "REPORT" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(11).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(15, ItemStackUtils.getItemStack(Material.APPLE, "Cross team", null, 1));
+                    actions.put(15, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "REPORT" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(15).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(16, ItemStackUtils.getItemStack(Material.ANVIL, "Other", null, 1));
+                    actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "REPORT" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(16).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
                     break;
                 }
                 default:
