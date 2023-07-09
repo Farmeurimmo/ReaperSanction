@@ -21,14 +21,10 @@ public class GuiManager {
     public GuiManager() {
         instance = this;
 
+        new ActionGuiInterpreter();
+
+        new CustomInventories();
         new HistoryGui();
-        new BanGui();
-        new MuteGui();
-        new BanIpGui();
-        new ReportGui();
-        new RsGui();
-        new EndGui();
-        new KickGui();
     }
 
     public void applyGlass(Inventory inv) {

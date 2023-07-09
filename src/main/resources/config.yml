@@ -1,8 +1,9 @@
-#Config version 1.4.0
+#Config version 1.5.0
 IP:
   ShowIpForAdmin: true
   ShowIpForMod: true
 
+TimeZone: Europe/Paris
 # Available YAML and MYSQL(need to edit credentials)
 # Be careful with the storage method option, if you type it wrong, the plugin will automatically switch to YAML
 storage:
@@ -55,86 +56,3 @@ Vanish:
   ExitGamemode: true
   ExGamemode: 0
   Fly: true
-Report:
-  Enabled: true
-  Reason:
-    grass: "&6Incorrect skin/name"
-    DiamondSword: "&6Hacks"
-    apple: "&6Cross team"
-    beacon: "&6Others"
-Menu:
-  RsMenu:
-    GrassBlock: "&6Mutes"
-    DiamondSword: "&6Bans"
-    SkullLore:
-      line1: "&eIP: %ip%"
-      line2: "&eDisplay name: %displayname%"
-      #You can't add more line for the moment
-    Anvil: "&6Ban-ip"
-    Paper: "&6Unbans and Unmutes"
-    Barrier: "&4No Permission"
-    GoBackDoor: "&6Go Back"
-    History: "&6History"
-    Kick: "&6Kick"
-  #You need to add sec for second or min for minute or day for day or y for year
-  Mutes:
-    Bow:
-      Reason: "Spam"
-      Duration: "20min"
-    DiamondSword:
-      Reason: "Flood"
-      Duration: "20min"
-    Anvil:
-      Reason: "Insults"
-      Duration: "30min"
-    RedstoneBlock:
-      Reason: "Provocation"
-      Duration: "30min"
-    ActivatorRail:
-      Reason: "Incitement to crimine"
-      Duration: "1hour"
-    ArmorStand:
-      Reason: "Sanction evading"
-      Duration: "30min"
-    Compass:
-      Reason: "Pub"
-      Duration: "1day"
-    FlintAndSteel:
-      Reason: "Threat"
-      Duration: "1day"
-  Bans:
-    DiamondSword:
-      Reason: "Killaura"
-      Duration: "7day"
-    WoodSword:
-      Reason: "CPS"
-      Duration: "7day"
-    Feather:
-      Reason: "Fly"
-      Duration: "7day"
-    IronBoots:
-      Reason: "Anti knockback"
-      Duration: "7day"
-    GoldAxe:
-      Reason: "Reach"
-      Duration: "7day"
-    ArmorStand:
-      Reason: "Others hacks"
-      Duration: "7day"
-    Tnt:
-      Reason: "Incorrect player name"
-      Duration: "10year"
-    Leather:
-      Reason: "Incorrect skin"
-      Duration: "1day"
-    DiamondChestPlate:
-      Reason: "Other"
-      Duration: "7day"
-    Dirt:
-      Reason: "Incorrect build"
-      Duration: "5day"
-  Banip:
-    NameTag:
-      Reason: "Usurpation"
-    ClayBall:
-      Reason: "Multiple account"

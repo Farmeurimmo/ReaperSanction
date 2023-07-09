@@ -3,11 +3,15 @@ package fr.farmeurimmo.reapersanction.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class TimeConverter {
 
+    public static TimeZone timeZone = TimeZone.getTimeZone("Europe/Paris");
+
     public static String getFormatTimeWithTZ(Date currentTime) {
         SimpleDateFormat timeZoneDate = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.FRANCE);
+        timeZoneDate.setTimeZone(timeZone);
         return timeZoneDate.format(currentTime);
     }
 
