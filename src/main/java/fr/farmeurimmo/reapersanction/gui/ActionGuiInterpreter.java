@@ -156,6 +156,36 @@ public class ActionGuiInterpreter {
                 return;
             }
 
+            if (what.equals("UNMUTE")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                p.performCommand("unmute " + player);
+                return;
+            }
+
+            if (what.equals("UNBAN")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                p.performCommand("unban " + player);
+                return;
+            }
+
+            if (what.equals("UNBAN_IP")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                p.performCommand("unban " + player);
+                return;
+            }
+
             if (what.equals("CLOSE")) {
                 p.closeInventory();
                 return;
