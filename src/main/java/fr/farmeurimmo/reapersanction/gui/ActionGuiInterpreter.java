@@ -75,7 +75,84 @@ public class ActionGuiInterpreter {
             }
 
             if (what.equals("MUTE")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                String reason = "";
+                if (sizeof > 3) reason = action.split(SEPARATOR)[3];
+                p.performCommand("mute " + player + " " + reason);
+                return;
+            }
 
+            if (what.equals("TEMPMUTE")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                if (sizeof == 3) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_DURATION_FOR_TEMP);
+                    return;
+                }
+                String duration = action.split(SEPARATOR)[3];
+                String reason = "";
+                if (sizeof > 4) reason = action.split(SEPARATOR)[4];
+                p.performCommand("tempmute " + player + " " + duration + " " + reason);
+                return;
+            }
+
+            if (what.equals("BAN")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                String reason = "";
+                if (sizeof > 3) reason = action.split(SEPARATOR)[3];
+                p.performCommand("ban " + player + " " + reason);
+                return;
+            }
+
+            if (what.equals("TEMPBAN")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                if (sizeof == 3) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_DURATION_FOR_TEMP);
+                    return;
+                }
+                String duration = action.split(SEPARATOR)[3];
+                String reason = "";
+                if (sizeof > 4) reason = action.split(SEPARATOR)[4];
+                p.performCommand("tempban " + player + " " + duration + " " + reason);
+                return;
+            }
+
+            if (what.equals("KICK")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                String reason = "";
+                if (sizeof > 3) reason = action.split(SEPARATOR)[3];
+                p.performCommand("kick " + player + " " + reason);
+                return;
+            }
+
+            if (what.equals("BAN_IP")) {
+                if (sizeof == 2) {
+                    sendActionNotWorking(action, ActionErrorCodes.NO_PLAYER_SELECTED);
+                    return;
+                }
+                String player = action.split(SEPARATOR)[2];
+                String reason = "";
+                if (sizeof > 3) reason = action.split(SEPARATOR)[3];
+                p.performCommand("ban-ip " + player + " " + reason);
                 return;
             }
 

@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class ReaperSanction extends JavaPlugin implements Listener {
 
@@ -96,6 +97,14 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("history").setExecutor(new HistoryCmd());
         this.getCommand("kick").setExecutor(new KickCmd());
 
+        getLogger().info("Trying to get the TimeZone from config");
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone(getConfig().getString("TimeZone")));
+        } catch (Exception e) {
+            getLogger().warning("§c§lUnable to get the TimeZone from config, using default one...");
+            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+        }
+
         getLogger().info("[ReaperSanction] Plugin enabled !");
         getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
         getLogger().info("-----------------------------------------------------------------------------------------------------");
@@ -131,16 +140,25 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             if (this.getDescription().getVersion().equals(version)) {
                 getLogger().info("§6No update found.");
             } else {
-                getLogger().warning("A new update is available please consider updating if you want to receive support !");
-                getLogger().info("Newest version detected at spigot : " + version);
-                getLogger().info("Your version : " + this.getDescription().getVersion());
-                getLogger().info("Download link : https://www.spigotmc.org/resources/reapersanction.89580/");
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.hasPermission("reapersanction.rsadmin")) {
-                        player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
+                if (version.contains("RC")) {
+                    getLogger().warning("§c§lA new RC update is available, you can try it but it may contains bugs !");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.hasPermission("reapersanction.rsadmin")) {
+                            player.sendMessage("§c§lA new Release candidate update is available, you can try it but it may contains bugs and breaking changes so be careful !");
+                        }
                     }
+                } else {
+                    getLogger().warning("A new update is available please consider updating if you want to receive support !");
+                    getLogger().info("Newest version detected at spigot : " + version);
+                    getLogger().info("Your version : " + this.getDescription().getVersion());
+                    getLogger().info("Download link : https://www.spigotmc.org/resources/reapersanction.89580/");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (player.hasPermission("reapersanction.rsadmin")) {
+                            player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
+                        }
+                    }
+                    getLogger().info("§4§lA new update is available please consider updating if you want to receive support ! (the spigot api is taking time to update the version)");
                 }
-                getLogger().info("§4§lA new update is available please consider updating if you want to receive support ! (the spigot api is taking time to update the version)");
             }
         });
         Bukkit.getScheduler().runTaskLater(this, this::checkForUpdate, 20 * 60 * 60);

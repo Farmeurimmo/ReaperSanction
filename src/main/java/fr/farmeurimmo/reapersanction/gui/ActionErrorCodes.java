@@ -10,7 +10,8 @@ public enum ActionErrorCodes {
     NO_GUI(5),
     NO_INTRUCTION(6),
     NO_REASON(7),
-    PLAYER_NOT_FOUND(8);
+    PLAYER_NOT_FOUND(8),
+    NO_DURATION_FOR_TEMP(9);
 
 
     private int code;
