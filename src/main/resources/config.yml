@@ -56,3 +56,7 @@ Vanish:
   ExitGamemode: true
   ExGamemode: 0
   Fly: true
+Menu:
+  RsMenu:
+    GoBackDoor: "&6Go Back"
+    History: "&6History"

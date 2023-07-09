@@ -28,11 +28,11 @@ public class GuiListener implements Listener {
 
         if (title.contains("§c§lHistory of ")) {
             e.setCancelled(true);
-            if (currenttype == Material.IRON_DOOR) {
+            if (currenttype.name().contains("IRON_DOOR")) {
                 CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, HistoryGui.instance.getPlayerFromGuiName(title));
                 return;
             }
-            if (currenttype == Material.ARROW) {
+            if (currenttype.name().contains("ARROW")) {
                 if (current.getItemMeta().getDisplayName().contains("Next")) {
                     HistoryGui.instance.openHistoryGui(player, UsersManager.instance.getUser(HistoryGui.instance.getPlayerFromGuiName(title)),
                             HistoryGui.instance.getPageFromGuiName(title) + 1);
