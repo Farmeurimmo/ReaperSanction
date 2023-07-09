@@ -30,27 +30,52 @@ public class CustomInventories {
 
     public void applyDefaultInventories() {
         for (InventoryType type : InventoryType.values()) {
-            if (type == InventoryType.MAIN) {
-                HashMap<Integer, ItemStack> items = new HashMap<>();
-                HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
+            switch (type) {
+                case MAIN:
+                    HashMap<Integer, ItemStack> items = new HashMap<>();
+                    HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
 
-                ArrayList<String> lore = new ArrayList<>();
-                lore.add("§7IP : §e%ip%");
+                    ArrayList<String> lore = new ArrayList<>();
+                    lore.add("§7IP : §e%ip%");
 
-                items.put(10, ItemStackUtils.getItemStack(Material.GRASS, "§aMutes", null, 1));
-                actions.put(10, new ArrayList<>(Arrays.asList("INT|GUI|MUTE", "STR|CIBLE|%player%")));
+                    items.put(10, ItemStackUtils.getItemStack(Material.GRASS, "§aMutes", null, 1));
+                    actions.put(10, new ArrayList<>(Arrays.asList("INT|GUI|MUTE")));
 
-                items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "§aBans", null, 1));
+                    items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "§aBans", null, 1));
+                    actions.put(11, new ArrayList<>(Arrays.asList("INT|GUI|BAN")));
 
-                items.put(4, ItemStackUtils.getItemStack(Material.SLIME_BLOCK, "§cKick", null, 1));
-                items.put(22, ItemStackUtils.getItemStack(Material.BOOK, "§eHistory", null, 1));
+                    items.put(4, ItemStackUtils.getItemStack(Material.SLIME_BLOCK, "§cKick", null, 1));
+                    actions.put(4, new ArrayList<>(Arrays.asList("INT|GUI|KICK")));
 
-                items.put(15, ItemStackUtils.getItemStack(Material.ANVIL, "§cBan IP", null, 1));
-                items.put(16, ItemStackUtils.getItemStack(Material.PAPER, "§cEnd", null, 1));
+                    items.put(22, ItemStackUtils.getItemStack(Material.BOOK, "§eHistory", null, 1));
+                    actions.put(22, new ArrayList<>(Arrays.asList("INT|GUI|HISTORY")));
 
-                items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+                    items.put(15, ItemStackUtils.getItemStack(Material.ANVIL, "§cBan IP", null, 1));
+                    actions.put(15, new ArrayList<>(Arrays.asList("INT|GUI|BANIP")));
 
-                inventories.put(type, new CustomInventory("§4ReaperSanction", 27, items, actions, true, type));
+                    items.put(16, ItemStackUtils.getItemStack(Material.PAPER, "§cEnd", null, 1));
+                    actions.put(16, new ArrayList<>(Arrays.asList("INT|GUI|END")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction", 27, items, actions, true, type));
+                    break;
+                case BAN:
+                    //TODO
+                case BAN_IP:
+                    //TODO
+                case KICK:
+                    //TODO
+                case MUTE:
+                    //TODO
+                case HISTORY:
+                    //TODO
+                case END:
+                    //TODO
+                case REPORT:
+                    //TODO
+                default:
+                    break;
             }
         }
     }
