@@ -27,7 +27,6 @@ public class GuiManager {
         new MuteGui();
         new BanIpGui();
         new ReportGui();
-        new RsGui();
         new EndGui();
         new KickGui();
     }

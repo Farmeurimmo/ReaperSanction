@@ -1,5 +1,6 @@
 package main.java.fr.farmeurimmo.reapersanction;
 
+import fr.mrmicky.fastinv.FastInvManager;
 import main.java.fr.farmeurimmo.reapersanction.cmd.*;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiListener;
 import main.java.fr.farmeurimmo.reapersanction.gui.GuiManager;
@@ -72,6 +73,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         new MessageManager();
 
         getLogger().info("Initializing GUIs...");
+        FastInvManager.register(instance);
         new GuiManager();
 
         getLogger().info("Starting listeners...");
@@ -145,9 +147,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     }
 
     public void Vanish() {
-        ArrayList<Player> vanish = vanished;
         for (Player players : Bukkit.getOnlinePlayers()) {
-            for (Player pl : vanish) {
+            for (Player pl : vanished) {
                 players.hidePlayer(pl);
             }
         }

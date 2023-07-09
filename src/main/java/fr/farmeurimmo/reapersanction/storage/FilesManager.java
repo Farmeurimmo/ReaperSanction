@@ -111,6 +111,12 @@ public class FilesManager {
             e.printStackTrace();
         }
         ReaperSanction.instance.reloadConfig();
+        try {
+            inventoryData.load(inventoryFile);
+        } catch (Exception e) {
+            ReaperSanction.instance.getLogger().info("§c§lError in reloading data for Inventories.yml!");
+            e.printStackTrace();
+        }
         CustomInventories.instance.loadInventories();
     }
 

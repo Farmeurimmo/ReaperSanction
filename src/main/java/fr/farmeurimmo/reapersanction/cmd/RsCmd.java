@@ -1,6 +1,7 @@
 package main.java.fr.farmeurimmo.reapersanction.cmd;
 
-import main.java.fr.farmeurimmo.reapersanction.gui.RsGui;
+import main.java.fr.farmeurimmo.reapersanction.gui.CustomInventories;
+import main.java.fr.farmeurimmo.reapersanction.gui.InventoryType;
 import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -29,7 +30,7 @@ public class RsCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            RsGui.instance.ssMainGui(player, args[0]);
+            CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
         } else {
             player.sendMessage(MessageManager.prefix +
                     MessageManager.instance.getMessage("InvalidPlayer"));

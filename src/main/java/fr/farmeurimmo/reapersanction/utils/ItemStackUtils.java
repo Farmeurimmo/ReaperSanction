@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class ItemStackUtils {
 
-    public static ItemStack getItemStack(Material material, String name, ArrayList<String> lore) {
-        ItemStack item = new ItemStack(material);
+    public static ItemStack getItemStack(Material material, String name, ArrayList<String> lore, int amount) {
+        ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(lore);

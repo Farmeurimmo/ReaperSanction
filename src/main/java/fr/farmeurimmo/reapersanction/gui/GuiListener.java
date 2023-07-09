@@ -33,7 +33,7 @@ public class GuiListener implements Listener {
         if (title.contains("§c§lHistory of ")) {
             e.setCancelled(true);
             if (currenttype == Material.IRON_DOOR) {
-                RsGui.instance.ssMainGui(player, HistoryGui.instance.getPlayerFromGuiName(title));
+                CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, HistoryGui.instance.getPlayerFromGuiName(title));
                 return;
             }
             if (currenttype == Material.ARROW) {
@@ -77,7 +77,7 @@ public class GuiListener implements Listener {
                         break;
                     case PAPER:
                         if (!player.hasPermission("mod+")) {
-                            RsGui.instance.ssMainGui(player, cible);
+                            CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                             break;
                         }
@@ -85,7 +85,7 @@ public class GuiListener implements Listener {
                         break;
                     case BOOK:
                         if (!player.hasPermission("mod+")) {
-                            RsGui.instance.ssMainGui(player, cible);
+                            CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                             player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                             break;
                         }
@@ -101,7 +101,7 @@ public class GuiListener implements Listener {
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod")) {
-                    RsGui.instance.ssMainGui(player, cible);
+                    CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                     player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                     return;
                 }
@@ -148,7 +148,7 @@ public class GuiListener implements Listener {
                         player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                         break;
                     default:
-                        RsGui.instance.ssMainGui(player, cible);
+                        CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
                 break;
@@ -156,7 +156,7 @@ public class GuiListener implements Listener {
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod")) {
-                    RsGui.instance.ssMainGui(player, cible);
+                    CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                     player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                     return;
                 }
@@ -213,7 +213,7 @@ public class GuiListener implements Listener {
                         player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                         break;
                     default:
-                        RsGui.instance.ssMainGui(player, cible);
+                        CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
                 break;
@@ -221,7 +221,7 @@ public class GuiListener implements Listener {
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod+")) {
-                    RsGui.instance.ssMainGui(player, cible);
+                    CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                     player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                     break;
                 }
@@ -238,7 +238,7 @@ public class GuiListener implements Listener {
                         player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitForApplication"));
                         break;
                     default:
-                        RsGui.instance.ssMainGui(player, cible);
+                        CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
                 break;
@@ -267,7 +267,7 @@ public class GuiListener implements Listener {
                         player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SanctionWaitEnd"));
                         break;
                     default:
-                        RsGui.instance.ssMainGui(player, cible);
+                        CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
                 break;
@@ -275,14 +275,14 @@ public class GuiListener implements Listener {
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod")) {
-                    RsGui.instance.ssMainGui(player, cible);
+                    CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                     player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
                     return;
                 }
 
                 switch (currenttype) {
                     case IRON_DOOR:
-                        RsGui.instance.ssMainGui(player, cible);
+                        CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
             default:

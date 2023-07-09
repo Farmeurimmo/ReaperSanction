@@ -9,40 +9,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-enum InventoryType {
-    MAIN("Main"),
-    BAN("Ban"),
-    MUTE("Mute"),
-    KICK("Kick"),
-    BAN_IP("BanIP"),
-    END("End"),
-    REPORT("Report"),
-    HISTORY("History");
-
-    final String name;
-
-    InventoryType(String i) {
-        this.name = i;
-    }
-
-    public String getName() {
-        return name;
-    }
-}
-
 public class CustomInventory {
 
+    private final int size;
+    private final InventoryType type;
     private String name;
-    private int size;
     private HashMap<Integer, ItemStack> items;
-    private HashMap<Integer, InventoryAction> actionPerItem;
+    private HashMap<Integer, ArrayList<String>> actionPerItem;
     private boolean isFill;
-    private InventoryType type;
 
-    public CustomInventory(String name, int size, HashMap<Integer, ItemStack> items, HashMap<Integer, InventoryAction> actionPerItem, boolean isFill, InventoryType type) {
+    public CustomInventory(String name, int size, HashMap<Integer, ItemStack> items, HashMap<Integer, ArrayList<String>> actionPerItem, boolean isFill, InventoryType type) {
         this.name = name;
         this.size = size;
         this.items = items;
@@ -71,7 +51,7 @@ public class CustomInventory {
         return type;
     }
 
-    public HashMap<Integer, InventoryAction> getActionPerItem() {
+    public HashMap<Integer, ArrayList<String>> getActionPerItem() {
         return actionPerItem;
     }
 
