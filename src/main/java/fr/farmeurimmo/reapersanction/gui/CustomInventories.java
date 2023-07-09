@@ -5,7 +5,6 @@ import main.java.fr.farmeurimmo.reapersanction.storage.MessageManager;
 import main.java.fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -39,22 +38,28 @@ public class CustomInventories {
                     lore.add("§7IP : §e%ip%");
 
                     items.put(10, ItemStackUtils.getItemStack(Material.GRASS, "§aMutes", null, 1));
-                    actions.put(10, new ArrayList<>(Arrays.asList("INT|GUI|MUTE")));
+                    actions.put(10, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MUTE" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "§aBans", null, 1));
-                    actions.put(11, new ArrayList<>(Arrays.asList("INT|GUI|BAN")));
+                    actions.put(11, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "BAN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(4, ItemStackUtils.getItemStack(Material.SLIME_BLOCK, "§cKick", null, 1));
-                    actions.put(4, new ArrayList<>(Arrays.asList("INT|GUI|KICK")));
+                    actions.put(4, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "KICK" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(22, ItemStackUtils.getItemStack(Material.BOOK, "§eHistory", null, 1));
-                    actions.put(22, new ArrayList<>(Arrays.asList("INT|GUI|HISTORY")));
+                    actions.put(22, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "HISTORY" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(15, ItemStackUtils.getItemStack(Material.ANVIL, "§cBan IP", null, 1));
-                    actions.put(15, new ArrayList<>(Arrays.asList("INT|GUI|BANIP")));
+                    actions.put(15, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "BANIP" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(16, ItemStackUtils.getItemStack(Material.PAPER, "§cEnd", null, 1));
-                    actions.put(16, new ArrayList<>(Arrays.asList("INT|GUI|END")));
+                    actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "END" + ActionGuiInterpreter.SEPARATOR + "%player%")));
 
                     items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
 
@@ -78,12 +83,6 @@ public class CustomInventories {
                     break;
             }
         }
-    }
-
-    public Inventory getMainInventory(String cible) {
-        CustomInventory inv = inventories.get(InventoryType.MAIN);
-        inv.applyCible(cible);
-        return inv.getInventory();
     }
 
     public CustomInventory getCustomInventory(InventoryType type) {
@@ -158,8 +157,7 @@ public class CustomInventories {
                     }
                     inventories.put(type, new CustomInventory(name, size, items, actions, isFill, type));
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
     }

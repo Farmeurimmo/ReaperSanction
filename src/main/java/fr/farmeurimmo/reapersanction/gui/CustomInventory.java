@@ -72,6 +72,16 @@ public class CustomInventory {
             }
             item.setItemMeta(meta);
         }
+        for (int i : actionPerItem.keySet()) {
+            ArrayList<String> actions = actionPerItem.get(i);
+            for (int j = 0; j < actions.size(); j++) {
+                String action = actions.get(j);
+                action = action.replace("%player%", cible);
+                action = action.replace("%ip%", ip);
+                actions.set(j, action);
+            }
+            actionPerItem.put(i, actions);
+        }
     }
 
     public Inventory getInventory() {

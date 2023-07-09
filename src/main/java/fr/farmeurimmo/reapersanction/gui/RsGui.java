@@ -17,7 +17,7 @@ public class RsGui extends FastInv {
             setItem(entry.getKey(), entry.getValue(), e -> {
                 if (ci.getActionPerItem().containsKey(entry.getKey())) {
                     for (String action : ci.getActionPerItem().get(entry.getKey())) {
-                        //TODO: Parse action and execute it
+                        ActionGuiInterpreter.INSTANCE.interpretAction(action, player);
                     }
                 }
             });

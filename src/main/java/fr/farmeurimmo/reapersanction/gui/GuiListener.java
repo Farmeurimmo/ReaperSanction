@@ -57,7 +57,7 @@ public class GuiListener implements Listener {
         User targetUser = UsersManager.instance.getUser(cible);
 
         switch (title) {
-            case "§4ReaperSanction":
+            /*case "§4ReaperSanction":
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod")) {
@@ -96,7 +96,7 @@ public class GuiListener implements Listener {
                         if (targetUser == null) break;
                         KickGui.instance.openKickGui(player, cible);
                 }
-                break;
+                break;*/
             case "§4ReaperSanction Mutes":
                 e.setCancelled(true);
 
