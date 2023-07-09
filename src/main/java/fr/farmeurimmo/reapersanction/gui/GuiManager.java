@@ -42,7 +42,7 @@ public class GuiManager {
     public void applyDoorsFromInvSize(Inventory inv) {
         ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
         ItemMeta customd = custom5.getItemMeta();
-        customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.GoBackDoor"));
+        customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("History.GoBackDoor"));
         custom5.setItemMeta(customd);
 
         int firstItem = 0;

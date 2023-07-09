@@ -33,6 +33,7 @@ Kick:
   lines: "&cConnection stopped \n \n&4You have been kicked from this server \n\n&6Date of kick : &e%date% \n&6By : &e%banner% \n&6Reason : &e%reason%"
 
 History:
+  GoBackDoor: "&6Go Back"
   # %% is a line break
   displayname: "&6%sanctiontype% §e%player% %date%"
   lore: "&6By : &e%banner% %%&6Reason : &e%reason% %%&6Duration : &e%duration% %%&6Expiration : &e%expiration% %%&6Expired : &e%expired%"
@@ -56,7 +57,3 @@ Vanish:
   ExitGamemode: true
   ExGamemode: 0
   Fly: true
-Menu:
-  RsMenu:
-    GoBackDoor: "&6Go Back"
-    History: "&6History"
