@@ -26,7 +26,6 @@ public class GuiManager {
         new CustomInventories();
         new HistoryGui();
         new BanGui();
-        new MuteGui();
         new BanIpGui();
         new ReportGui();
         new EndGui();

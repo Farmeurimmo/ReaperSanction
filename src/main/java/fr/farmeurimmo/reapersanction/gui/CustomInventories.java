@@ -29,14 +29,13 @@ public class CustomInventories {
 
     public void applyDefaultInventories() {
         for (InventoryType type : InventoryType.values()) {
+            HashMap<Integer, ItemStack> items = new HashMap<>();
+            HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
+
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add("§7IP : §e%ip%");
             switch (type) {
-                case MAIN:
-                    HashMap<Integer, ItemStack> items = new HashMap<>();
-                    HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
-
-                    ArrayList<String> lore = new ArrayList<>();
-                    lore.add("§7IP : §e%ip%");
-
+                case MAIN: {
                     items.put(10, ItemStackUtils.getItemStack(Material.GRASS, "§aMutes", null, 1));
                     actions.put(10, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
                             ActionGuiInterpreter.SEPARATOR + "MUTE" + ActionGuiInterpreter.SEPARATOR + "%player%")));
@@ -65,20 +64,84 @@ public class CustomInventories {
 
                     inventories.put(type, new CustomInventory("§4ReaperSanction", 27, items, actions, true, type));
                     break;
-                case BAN:
+                }
+                case BAN: {
                     //TODO
-                case BAN_IP:
+                    break;
+                }
+                case BAN_IP: {
                     //TODO
-                case KICK:
+                    break;
+                }
+                case KICK: {
                     //TODO
-                case MUTE:
+                    break;
+                }
+                case MUTE: {
+                    items.put(4, ItemStackUtils.getItemStack(Material.DETECTOR_RAIL, "Incitment to crime", null, 1));
+                    actions.put(4, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(4).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(10, ItemStackUtils.getItemStack(Material.BOW, "Spam", null, 1));
+                    actions.put(10, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(10).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "Flood", null, 1));
+                    actions.put(11, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(11).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(12, ItemStackUtils.getItemStack(Material.COMPASS, "Pub", null, 1));
+                    actions.put(12, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(12).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(13, ItemStackUtils.getSkull("§6%player%", null, lore));
+
+                    items.put(14, ItemStackUtils.getItemStack(Material.FLINT_AND_STEEL, "Threat", null, 1));
+                    actions.put(14, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(14).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(15, ItemStackUtils.getItemStack(Material.ANVIL, "Insults", null, 1));
+                    actions.put(15, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(15).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(16, ItemStackUtils.getItemStack(Material.REDSTONE_BLOCK, "Provocation", null, 1));
+                    actions.put(16, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(16).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(22, ItemStackUtils.getItemStack(Material.ARMOR_STAND, "Sanction evading", null, 1));
+                    actions.put(22, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "BAN" +
+                            ActionGuiInterpreter.SEPARATOR + items.get(22).getItemMeta().getDisplayName() +
+                            ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(18, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(18, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(26, ItemStackUtils.getItemStack(Material.BARRIER, "§cClose", null, 1));
+                    actions.put(26, new ArrayList<>(Arrays.asList("INT" + ActionGuiInterpreter.SEPARATOR + "CLOSE")));
+
+                    inventories.put(type, new CustomInventory("§4ReaperSanction Mutes", 27, items, actions, true, type));
+                    break;
+                }
+                case HISTORY: {
                     //TODO
-                case HISTORY:
+                    break;
+                }
+                case END: {
                     //TODO
-                case END:
+                    break;
+                }
+                case REPORT: {
                     //TODO
-                case REPORT:
-                    //TODO
+                    break;
+                }
                 default:
                     break;
             }
@@ -96,7 +159,7 @@ public class CustomInventories {
                     "§cInternal Error: " + type.toString() + " is not found in the inventories list.");
             return;
         }
-        new RsGui(p, cible, ci).open(p);
+        new Gui(p, cible, ci).open(p);
     }
 
     public void saveInventories() {

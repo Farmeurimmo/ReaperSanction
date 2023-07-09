@@ -6,9 +6,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-public class RsGui extends FastInv {
+public class Gui extends FastInv {
 
-    public RsGui(Player player, String cible, CustomInventory ci) {
+    public Gui(Player player, String cible, CustomInventory ci) {
         super(ci.getSize(), ci.getName());
 
         ci.applyCible(cible);

@@ -97,7 +97,7 @@ public class GuiListener implements Listener {
                         KickGui.instance.openKickGui(player, cible);
                 }
                 break;*/
-            case "§4ReaperSanction Mutes":
+            /*case "§4ReaperSanction Mutes":
                 e.setCancelled(true);
 
                 if (!player.hasPermission("mod")) {
@@ -151,7 +151,7 @@ public class GuiListener implements Listener {
                         CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, cible);
                         break;
                 }
-                break;
+                break;*/
             case "§4ReaperSanction Bans":
                 e.setCancelled(true);
 

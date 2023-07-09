@@ -19,7 +19,6 @@ public class ActionGuiInterpreter {
             return;
         }
         String where = action.split(SEPARATOR)[0];
-        System.out.println("DEBUG : " + where);
         if (where.equals("INT")) {
             if (sizeof == 1) {
                 sendActionNotWorking(action, ActionErrorCodes.NO_DECISION);
@@ -49,6 +48,10 @@ public class ActionGuiInterpreter {
             }
             if (what.equals("MUTE")) {
 
+                return;
+            }
+            if (what.equals("CLOSE")) {
+                p.closeInventory();
                 return;
             }
             sendActionNotWorking(action, ActionErrorCodes.NO_INTRUCTION);
