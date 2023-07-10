@@ -37,7 +37,7 @@ public class KickCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        if (args.length == 0) {
+        if (args.length == 1 && command.getName().equalsIgnoreCase("kick")) {
             List<String> toReturn = new ArrayList<>();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.getName().equalsIgnoreCase(sender.getName())) continue;

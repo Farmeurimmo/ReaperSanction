@@ -210,4 +210,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     public String getServerName() {
         return Bukkit.getServerName();
     }
+
+    public boolean isDiscordWebhookActive() {
+        return DISCORD_WEBHOOK_URL.length() > 0;
+    }
 }
