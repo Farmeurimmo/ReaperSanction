@@ -4,12 +4,10 @@ import fr.farmeurimmo.reapersanction.sanctions.SanctionRevoker;
 import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.users.User;
 import fr.farmeurimmo.reapersanction.users.UsersManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +37,13 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
         ArrayList<String> subcmd = new ArrayList<>();
         if (cmd.getName().equalsIgnoreCase("unmute")) {
             if (args.length == 1) {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    subcmd.add(player.getName());
+                for (User user : UsersManager.INSTANCE.users) {
+                    if (user.isMuted()) {
+                        subcmd.add(user.getName());
+                    }
+                    if (user.isPermaMuted()) {
+                        subcmd.add(user.getName());
+                    }
                 }
             } else if (args.length >= 2) {
                 subcmd.add("");

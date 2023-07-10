@@ -48,6 +48,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
         if (cmd.getName().equalsIgnoreCase("report")) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equalsIgnoreCase(sender.getName())) continue;
                     subcmd.add(player.getName());
                 }
             } else if (args.length >= 2) {

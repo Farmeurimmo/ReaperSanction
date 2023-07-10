@@ -10,11 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
-public class BanIpCmd implements CommandExecutor {
+public class BanIpCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -46,6 +50,19 @@ public class BanIpCmd implements CommandExecutor {
                 .replace("%reason%", reason));
         SanctionApplier.INSTANCE.ApplyPermaBanIp(p, reason, sender.getName());
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        List<String> subcmd = new ArrayList<>();
+        if (args.length == 1) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getName().equalsIgnoreCase(sender.getName())) continue;
+                subcmd.add(player.getName());
+            }
+        }
+        Collections.sort(subcmd);
+        return subcmd;
     }
 
 }

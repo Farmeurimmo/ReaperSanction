@@ -60,6 +60,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
         if (cmd.getName().equalsIgnoreCase("ban")) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equalsIgnoreCase(sender.getName())) continue;
                     subcmd.add(player.getName());
                 }
             } else if (args.length >= 2) {

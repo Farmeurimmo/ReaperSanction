@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class KickCmd implements CommandExecutor, TabCompleter {
@@ -39,8 +40,10 @@ public class KickCmd implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             List<String> toReturn = new ArrayList<>();
             for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().equalsIgnoreCase(sender.getName())) continue;
                 toReturn.add(p.getName());
             }
+            Collections.sort(toReturn);
             return toReturn;
         }
         return null;
