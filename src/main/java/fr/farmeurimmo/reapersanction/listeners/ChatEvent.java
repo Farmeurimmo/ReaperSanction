@@ -14,17 +14,17 @@ public class ChatEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void AsyncChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        User user = UsersManager.instance.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
+        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
         if (user.isMuted()) {
             e.setCancelled(true);
             if (user.isPermaMuted()) {
                 player.sendMessage(MessageManager.prefix +
-                        MessageManager.instance.getMessage("PermaMutedPlayerChat")
+                        MessageManager.INSTANCE.getMessage("PermaMutedPlayerChat")
                                 .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
                 return;
             }
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("TempMutedPlayerChat")
+                    MessageManager.INSTANCE.getMessage("TempMutedPlayerChat")
                             .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
         }
     }

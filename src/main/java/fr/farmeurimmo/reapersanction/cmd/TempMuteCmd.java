@@ -14,7 +14,7 @@ public class TempMuteCmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempMuteArg"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorTempMuteArg"));
             return false;
         }
         String sample = args[1];
@@ -22,33 +22,33 @@ public class TempMuteCmd implements CommandExecutor {
         StringBuilder cb = new StringBuilder();
         for (char c : chars) {
             if (c == '-') {
-                sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempMuteArg"));
+                sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorTempMuteArg"));
                 return false;
             }
             if (Character.isDigit(c)) cb.append(c);
         }
         if (!(cb.length() > 0 && cb.length() < 6)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempMuteArg"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorTempMuteArg"));
             return false;
         }
         if (!(args[1].contains("sec") || args[1].contains("min") || args[1].contains("day") || args[1].contains("year")
                 || args[1].contains("hour"))) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempMuteArg"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorTempMuteArg"));
             return false;
         }
         String type = args[1];
         String reason;
         if (args.length == 2) {
-            reason = MessageManager.instance.getMessage("UnkownReasonSpecified").trim();
+            reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified").trim();
         } else {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
         Player player = Bukkit.getPlayer(args[0]);
         if (player == null) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorPlayerNotFound"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorPlayerNotFound"));
             return false;
         }
-        SanctionApplier.instance.ApplyTempMute(player, reason.trim(), sender, cb.toString(), type.replace(cb, ""));
+        SanctionApplier.INSTANCE.ApplyTempMute(player, reason.trim(), sender, cb.toString(), type.replace(cb, ""));
         return false;
     }
 }

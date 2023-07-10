@@ -24,33 +24,33 @@ public class BanCmd implements CommandExecutor, TabCompleter {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorBanArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorBanArg"));
             return true;
         }
         if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
-            String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
+            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
             assert p != null;
-            if (p.isOnline()) p.kickPlayer(FilesManager.instance.getFromConfigFormatted("Ban.lines")
+            if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
                     .replace("%banner%", sender.getName())
                     .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                     .replace("%reason%", reason.trim()));
-            SanctionApplier.instance.ApplyPermaBan(p, reason, sender.getName());
+            SanctionApplier.INSTANCE.ApplyPermaBan(p, reason, sender.getName());
             return true;
         }
         if (Bukkit.getPlayer(args[0]) == null) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("InvalidPlayer"));
+                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
             return true;
         }
         Player p = Bukkit.getPlayer(args[0]);
         String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         assert p != null;
-        if (p.isOnline()) p.kickPlayer(FilesManager.instance.getFromConfigFormatted("Ban.lines")
+        if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                 .replace("%reason%", reason));
-        SanctionApplier.instance.ApplyPermaBan(p, reason, sender.getName());
+        SanctionApplier.INSTANCE.ApplyPermaBan(p, reason, sender.getName());
         return true;
     }
 

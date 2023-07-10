@@ -10,12 +10,12 @@ import java.util.UUID;
 
 public class DatabaseManager {
 
-    public static DatabaseManager instance;
+    public static DatabaseManager INSTANCE;
     private final String host, user, password;
     public Connection connection;
 
     public DatabaseManager(String host, String user, String password) {
-        instance = this;
+        INSTANCE = this;
 
         this.host = host;
         this.user = user;
@@ -25,7 +25,7 @@ public class DatabaseManager {
     public void startConnection() throws Exception {
         try {
             connection = getConnection();
-            ReaperSanction.instance.getLogger().info("§a§lSuccessfully connected to the database !");
+            ReaperSanction.INSTANCE.getLogger().info("§a§lSuccessfully connected to the database !");
         } catch (SQLException e) {
             throw new Exception("Unable to connect to the database");
         }
@@ -94,7 +94,7 @@ public class DatabaseManager {
     }
 
     public void updateAllUsersFromMigratation() {
-        for (User user : UsersManager.instance.users) {
+        for (User user : UsersManager.INSTANCE.users) {
             createUser(user);
             updatePlayer(user);
         }
@@ -115,7 +115,7 @@ public class DatabaseManager {
                         resultSet.getString("bannedDuration"), resultSet.getString("ip"), User.getHistoryFromString(resultSet.getString("history"))));
             }
 
-            UsersManager.instance.users = users;
+            UsersManager.INSTANCE.users = users;
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -15,7 +15,7 @@ public class TempBanCmd implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0 || args.length == 1) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorTempBanArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorTempBanArg"));
             return false;
         }
         String sample = args[1];
@@ -23,36 +23,36 @@ public class TempBanCmd implements CommandExecutor {
         StringBuilder cb = new StringBuilder();
         for (char c : chars) {
             if (c == '-') {
-                sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorTempBanArg"));
+                sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorTempBanArg"));
                 return false;
             }
             if (Character.isDigit(c)) cb.append(c);
         }
         if (!(cb.length() > 0 && cb.length() < 6)) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorTempBanArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorTempBanArg"));
             return false;
         }
         if (!(args[1].contains("sec") || args[1].contains("min") || args[1].contains("day") || args[1].contains("year")
                 || args[1].contains("hour"))) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorTempBanArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorTempBanArg"));
             return false;
         }
         String type = args[1].replace(cb.toString(), "");
         String reason;
         if (args.length == 2) {
-            reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
+            reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
         } else {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
         Player p = Bukkit.getPlayer(args[0]);
         if (p == null) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("InvalidPlayer"));
+                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
             return false;
         }
-        SanctionApplier.instance.ApplyTempBan(p, reason, sender, cb.toString(), type);
+        SanctionApplier.INSTANCE.ApplyTempBan(p, reason, sender, cb.toString(), type);
         return false;
     }
 

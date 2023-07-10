@@ -21,24 +21,24 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
         }
         Player player = (Player) sender;
         if (args.length != 1) {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("Report-ErrorArg"));
+                    MessageManager.INSTANCE.getMessage("Report-ErrorArg"));
             return true;
         }
         if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
-            if (FilesManager.instance.getConfig().getBoolean("Report.Enabled")) {
-                CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
+            if (FilesManager.INSTANCE.getConfig().getBoolean("Report.Enabled")) {
+                CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
             } else {
-                player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Disabled"));
+                player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Disabled"));
             }
             return true;
         }
-        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-PlayerNotonline"));
+        player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-PlayerNotonline"));
         return true;
     }
 

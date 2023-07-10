@@ -47,7 +47,7 @@ public class ActionGuiInterpreter {
                     sendActionNotWorking(action, ActionErrorCodes.NO_GUI);
                     return;
                 }
-                CustomInventories.instance.startInventoryOpenProcess(p, it, player);
+                CustomInventories.INSTANCE.startInventoryOpenProcess(p, it, player);
                 return;
             }
             if (what.equals("GUI_DYN")) {
@@ -62,12 +62,12 @@ public class ActionGuiInterpreter {
                 String player = action.split(SEPARATOR)[3];
                 String gui = action.split(SEPARATOR)[2];
                 if (gui.equals(InventoryType.HISTORY.name())) {
-                    User user = UsersManager.instance.getUser(player);
+                    User user = UsersManager.INSTANCE.getUser(player);
                     if (user == null) {
                         sendActionNotWorking(action, ActionErrorCodes.PLAYER_NOT_FOUND);
                         return;
                     }
-                    HistoryGui.instance.openHistoryGui(p, user, 0);
+                    HistoryGui.INSTANCE.openHistoryGui(p, user, 0);
                     return;
                 }
                 sendActionNotWorking(action, ActionErrorCodes.NO_GUI);
@@ -218,16 +218,16 @@ public class ActionGuiInterpreter {
     }
 
     public void sendActionNotWorking(String action, ActionErrorCodes code) {
-        ReaperSanction.instance.getLogger().warning("Action " + action + " is not working. Code: " + code.getCode() + " " + code.name() +
+        ReaperSanction.INSTANCE.getLogger().warning("Action " + action + " is not working. Code: " + code.getCode() + " " + code.name() +
                 " (see the wiki for more informations)");
     }
 
     public void sendMessageReported(Player player, String cible, String ReportReason) {
-        player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
+        player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
         player.closeInventory();
         for (Player all : Bukkit.getServer().getOnlinePlayers()) {
             if (all.hasPermission("reportview"))
-                all.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
+                all.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
         }
     }
 }

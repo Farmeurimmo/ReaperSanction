@@ -10,14 +10,14 @@ import java.util.HashMap;
 public class MessageManager {
 
     public static final HashMap<String, String> messages = new HashMap<>();
-    public static MessageManager instance;
+    public static MessageManager INSTANCE;
     public static String prefix = "";
 
     public MessageManager() {
-        instance = this;
+        INSTANCE = this;
 
         int count = 0;
-        for (String ignored : FilesManager.instance.messagesData.getKeys(false)) count++;
+        for (String ignored : FilesManager.INSTANCE.messagesData.getKeys(false)) count++;
 
         load();
 
@@ -47,24 +47,24 @@ public class MessageManager {
     }
 
     public void regenConfig() {
-        if (FilesManager.instance.messagesFile.exists()) {
-            File old = new File(ReaperSanction.instance.getDataFolder(), "OLD-Messages.yml");
+        if (FilesManager.INSTANCE.messagesFile.exists()) {
+            File old = new File(ReaperSanction.INSTANCE.getDataFolder(), "OLD-Messages.yml");
             try {
                 if (old.exists()) old.delete();
                 old.createNewFile();
                 FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(old);
-                for (String key : FilesManager.instance.messagesData.getKeys(false)) {
-                    oldConfig.set(key, FilesManager.instance.messagesData.get(key));
+                for (String key : FilesManager.INSTANCE.messagesData.getKeys(false)) {
+                    oldConfig.set(key, FilesManager.INSTANCE.messagesData.get(key));
                 }
                 oldConfig.save(old);
             } catch (Exception e) {
-                ReaperSanction.instance.getLogger().info("§c§lError in creation of OLD-Messages.yml");
+                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of OLD-Messages.yml");
             }
         }
 
-        for (String key : FilesManager.instance.messagesData.getKeys(false))
-            FilesManager.instance.messagesData.set(key, null);
-        FilesManager.instance.saveMessages();
+        for (String key : FilesManager.INSTANCE.messagesData.getKeys(false))
+            FilesManager.INSTANCE.messagesData.set(key, null);
+        FilesManager.INSTANCE.saveMessages();
 
         save();
         readFromFile();
@@ -119,17 +119,17 @@ public class MessageManager {
     }
 
     public void readFromFile() {
-        for (String key : FilesManager.instance.messagesData.getKeys(false)) {
-            messages.put(key, FilesManager.instance.messagesData.getString(key));
+        for (String key : FilesManager.INSTANCE.messagesData.getKeys(false)) {
+            messages.put(key, FilesManager.INSTANCE.messagesData.getString(key));
         }
         save();
     }
 
     public void save() {
         for (String key : messages.keySet()) {
-            FilesManager.instance.messagesData.set(key, messages.get(key));
+            FilesManager.INSTANCE.messagesData.set(key, messages.get(key));
         }
-        FilesManager.instance.saveMessages();
+        FilesManager.INSTANCE.saveMessages();
     }
 
 }

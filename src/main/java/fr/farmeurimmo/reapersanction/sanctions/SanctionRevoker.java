@@ -10,13 +10,13 @@ import org.bukkit.entity.Player;
 
 public class SanctionRevoker {
 
-    public static SanctionRevoker instance;
+    public static SanctionRevoker INSTANCE;
 
     public SanctionRevoker() {
-        instance = this;
+        INSTANCE = this;
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(ReaperSanction.instance, () -> {
-            for (User user : UsersManager.instance.users) {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(ReaperSanction.INSTANCE, () -> {
+            for (User user : UsersManager.INSTANCE.users) {
                 checkForSanctionExpiration(user);
             }
         }, 0, 20);
@@ -40,18 +40,18 @@ public class SanctionRevoker {
         Player player = Bukkit.getPlayer(user.getUuid());
         if (player != null) {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("MuteEnded"));
+                    MessageManager.INSTANCE.getMessage("MuteEnded"));
         }
     }
 
     public void revokeMuteAdmin(User user, CommandSender requester) {
         if (!user.isMuted()) {
-            requester.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotMuted"));
+            requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotMuted"));
             return;
         }
         revokeMute(user);
         requester.sendMessage(MessageManager.prefix +
-                MessageManager.instance.getMessage("SuccefullyUnmuted")
+                MessageManager.INSTANCE.getMessage("SuccefullyUnmuted")
                         .replace("%player%", user.getName()));
     }
 
@@ -67,16 +67,16 @@ public class SanctionRevoker {
         Player player = Bukkit.getPlayer(user.getUuid());
         if (player != null) {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("BanEnded"));
+                    MessageManager.INSTANCE.getMessage("BanEnded"));
         }
     }
 
     public void revokeBanAdmin(User user, CommandSender requester) {
         if (!user.isBanned()) {
-            requester.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotBanned"));
+            requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotBanned"));
             return;
         }
         revokeBan(user);
-        requester.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("SuccefullyUnbanned").replace("%player%", user.getName()));
+        requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("SuccefullyUnbanned").replace("%player%", user.getName()));
     }
 }

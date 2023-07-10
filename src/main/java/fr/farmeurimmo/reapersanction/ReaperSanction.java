@@ -25,14 +25,14 @@ import java.util.TimeZone;
 public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static final ArrayList<Player> vanished = new ArrayList<>();
-    public static ReaperSanction instance;
+    public static ReaperSanction INSTANCE;
     public static String storageMethod = "YAML";
     public final HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        instance = this;
+        INSTANCE = this;
         String version = Bukkit.getServer().getBukkitVersion();
         getLogger().info("-----------------------------------------------------------------------------------------------------");
         getLogger().info("This server is using minecraft : " + version);
@@ -51,8 +51,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             getCredentialsAndInitialize();
 
             try {
-                DatabaseManager.instance.startConnection();
-                DatabaseManager.instance.loadUsers();
+                DatabaseManager.INSTANCE.startConnection();
+                DatabaseManager.INSTANCE.loadUsers();
             } catch (Exception e) {
                 e.printStackTrace();
                 getLogger().severe("§c§lUnable to connect to the database, stopping server...");
@@ -61,20 +61,20 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             }
         } else {
             getLogger().info("Found YAML storage method, starting it...");
-            LocalStorageManager.instance.setup();
+            LocalStorageManager.INSTANCE.setup();
         }
 
         getLogger().info("Starting moderation module...");
         new SanctionApplier();
         new SanctionRevoker();
         Vanish();
-        UsersManager.instance.checkForOnlinePlayersIfTheyAreUsers();
+        UsersManager.INSTANCE.checkForOnlinePlayersIfTheyAreUsers();
 
         getLogger().info("Looking for messages...");
         new MessageManager();
 
         getLogger().info("Initializing GUIs...");
-        FastInvManager.register(instance);
+        FastInvManager.register(INSTANCE);
         new GuiManager();
 
         getLogger().info("Starting listeners...");
@@ -120,7 +120,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     }
 
     public void reload() {
-        FilesManager.instance.reloadData();
+        FilesManager.INSTANCE.reloadData();
     }
 
     public void getCredentialsAndInitialize() {
@@ -170,6 +170,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 players.hidePlayer(pl);
             }
         }
-        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.instance, this::Vanish, 20);
+        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.INSTANCE, this::Vanish, 20);
     }
 }

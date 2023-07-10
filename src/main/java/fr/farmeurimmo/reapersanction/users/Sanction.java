@@ -62,12 +62,12 @@ public class Sanction {
     }
 
     public String getSanctionTypeStr() {
-        if (this.type == 0) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.banip");
-        if (this.type == 1) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.ban");
-        if (this.type == 2) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempban");
-        if (this.type == 3) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.mute");
-        if (this.type == 4) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.tempmute");
-        if (this.type == 5) return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.kick");
-        return FilesManager.instance.getFromConfigFormatted("History.sanctiontype.unknown");
+        if (this.type == 0) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.banip");
+        if (this.type == 1) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.ban");
+        if (this.type == 2) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.tempban");
+        if (this.type == 3) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.mute");
+        if (this.type == 4) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.tempmute");
+        if (this.type == 5) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.kick");
+        return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.unknown");
     }
 }

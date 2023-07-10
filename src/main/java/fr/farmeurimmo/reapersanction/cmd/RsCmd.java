@@ -20,20 +20,20 @@ public class RsCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
         }
         Player player = (Player) sender;
         if (args.length != 1) {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorArg"));
             return false;
         }
         if (Bukkit.getPlayer(args[0]) != null) {
-            CustomInventories.instance.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
+            CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
         } else {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("InvalidPlayer"));
+                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
         }
         return false;
     }

@@ -21,18 +21,18 @@ public class BanIpCmd implements CommandExecutor {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorBanIpArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorBanIpArg"));
             return true;
         }
         if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
-            String reason = MessageManager.instance.getMessage("UnkownReasonSpecified");
+            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
             assert p != null;
-            if (p.isOnline()) p.kickPlayer(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+            if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", sender.getName())
                     .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                     .replace("%reason%", reason));
-            SanctionApplier.instance.ApplyPermaBanIp(p, reason, sender.getName());
+            SanctionApplier.INSTANCE.ApplyPermaBanIp(p, reason, sender.getName());
             Bukkit.getBanList(Type.IP).addBan(p.getAddress().getHostName(), reason,
                     null, sender.getName());
             return true;
@@ -40,11 +40,11 @@ public class BanIpCmd implements CommandExecutor {
         Player p = Bukkit.getPlayer(args[0]);
         String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         assert p != null;
-        if (p.isOnline()) p.kickPlayer(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+        if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                 .replace("%reason%", reason));
-        SanctionApplier.instance.ApplyPermaBanIp(p, reason, sender.getName());
+        SanctionApplier.INSTANCE.ApplyPermaBanIp(p, reason, sender.getName());
         return true;
     }
 

@@ -22,11 +22,11 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg3) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
         }
-        if (!ReaperSanction.instance.getConfig().getBoolean("Vanish.Enabled")) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("Command-Disabled"));
+        if (!ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.Enabled")) {
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Command-Disabled"));
             return false;
         }
         Player p = (Player) sender;
@@ -36,25 +36,25 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
                 p.removePotionEffect(PotionEffectType.INVISIBILITY);
                 if (p.getGameMode() == GameMode.ADVENTURE) p.setAllowFlight(false);
                 if (p.getGameMode() == GameMode.SURVIVAL) p.setAllowFlight(false);
-                if (ReaperSanction.instance.getConfig().getBoolean("Vanish.ExitGamemode")) {
-                    if (ReaperSanction.instance.getConfig().getInt("Vanish.ExGamemode") == 1) {
+                if (ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.ExitGamemode")) {
+                    if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.ExGamemode") == 1) {
                         p.setGameMode(GameMode.CREATIVE);
                         p.setAllowFlight(true);
                         p.setFlying(true);
                     }
-                    if (ReaperSanction.instance.getConfig().getInt("Vanish.ExGamemode") == 2)
+                    if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.ExGamemode") == 2)
                         p.setGameMode(GameMode.ADVENTURE);
-                    if (ReaperSanction.instance.getConfig().getInt("Vanish.ExGamemode") == 3) {
+                    if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.ExGamemode") == 3) {
                         p.setGameMode(GameMode.SPECTATOR);
                         p.setAllowFlight(true);
                         p.setFlying(true);
                     }
-                    if (ReaperSanction.instance.getConfig().getInt("Vanish.ExGamemode") == 0)
+                    if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.ExGamemode") == 0)
                         p.setGameMode(GameMode.SURVIVAL);
                 }
             }
             ReaperSanction.vanished.remove(p);
-            p.sendMessage(MessageManager.instance.getMessage("Vanish-Isoff"));
+            p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
             return true;
         }
         for (Player players : Bukkit.getOnlinePlayers()) {
@@ -62,19 +62,19 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
             p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000000000, 1));
         }
         ReaperSanction.vanished.add(p);
-        if (ReaperSanction.instance.getConfig().getBoolean("Vanish.ChangeGamemode")) {
-            if (ReaperSanction.instance.getConfig().getInt("Vanish.Gamemode") == 1) p.setGameMode(GameMode.CREATIVE);
-            if (ReaperSanction.instance.getConfig().getInt("Vanish.Gamemode") == 2) p.setGameMode(GameMode.ADVENTURE);
-            if (ReaperSanction.instance.getConfig().getInt("Vanish.Gamemode") == 3) p.setGameMode(GameMode.SPECTATOR);
-            if (ReaperSanction.instance.getConfig().getInt("Vanish.Gamemode") == 0) p.setGameMode(GameMode.SURVIVAL);
+        if (ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.ChangeGamemode")) {
+            if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 1) p.setGameMode(GameMode.CREATIVE);
+            if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 2) p.setGameMode(GameMode.ADVENTURE);
+            if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 3) p.setGameMode(GameMode.SPECTATOR);
+            if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 0) p.setGameMode(GameMode.SURVIVAL);
         }
-        if (ReaperSanction.instance.getConfig().getBoolean("Vanish.Fly")) {
+        if (ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.Fly")) {
             if (!p.getAllowFlight()) {
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }
         }
-        p.sendMessage(MessageManager.instance.getMessage("Vanish-Ison"));
+        p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Ison"));
         return true;
     }
 

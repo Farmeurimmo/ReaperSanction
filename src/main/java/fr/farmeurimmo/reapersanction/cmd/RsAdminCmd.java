@@ -21,7 +21,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorArgAdminCommands"));
+                    MessageManager.INSTANCE.getMessage("ErrorArgAdminCommands"));
             sender.sendMessage("Subs commands available: infos, reload, rl");
             return true;
         }
@@ -29,22 +29,22 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("Plugin developper : Farmeurimmo");
             sender.sendMessage("Email : contact@farmeurimmo.fr");
             sender.sendMessage("Website : https://reaper.farmeurimmo.fr/reapersanction");
-            sender.sendMessage("Version : " + ReaperSanction.instance.getDescription().getVersion());
+            sender.sendMessage("Version : " + ReaperSanction.INSTANCE.getDescription().getVersion());
             return true;
         }
         if (!sender.hasPermission("reapersanction.rsadmin")) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("NoPermission"));
+                    MessageManager.INSTANCE.getMessage("NoPermission"));
             return true;
         }
         if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
-            ReaperSanction.instance.reload();
+            ReaperSanction.INSTANCE.reload();
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ReloadMessage"));
+                    MessageManager.INSTANCE.getMessage("ReloadMessage"));
             return true;
         }
         if (args[0].equalsIgnoreCase("migratedb")) {
-            if (!ReaperSanction.instance.matchRequirementsToMigrateToMYSQL()) {
+            if (!ReaperSanction.INSTANCE.matchRequirementsToMigrateToMYSQL()) {
                 sender.sendMessage("§l§cIf you want to upgrade to MYSQL and you have already sanctions on players, you can, just follow those steps !\n" +
                         "§cPlease migrate your db when the server is empty, and make a backup of your old messages.yml to prevent data loss if the server crash !\n" +
                         "§l§c1. §7Stop your server\n" +
@@ -59,12 +59,12 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cStarting migration, can take a while depending on how much users you have.");
             CompletableFuture.runAsync(() -> {
                 sender.sendMessage("§7Migrating users... (ASYNC)");
-                FilesManager.instance.setup_YAML_Storage();
-                if (LocalStorageManager.instance.isAnOldYAMLFile())
-                    LocalStorageManager.instance.convertFromOldStorageMethod();
-                else LocalStorageManager.instance.loadUsers();
-                DatabaseManager.instance.updateAllUsersFromMigratation();
-                FilesManager.instance.deleteAndRecreateDataFile();
+                FilesManager.INSTANCE.setup_YAML_Storage();
+                if (LocalStorageManager.INSTANCE.isAnOldYAMLFile())
+                    LocalStorageManager.INSTANCE.convertFromOldStorageMethod();
+                else LocalStorageManager.INSTANCE.loadUsers();
+                DatabaseManager.INSTANCE.updateAllUsersFromMigratation();
+                FilesManager.INSTANCE.deleteAndRecreateDataFile();
                 sender.sendMessage("§aMigration done ! (took " + (System.currentTimeMillis() - start) + "ms)");
             });
             return false;

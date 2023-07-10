@@ -14,22 +14,22 @@ public class HistoryCmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
         }
         Player player = (Player) sender;
 
         if (args.length != 1) {
-            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("ErrorHistoryArg"));
+            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorHistoryArg"));
             return false;
         }
 
-        User targetUser = UsersManager.instance.getUser(args[0]);
+        User targetUser = UsersManager.INSTANCE.getUser(args[0]);
         if (targetUser == null) {
-            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("InvalidPlayer"));
+            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("InvalidPlayer"));
             return false;
         }
-        HistoryGui.instance.openHistoryGui(player, targetUser, 0);
+        HistoryGui.INSTANCE.openHistoryGui(player, targetUser, 0);
         return false;
     }
 }

@@ -19,14 +19,14 @@ import java.util.LinkedList;
 
 public class HistoryGui {
 
-    public static final String EXPIRED_YES = FilesManager.instance.getFromConfigFormatted("History.isExpired");
-    public static final String EXPIRED_NO = FilesManager.instance.getFromConfigFormatted("History.isNotExpired");
-    public static HistoryGui instance;
+    public static final String EXPIRED_YES = FilesManager.INSTANCE.getFromConfigFormatted("History.isExpired");
+    public static final String EXPIRED_NO = FilesManager.INSTANCE.getFromConfigFormatted("History.isNotExpired");
+    public static HistoryGui INSTANCE;
     public static String GUI_NAME = "§c§lHistory of %player% #%page%";
     public static int PER_PAGE = 46;
 
     public HistoryGui() {
-        instance = this;
+        INSTANCE = this;
     }
 
     public String getPlayerFromGuiName(String guiName) {
@@ -39,7 +39,7 @@ public class HistoryGui {
 
     public void openHistoryGui(Player player, User targetUser, int page) {
         if (!player.hasPermission("mod")) {
-            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("NoPermission"));
+            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NoPermission"));
             return;
         }
 
@@ -48,7 +48,7 @@ public class HistoryGui {
         Inventory inv = Bukkit.createInventory(null, 54, GUI_NAME.replace("%player%", targetUser.getName()).replace("%page%", String.valueOf(page)));
 
         if (targetUser.getHistory().size() == 0) {
-            player.sendMessage(MessageManager.prefix + MessageManager.instance.getMessage("PlayerNoHistoryAvailable"));
+            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable"));
             return;
         }
 
@@ -60,12 +60,12 @@ public class HistoryGui {
             ItemMeta meta = item.getItemMeta();
             Sanction sanction = historyForPage.getLast();
             historyForPage.removeLast();
-            meta.setDisplayName(TimeConverter.replaceArgs(FilesManager.instance.getFromConfigFormatted("History.displayname"),
+            meta.setDisplayName(TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.displayname"),
                             sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr()));
-            boolean expired = SanctionApplier.instance.isSanctionStillActive(sanction, targetUser);
+            boolean expired = SanctionApplier.INSTANCE.isSanctionStillActive(sanction, targetUser);
             String expiredStr = expired ? EXPIRED_NO : EXPIRED_YES;
-            String lore = TimeConverter.replaceArgs(FilesManager.instance.getFromConfigFormatted("History.lore"),
+            String lore = TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.lore"),
                             sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr()).replace("%expired%", expiredStr);
             ArrayList<String> loreList = new ArrayList<>(Arrays.asList(lore.split("%%")));
@@ -90,8 +90,8 @@ public class HistoryGui {
             inv.setItem(50, next);
         }
 
-        GuiManager.instance.applyDoorsFromInvSize(inv);
-        GuiManager.instance.applyGlass(inv);
+        GuiManager.INSTANCE.applyDoorsFromInvSize(inv);
+        GuiManager.INSTANCE.applyGlass(inv);
 
         player.openInventory(inv);
     }

@@ -16,10 +16,10 @@ import java.util.Collections;
 
 public class GuiManager {
 
-    public static GuiManager instance;
+    public static GuiManager INSTANCE;
 
     public GuiManager() {
-        instance = this;
+        INSTANCE = this;
 
         new ActionGuiInterpreter();
 
@@ -28,7 +28,7 @@ public class GuiManager {
     }
 
     public void applyGlass(Inventory inv) {
-        if (!ReaperSanction.instance.getConfig().getBoolean("FillInventoryWithGlassPane")) return;
+        if (!ReaperSanction.INSTANCE.getConfig().getBoolean("FillInventoryWithGlassPane")) return;
         ItemStack custom8 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 0);
         ItemMeta meta8 = custom8.getItemMeta();
         meta8.setDisplayName("§6");
@@ -42,7 +42,7 @@ public class GuiManager {
     public void applyDoorsFromInvSize(Inventory inv) {
         ItemStack custom5 = new ItemStack(Material.IRON_DOOR, 1);
         ItemMeta customd = custom5.getItemMeta();
-        customd.setDisplayName(FilesManager.instance.getFromConfigFormatted("History.GoBackDoor"));
+        customd.setDisplayName(FilesManager.INSTANCE.getFromConfigFormatted("History.GoBackDoor"));
         custom5.setItemMeta(customd);
 
         int firstItem = 0;
@@ -62,24 +62,24 @@ public class GuiManager {
         meta.setDisplayName("§6" + cible);
         Player target = Bukkit.getOfflinePlayer(cible).getPlayer();
         if (target == null)
-            meta.setLore(Collections.singletonList(MessageManager.instance.getMessage("InvalidPlayer")));
+            meta.setLore(Collections.singletonList(MessageManager.INSTANCE.getMessage("InvalidPlayer")));
         else {
             String hostname = target.getAddress().getHostName();
             String displayname = target.getDisplayName();
             if (player.hasPermission("mod+")) {
-                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForAdmin"))
-                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
-                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
+                if (ReaperSanction.INSTANCE.getConfig().getBoolean("IP.ShowIpForAdmin"))
+                    meta.setLore(Arrays.asList(FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
+                            FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
                 else
-                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
-                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
+                    meta.setLore(Arrays.asList(FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
+                            FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
             } else {
-                if (ReaperSanction.instance.getConfig().getBoolean("IP.ShowIpForMod"))
-                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
-                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
+                if (ReaperSanction.INSTANCE.getConfig().getBoolean("IP.ShowIpForMod"))
+                    meta.setLore(Arrays.asList(FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", hostname),
+                            FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", hostname)));
                 else
-                    meta.setLore(Arrays.asList(FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
-                            FilesManager.instance.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
+                    meta.setLore(Arrays.asList(FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line1").replace("%displayname%", displayname).replace("%ip%", "Disabled"),
+                            FilesManager.INSTANCE.getFromConfigFormatted("Menu.RsMenu.SkullLore.line2").replace("%displayname%", displayname).replace("%ip%", "Disabled")));
             }
         }
         stack.setItemMeta(meta);

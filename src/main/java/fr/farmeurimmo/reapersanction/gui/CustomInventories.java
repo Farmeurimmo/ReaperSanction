@@ -15,15 +15,15 @@ import java.util.Map;
 
 public class CustomInventories {
 
-    public static CustomInventories instance;
+    public static CustomInventories INSTANCE;
     public HashMap<InventoryType, CustomInventory> inventories = new HashMap<>();
 
     public CustomInventories() {
-        instance = this;
+        INSTANCE = this;
 
         applyDefaultInventories();
 
-        FilesManager.instance.setup_inventory_file();
+        FilesManager.INSTANCE.setup_inventory_file();
         loadInventories();
         saveInventories();
     }
@@ -280,7 +280,7 @@ public class CustomInventories {
     }
 
     public void startInventoryOpenProcess(Player p, InventoryType type, String cible) {
-        final CustomInventory ci = CustomInventories.instance.getCustomInventory(type);
+        final CustomInventory ci = CustomInventories.INSTANCE.getCustomInventory(type);
         if (ci == null) {
             p.sendMessage(MessageManager.prefix +
                     "§cInternal Error: " + type.toString() + " is not found in the inventories list.");
@@ -291,66 +291,66 @@ public class CustomInventories {
 
     public void saveInventories() {
         for (CustomInventory inv : inventories.values()) {
-            FilesManager.instance.getInventoryData().set(inv.getType() + ".name", inv.getName());
-            FilesManager.instance.getInventoryData().set(inv.getType() + ".size", inv.getSize());
-            FilesManager.instance.getInventoryData().set(inv.getType() + ".isFill", inv.isFill());
+            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".name", inv.getName());
+            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".size", inv.getSize());
+            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".isFill", inv.isFill());
             for (Map.Entry<Integer, ItemStack> entry : inv.getItems().entrySet()) {
-                FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".type", entry.getValue().getType().name());
+                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".type", entry.getValue().getType().name());
                 if (entry.getValue().getType() == Material.SKULL_ITEM) {
                     SkullMeta meta = (SkullMeta) entry.getValue().getItemMeta();
-                    FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".owner", meta.getOwner());
+                    FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".owner", meta.getOwner());
                 }
-                FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".amount", entry.getValue().getAmount());
-                FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".display", entry.getValue().getItemMeta().getDisplayName());
+                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".amount", entry.getValue().getAmount());
+                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".display", entry.getValue().getItemMeta().getDisplayName());
                 if (entry.getValue().getItemMeta().getLore() != null) {
                     for (int i = 0; i < entry.getValue().getItemMeta().getLore().size(); i++) {
-                        FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".lore." + i, entry.getValue().getItemMeta().getLore().get(i));
+                        FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".lore." + i, entry.getValue().getItemMeta().getLore().get(i));
                     }
                 }
                 if (inv.getActionPerItem().containsKey(entry.getKey())) {
                     int i = 0;
                     for (String action : inv.getActionPerItem().get(entry.getKey())) {
-                        FilesManager.instance.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".actions." + i, action);
+                        FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".actions." + i, action);
                         i++;
                     }
                 }
             }
         }
-        FilesManager.instance.saveInventory();
+        FilesManager.INSTANCE.saveInventory();
     }
 
     public void loadInventories() {
         for (InventoryType type : InventoryType.values()) {
             try {
-                if (FilesManager.instance.getInventoryData().contains(type + ".name")) {
-                    String name = FilesManager.instance.getInventoryData().getString(type + ".name");
-                    int size = FilesManager.instance.getInventoryData().getInt(type + ".size");
-                    boolean isFill = FilesManager.instance.getInventoryData().getBoolean(type + ".isFill");
+                if (FilesManager.INSTANCE.getInventoryData().contains(type + ".name")) {
+                    String name = FilesManager.INSTANCE.getInventoryData().getString(type + ".name");
+                    int size = FilesManager.INSTANCE.getInventoryData().getInt(type + ".size");
+                    boolean isFill = FilesManager.INSTANCE.getInventoryData().getBoolean(type + ".isFill");
                     HashMap<Integer, ItemStack> items = new HashMap<>();
                     HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
-                    for (String key : FilesManager.instance.getInventoryData().getConfigurationSection(type + ".items").getKeys(false)) {
+                    for (String key : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items").getKeys(false)) {
                         int slot = Integer.parseInt(key);
-                        Material material = Material.valueOf(FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".type"));
-                        int amount = FilesManager.instance.getInventoryData().getInt(type + ".items." + key + ".amount");
-                        String display = FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".display");
+                        Material material = Material.valueOf(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".type"));
+                        int amount = FilesManager.INSTANCE.getInventoryData().getInt(type + ".items." + key + ".amount");
+                        String display = FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".display");
                         ArrayList<String> lore = new ArrayList<>();
-                        if (FilesManager.instance.getInventoryData().contains(type + ".items." + key + ".lore")) {
-                            for (String loreKey : FilesManager.instance.getInventoryData().getConfigurationSection(type + ".items." + key + ".lore").getKeys(false)) {
-                                lore.add(FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".lore." + loreKey));
+                        if (FilesManager.INSTANCE.getInventoryData().contains(type + ".items." + key + ".lore")) {
+                            for (String loreKey : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items." + key + ".lore").getKeys(false)) {
+                                lore.add(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".lore." + loreKey));
                             }
                         }
                         ItemStack item;
                         if (material != Material.SKULL_ITEM) {
                             item = ItemStackUtils.getItemStack(material, display, lore, amount);
                         } else {
-                            String owner = FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".owner");
+                            String owner = FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".owner");
                             item = ItemStackUtils.getSkull(display, owner, lore);
                         }
                         items.put(slot, item);
-                        if (FilesManager.instance.getInventoryData().contains(type + ".items." + key + ".actions")) {
+                        if (FilesManager.INSTANCE.getInventoryData().contains(type + ".items." + key + ".actions")) {
                             ArrayList<String> actionList = new ArrayList<>();
-                            for (String actionKey : FilesManager.instance.getInventoryData().getConfigurationSection(type + ".items." + key + ".actions").getKeys(false)) {
-                                actionList.add(FilesManager.instance.getInventoryData().getString(type + ".items." + key + ".actions." + actionKey));
+                            for (String actionKey : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items." + key + ".actions").getKeys(false)) {
+                                actionList.add(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".actions." + actionKey));
                             }
                             actions.put(slot, actionList);
                         }

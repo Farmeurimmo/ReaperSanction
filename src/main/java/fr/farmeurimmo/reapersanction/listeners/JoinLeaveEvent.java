@@ -19,13 +19,13 @@ public class JoinLeaveEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void AsyncPlayer(AsyncPlayerPreLoginEvent e) {
-        User user = UsersManager.instance.getUserAndCreateIfNotExists(e.getUniqueId(), e.getName());
+        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(e.getUniqueId(), e.getName());
         user.setIp(e.getAddress().getHostAddress());
         String ip = e.getAddress().getHostAddress();
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
-        SanctionRevoker.instance.checkForSanctionExpiration(user);
-        if (ReaperSanction.instance.ipblocked.containsKey(partialIp)) {
-            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+        SanctionRevoker.INSTANCE.checkForSanctionExpiration(user);
+        if (ReaperSanction.INSTANCE.ipblocked.containsKey(partialIp)) {
+            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -33,7 +33,7 @@ public class JoinLeaveEvent implements Listener {
             return;
         }
         if (user.isIpBanned()) {
-            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("BanIp.lines")
+            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -41,7 +41,7 @@ public class JoinLeaveEvent implements Listener {
             return;
         }
         if (user.isPermaBan()) {
-            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("Ban.lines")
+            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -49,7 +49,7 @@ public class JoinLeaveEvent implements Listener {
             return;
         }
         if (user.isBanned() && !user.isPermaBan()) {
-            e.setKickMessage(FilesManager.instance.getFromConfigFormatted("TempBan.lines")
+            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("TempBan.lines")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason())
@@ -65,7 +65,7 @@ public class JoinLeaveEvent implements Listener {
         if (ReaperSanction.vanished.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             ReaperSanction.vanished.remove(player);
-            player.sendMessage(MessageManager.instance.getMessage("Vanish-Isoff"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
         }
     }
 }

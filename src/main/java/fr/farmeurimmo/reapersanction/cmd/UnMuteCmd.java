@@ -21,16 +21,16 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("ErrorUnMuteArg"));
+                    MessageManager.INSTANCE.getMessage("ErrorUnMuteArg"));
             return false;
         }
-        User user = UsersManager.instance.getUser(args[0]);
+        User user = UsersManager.INSTANCE.getUser(args[0]);
         if (user == null) {
             sender.sendMessage(MessageManager.prefix +
-                    MessageManager.instance.getMessage("InvalidPlayer"));
+                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
             return false;
         }
-        SanctionRevoker.instance.revokeMuteAdmin(user, sender);
+        SanctionRevoker.INSTANCE.revokeMuteAdmin(user, sender);
         return false;
     }
 

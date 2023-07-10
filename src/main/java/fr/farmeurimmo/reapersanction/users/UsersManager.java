@@ -10,11 +10,11 @@ import java.util.UUID;
 
 public class UsersManager {
 
-    public static UsersManager instance;
+    public static UsersManager INSTANCE;
     public ArrayList<User> users = new ArrayList<>();
 
     public UsersManager() {
-        instance = this;
+        INSTANCE = this;
     }
 
     public void checkForOnlinePlayersIfTheyAreUsers() {
@@ -29,7 +29,7 @@ public class UsersManager {
                 return user;
             }
         }
-        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) return DatabaseManager.instance.getUser(uuid);
+        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) return DatabaseManager.INSTANCE.getUser(uuid);
         return null;
     }
 
@@ -45,7 +45,7 @@ public class UsersManager {
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);
-        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) DatabaseManager.instance.createUser(user);
+        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.createUser(user);
         return user;
     }
 
