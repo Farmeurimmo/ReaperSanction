@@ -4,6 +4,7 @@ IP:
   ShowIpForMod: true
 
 TimeZone: Europe/Paris
+
 # Available YAML and MYSQL(need to edit credentials)
 # Be careful with the storage method option, if you type it wrong, the plugin will automatically switch to YAML
 storage:
@@ -57,3 +58,79 @@ Vanish:
   ExitGamemode: true
   ExGamemode: 0
   Fly: true
+
+Discord:
+  active: false
+  webhook_url:
+  tempmute:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``TempMute``\\n**Duration ·** ``%duration%``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  tempban:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``TempBan``\\n**Duration ·** ``%duration%``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  ban:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``Ban``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  ban_ip:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``BanIP``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  kick:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``Kick``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  mute:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``Mute``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  unmute:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``Unmute``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  unban:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**SanctionType ·** ``Unban``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"
+  report:
+    desc: "**Author ·** ``%author%``\\n**Target ·** ``%target%``\\n**Reason ·** ``%reason%``\\n**Server ·** ``%server_name%``"
+    thumbnail: "https://minotar.net/avatar/%target%/100.png"
+    author:
+      name: "%author%"
+      icon_url: "https://minotar.net/avatar/%author%/100.png"
+      url: "https://namemc.com/profile/%author%"
+    color: "#29ad91"

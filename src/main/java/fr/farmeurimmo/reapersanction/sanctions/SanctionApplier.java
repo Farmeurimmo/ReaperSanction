@@ -123,6 +123,26 @@ public class SanctionApplier {
         Bukkit.broadcastMessage(MessageManager.prefix +
                 TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempMute"),
                         duration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
+
+
+        /*DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
+        webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
+                .setDescription("**Author ·** ``" + sender.getName() + "``\\n**Target ·** ``" + player.getName() + "``\\n**Reason ·** ``" +
+                        reason + "``\\n**Sanction ·** ``" + sanction + "``\\n**Server ·** ``" + ReaperSanction.INSTANCE.getServerName() + "``")
+                .setThumbnail("https://minotar.net/avatar/" + player.getName() + "/100.png")
+                .setAuthor(sender.getName(), "", "https://minotar.net/avatar/" + sender.getName() + "/100.png")
+                .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
+                .setColor(Color.decode("#29ad91")));
+        webhook_message.setTts(false);
+        webhook_message.setUsername("ReaperSanction - " + ReaperSanction.INSTANCE.getVersion());
+        webhook_message.setAvatarUrl("https://cdn.farmeurimmo.fr/img/reaper-solution.jpg");
+        CompletableFuture.runAsync(() -> {
+            try {
+                webhook_message.execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });*/
     }
 
     public void ApplyPermaMute(Player player, String reason, String banner, CommandSender sender) {

@@ -30,7 +30,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         Player p = (Player) sender;
-        if (ReaperSanction.vanished.contains(p)) {
+        if (ReaperSanction.VANISHED.contains(p)) {
             for (Player players : Bukkit.getOnlinePlayers()) {
                 players.showPlayer(p);
                 p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -53,7 +53,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
                         p.setGameMode(GameMode.SURVIVAL);
                 }
             }
-            ReaperSanction.vanished.remove(p);
+            ReaperSanction.VANISHED.remove(p);
             p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
             return true;
         }
@@ -61,7 +61,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
             players.hidePlayer(p);
             p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000000000, 1));
         }
-        ReaperSanction.vanished.add(p);
+        ReaperSanction.VANISHED.add(p);
         if (ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.ChangeGamemode")) {
             if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 1) p.setGameMode(GameMode.CREATIVE);
             if (ReaperSanction.INSTANCE.getConfig().getInt("Vanish.Gamemode") == 2) p.setGameMode(GameMode.ADVENTURE);

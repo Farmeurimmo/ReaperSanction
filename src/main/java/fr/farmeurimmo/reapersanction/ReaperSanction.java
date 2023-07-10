@@ -12,6 +12,7 @@ import fr.farmeurimmo.reapersanction.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
 import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.users.UsersManager;
+import fr.farmeurimmo.reapersanction.utils.DiscordWebhook;
 import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,9 +25,10 @@ import java.util.TimeZone;
 
 public class ReaperSanction extends JavaPlugin implements Listener {
 
-    public static final ArrayList<Player> vanished = new ArrayList<>();
+    public static final ArrayList<Player> VANISHED = new ArrayList<>();
     public static ReaperSanction INSTANCE;
-    public static String storageMethod = "YAML";
+    public static String STORAGEMETHOD = "YAML";
+    public static String DISCORD_WEBHOOK_URL = "";
     public final HashMap<String, String> ipblocked = new HashMap<>();
 
     @Override
@@ -37,6 +39,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getLogger().info("-----------------------------------------------------------------------------------------------------");
         getLogger().info("This server is using minecraft : " + version);
 
+        if (getVersion().contains("RC"))
+            getLogger().warning("This version is a release candidate, bugs may be present !");
+
         getLogger().info("Starting configs files...");
         new FilesManager();
         new LocalStorageManager();
@@ -44,8 +49,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getLogger().info("Starting users manager...");
         new UsersManager();
 
-        storageMethod = getConfig().getString("storage.method");
-        if (storageMethod.equalsIgnoreCase("MYSQL")) {
+        STORAGEMETHOD = getConfig().getString("storage.method");
+        if (STORAGEMETHOD.equalsIgnoreCase("MYSQL")) {
             getLogger().info("Found MYSQL storage database, trying to connect...");
 
             getCredentialsAndInitialize();
@@ -104,6 +109,18 @@ public class ReaperSanction extends JavaPlugin implements Listener {
             getLogger().warning("§c§lUnable to get the TimeZone from config, using default one...");
             TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
         }
+        getLogger().info("TimeZone set to : " + TimeZone.getDefault().getID());
+
+        if (getConfig().getBoolean("Discord.active")) {
+            getLogger().info("Starting discord webhook...");
+            try {
+                DISCORD_WEBHOOK_URL = getConfig().getString("Discord.webhook_url");
+            } catch (Exception e) {
+                getLogger().warning("§c§lUnable to start discord webhook, disabling it...");
+                getConfig().set("discord.active", false);
+                saveConfig();
+            }
+        }
 
         getLogger().info("[ReaperSanction] Plugin enabled !");
         getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
@@ -121,6 +138,19 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public void reload() {
         FilesManager.INSTANCE.reloadData();
+
+        if (getConfig().getBoolean("Discord.active")) {
+            getLogger().info("Starting discord webhook...");
+            DISCORD_WEBHOOK_URL = "";
+            try {
+                DISCORD_WEBHOOK_URL = getConfig().getString("Discord.webhook_url");
+                new DiscordWebhook(DISCORD_WEBHOOK_URL);
+            } catch (Exception e) {
+                getLogger().warning("§c§lUnable to start discord webhook, disabling it...");
+                getConfig().set("discord.active", false);
+                saveConfig();
+            }
+        }
     }
 
     public void getCredentialsAndInitialize() {
@@ -166,10 +196,18 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public void Vanish() {
         for (Player players : Bukkit.getOnlinePlayers()) {
-            for (Player pl : vanished) {
+            for (Player pl : VANISHED) {
                 players.hidePlayer(pl);
             }
         }
         Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.INSTANCE, this::Vanish, 20);
+    }
+
+    public String getVersion() {
+        return this.getDescription().getVersion();
+    }
+
+    public String getServerName() {
+        return Bukkit.getServerName();
     }
 }

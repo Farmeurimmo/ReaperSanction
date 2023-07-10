@@ -62,9 +62,9 @@ public class JoinLeaveEvent implements Listener {
     @EventHandler
     public void OnLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (ReaperSanction.vanished.contains(player)) {
+        if (ReaperSanction.VANISHED.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            ReaperSanction.vanished.remove(player);
+            ReaperSanction.VANISHED.remove(player);
             player.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
         }
     }

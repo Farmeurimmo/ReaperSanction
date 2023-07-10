@@ -29,7 +29,7 @@ public class UsersManager {
                 return user;
             }
         }
-        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) return DatabaseManager.INSTANCE.getUser(uuid);
+        if (ReaperSanction.STORAGEMETHOD.equalsIgnoreCase("MYSQL")) return DatabaseManager.INSTANCE.getUser(uuid);
         return null;
     }
 
@@ -45,7 +45,7 @@ public class UsersManager {
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);
-        if (ReaperSanction.storageMethod.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.createUser(user);
+        if (ReaperSanction.STORAGEMETHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.createUser(user);
         return user;
     }
 
