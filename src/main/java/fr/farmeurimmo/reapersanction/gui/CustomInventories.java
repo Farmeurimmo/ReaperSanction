@@ -179,7 +179,7 @@ public class CustomInventories {
                     items.put(11, ItemStackUtils.getItemStack(Material.DIAMOND_SWORD, "Flood", null, 1));
                     actions.put(11, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR + "TEMPMUTE" +
                             ActionGuiInterpreter.SEPARATOR + "%player%" + ActionGuiInterpreter.SEPARATOR + "20min" +
-                            ActionGuiInterpreter.SEPARATOR + items.get(4).getItemMeta().getDisplayName())));
+                            ActionGuiInterpreter.SEPARATOR + items.get(11).getItemMeta().getDisplayName())));
 
                     items.put(12, ItemStackUtils.getItemStack(Material.COMPASS, "Pub", null, 1));
                     actions.put(12, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR + "TEMPMUTE" +
