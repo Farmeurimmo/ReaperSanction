@@ -166,7 +166,7 @@ public class CustomInventories {
                     break;
                 }
                 case MUTE: {
-                    items.put(4, ItemStackUtils.getItemStack(Material.DETECTOR_RAIL, "Incitment to crime", null, 1));
+                    items.put(4, ItemStackUtils.getItemStack(Material.DETECTOR_RAIL, "Incitement to crime", null, 1));
                     actions.put(4, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR + "TEMPMUTE" +
                             ActionGuiInterpreter.SEPARATOR + "%player%" + ActionGuiInterpreter.SEPARATOR + "1hour" +
                             ActionGuiInterpreter.SEPARATOR + items.get(4).getItemMeta().getDisplayName())));
