@@ -67,7 +67,15 @@ public class ActionGuiInterpreter {
                         sendActionNotWorking(action, ActionErrorCodes.PLAYER_NOT_FOUND);
                         return;
                     }
-                    HistoryGui.INSTANCE.openHistoryGui(p, user, 0);
+                    if (sizeof == 5) {
+                        try {
+                            int page = Integer.parseInt(action.split(SEPARATOR)[4]);
+                            CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(p, user, page);
+                            return;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(p, user, 0);
                     return;
                 }
                 sendActionNotWorking(action, ActionErrorCodes.NO_GUI);

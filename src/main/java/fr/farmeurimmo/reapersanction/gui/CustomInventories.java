@@ -2,6 +2,7 @@ package fr.farmeurimmo.reapersanction.gui;
 
 import fr.farmeurimmo.reapersanction.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.users.User;
 import fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -269,6 +270,24 @@ public class CustomInventories {
                     inventories.put(type, new CustomInventory("§4ReaperSanction Report", 27, items, actions, true, type));
                     break;
                 }
+                case HISTORY: {
+                    items.put(53, ItemStackUtils.getItemStack(Material.IRON_DOOR, "§cBack", null, 1));
+                    actions.put(53, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR + "GUI" +
+                            ActionGuiInterpreter.SEPARATOR + "MAIN" + ActionGuiInterpreter.SEPARATOR + "%player%")));
+
+                    items.put(48, ItemStackUtils.getItemStack(Material.ARROW, "§cPrevious page", null, 1));
+                    actions.put(48, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR +
+                            "GUI_DYN" + ActionGuiInterpreter.SEPARATOR + "HISTORY" + ActionGuiInterpreter.SEPARATOR +
+                            "%player%" + ActionGuiInterpreter.SEPARATOR + "%previous_page%")));
+
+                    items.put(50, ItemStackUtils.getItemStack(Material.ARROW, "§cNext page", null, 1));
+                    actions.put(50, new ArrayList<>(Collections.singletonList("INT" + ActionGuiInterpreter.SEPARATOR +
+                            "GUI_DYN" + ActionGuiInterpreter.SEPARATOR + "HISTORY" + ActionGuiInterpreter.SEPARATOR +
+                            "%player%" + ActionGuiInterpreter.SEPARATOR + "%next_page%")));
+
+                    inventories.put(type, new CustomInventory("§c§lHistory of %player% #%page%", 54, items, actions, true, type));
+                    break;
+                }
                 default:
                     break;
             }
@@ -287,6 +306,17 @@ public class CustomInventories {
             return;
         }
         new Gui(p, cible, ci).open(p);
+    }
+
+    public void startInventoryOpenOfHistoryGui(Player p, User user, int page) {
+        final CustomInventory ci = CustomInventories.INSTANCE.getCustomInventory(InventoryType.HISTORY);
+        if (ci == null) {
+            p.sendMessage(MessageManager.prefix +
+                    "§cInternal Error: HISTORY is not found in the inventories list.");
+            return;
+        }
+        if (page < 1) page = 1;
+        new HistoryGui(ci, p, user, page).open(p);
     }
 
     public void saveInventories() {

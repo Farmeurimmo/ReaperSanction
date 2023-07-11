@@ -6,53 +6,46 @@ import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.users.Sanction;
 import fr.farmeurimmo.reapersanction.users.User;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
-import org.bukkit.Bukkit;
+import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Map;
 
-public class HistoryGui {
+public class HistoryGui extends FastInv {
 
     public static final String EXPIRED_YES = FilesManager.INSTANCE.getFromConfigFormatted("History.isExpired");
     public static final String EXPIRED_NO = FilesManager.INSTANCE.getFromConfigFormatted("History.isNotExpired");
-    public static HistoryGui INSTANCE;
-    public static String GUI_NAME = "§c§lHistory of %player% #%page%";
-    public static int PER_PAGE = 46;
+    public static int PER_PAGE = 45;
 
-    public HistoryGui() {
-        INSTANCE = this;
-    }
+    public HistoryGui(CustomInventory ci, Player p, User userTarget, int page) {
+        super(ci.getSize(), ci.getName().replace("%player%", userTarget.getName()).replace("%page%", String.valueOf(page)));
 
-    public String getPlayerFromGuiName(String guiName) {
-        return guiName.split(" ")[2];
-    }
-
-    public int getPageFromGuiName(String guiName) {
-        return Integer.parseInt(guiName.split(" ")[3].replace("#", ""));
-    }
-
-    public void openHistoryGui(Player player, User targetUser, int page) {
-        if (!player.hasPermission("mod")) {
-            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NoPermission"));
+        if (!p.hasPermission("mod")) {
+            p.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NoPermission"));
+            p.closeInventory();
             return;
         }
 
         if (page < 1) page = 1;
 
-        Inventory inv = Bukkit.createInventory(null, 54, GUI_NAME.replace("%player%", targetUser.getName()).replace("%page%", String.valueOf(page)));
+        p.sendMessage("page = " + page);
 
-        if (targetUser.getHistory().size() == 0) {
-            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable"));
+        if (userTarget.getHistory().size() == 0) {
+            p.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable"));
+            p.closeInventory();
             return;
         }
 
-        LinkedList<Sanction> historyForPage = getContentForPage(targetUser.getHistory(), page);
+        ci.applyCible(userTarget.getName());
+        ci.applyPage(page);
+
+        LinkedList<Sanction> historyForPage = getContentForPage(userTarget.getHistory(), page);
 
         for (int i = 0; i < PER_PAGE; i++) {
             if (historyForPage.size() == 0) break;
@@ -61,39 +54,28 @@ public class HistoryGui {
             Sanction sanction = historyForPage.getLast();
             historyForPage.removeLast();
             meta.setDisplayName(TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.displayname"),
-                            sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
+                            sanction.getDuration(), userTarget.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr()));
-            boolean expired = SanctionApplier.INSTANCE.isSanctionStillActive(sanction, targetUser);
+            boolean expired = SanctionApplier.INSTANCE.isSanctionStillActive(sanction, userTarget);
             String expiredStr = expired ? EXPIRED_NO : EXPIRED_YES;
             String lore = TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.lore"),
-                            sanction.getDuration(), targetUser.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
+                            sanction.getDuration(), userTarget.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr()).replace("%expired%", expiredStr);
             ArrayList<String> loreList = new ArrayList<>(Arrays.asList(lore.split("%%")));
             meta.setLore(loreList);
             item.setItemMeta(meta);
-            inv.setItem(i, item);
+            setItem(i, item);
         }
 
-        if (getContentForPage(targetUser.getHistory(), page - 1).size() != 0) {
-            ItemStack back = new ItemStack(Material.ARROW);
-            ItemMeta backMeta = back.getItemMeta();
-            backMeta.setDisplayName("§cPrevious page");
-            back.setItemMeta(backMeta);
-            inv.setItem(48, back);
+        for (Map.Entry<Integer, ItemStack> entry : ci.getItems().entrySet()) {
+            setItem(entry.getKey(), entry.getValue(), e -> {
+                if (ci.getActionPerItem().containsKey(entry.getKey())) {
+                    for (String action : ci.getActionPerItem().get(entry.getKey())) {
+                        ActionGuiInterpreter.INSTANCE.interpretAction(action, p);
+                    }
+                }
+            });
         }
-
-        if (getContentForPage(targetUser.getHistory(), page + 1).size() != 0) {
-            ItemStack next = new ItemStack(Material.ARROW);
-            ItemMeta nextMeta = next.getItemMeta();
-            nextMeta.setDisplayName("§aNext page");
-            next.setItemMeta(nextMeta);
-            inv.setItem(50, next);
-        }
-
-        GuiManager.INSTANCE.applyDoorsFromInvSize(inv);
-        GuiManager.INSTANCE.applyGlass(inv);
-
-        player.openInventory(inv);
     }
 
     public LinkedList<Sanction> getContentForPage(LinkedList<Sanction> history, int page) {

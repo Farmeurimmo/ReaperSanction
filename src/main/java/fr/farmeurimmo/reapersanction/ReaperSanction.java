@@ -1,7 +1,6 @@
 package fr.farmeurimmo.reapersanction;
 
 import fr.farmeurimmo.reapersanction.cmd.*;
-import fr.farmeurimmo.reapersanction.gui.GuiListener;
 import fr.farmeurimmo.reapersanction.gui.GuiManager;
 import fr.farmeurimmo.reapersanction.listeners.ChatEvent;
 import fr.farmeurimmo.reapersanction.listeners.JoinLeaveEvent;
@@ -83,7 +82,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         new GuiManager();
 
         getLogger().info("Starting listeners...");
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 

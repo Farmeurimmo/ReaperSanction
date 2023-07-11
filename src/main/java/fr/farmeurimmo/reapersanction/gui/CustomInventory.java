@@ -4,7 +4,6 @@ import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -85,10 +84,38 @@ public class CustomInventory {
         }
     }
 
-    public Inventory getInventory() {
-        Inventory inv = Bukkit.createInventory(null, size, name);
-        for (int i : items.keySet()) inv.setItem(i, items.get(i));
-        return inv;
+    public void applyPage(int page) {
+        if (page < 1) page = 1;
+        for (int i : items.keySet()) {
+            ItemStack item = items.get(i);
+            ItemMeta meta = item.getItemMeta();
+            if (meta.getDisplayName() != null)
+                meta.setDisplayName(meta.getDisplayName().replace("%previous_page%", String.valueOf(page - 1)));
+            if (meta.getDisplayName() != null)
+                meta.setDisplayName(meta.getDisplayName().replace("%next_page%", String.valueOf(page + 1)));
+            if (meta.getDisplayName() != null)
+                meta.setDisplayName(meta.getDisplayName().replace("%page%", String.valueOf(page)));
+            if (meta.getLore() != null) {
+                List<String> lore = meta.getLore();
+                int finalPage = page;
+                lore.replaceAll(s -> s.replace("%previous_page%", String.valueOf(finalPage - 1)));
+                lore.replaceAll(s -> s.replace("%next_page%", String.valueOf(finalPage + 1)));
+                lore.replaceAll(s -> s.replace("%page%", String.valueOf(finalPage)));
+                meta.setLore(lore);
+            }
+            item.setItemMeta(meta);
+        }
+        for (int i : actionPerItem.keySet()) {
+            ArrayList<String> actions = actionPerItem.get(i);
+            for (int j = 0; j < actions.size(); j++) {
+                String action = actions.get(j);
+                action = action.replace("%previous_page%", String.valueOf(page - 1));
+                action = action.replace("%next_page%", String.valueOf(page + 1));
+                action = action.replace("%page%", String.valueOf(page));
+                actions.set(j, action);
+            }
+            actionPerItem.put(i, actions);
+        }
     }
 
 }

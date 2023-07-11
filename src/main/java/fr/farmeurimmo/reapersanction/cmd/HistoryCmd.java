@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.cmd;
 
-import fr.farmeurimmo.reapersanction.gui.HistoryGui;
+import fr.farmeurimmo.reapersanction.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.users.User;
 import fr.farmeurimmo.reapersanction.users.UsersManager;
@@ -35,7 +35,7 @@ public class HistoryCmd implements CommandExecutor, TabCompleter {
             player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("InvalidPlayer"));
             return false;
         }
-        HistoryGui.INSTANCE.openHistoryGui(player, targetUser, 0);
+        CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(player, targetUser, 0);
         return false;
     }
 
