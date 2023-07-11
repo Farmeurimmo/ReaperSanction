@@ -34,8 +34,6 @@ public class HistoryGui extends FastInv {
 
         if (page < 1) page = 1;
 
-        p.sendMessage("page = " + page);
-
         if (userTarget.getHistory().size() == 0) {
             p.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable"));
             p.closeInventory();
