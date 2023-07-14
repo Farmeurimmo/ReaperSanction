@@ -11,9 +11,9 @@ import fr.farmeurimmo.reapersanction.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.storage.LocalStorageManager;
 import fr.farmeurimmo.reapersanction.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.users.UsersManager;
-import fr.farmeurimmo.reapersanction.utils.DiscordWebhook;
 import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,28 +29,30 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     public static String STORAGEMETHOD = "YAML";
     public static String DISCORD_WEBHOOK_URL = "";
     public final HashMap<String, String> ipblocked = new HashMap<>();
+    private ConsoleCommandSender console;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         INSTANCE = this;
+        console = Bukkit.getConsoleSender();
         String version = Bukkit.getServer().getBukkitVersion();
-        getLogger().info("-----------------------------------------------------------------------------------------------------");
-        getLogger().info("This server is using minecraft : " + version);
+        console.sendMessage("§6-----------------------------------------------------------------------------------------------------");
+        console.sendMessage("§6This server is using minecraft : §b" + version);
 
         if (getVersion().contains("RC"))
             getLogger().warning("This version is a release candidate, bugs may be present !");
 
-        getLogger().info("Starting configs files...");
+        console.sendMessage("§6Starting configs files...");
         new FilesManager();
         new LocalStorageManager();
 
-        getLogger().info("Starting users manager...");
+        console.sendMessage("§6Starting users manager...");
         new UsersManager();
 
         STORAGEMETHOD = getConfig().getString("storage.method");
         if (STORAGEMETHOD.equalsIgnoreCase("MYSQL")) {
-            getLogger().info("Found MYSQL storage database, trying to connect...");
+            console.sendMessage("§6Found §bMYSQL §6storage database, trying to connect...");
 
             getCredentialsAndInitialize();
 
@@ -59,33 +61,33 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                 DatabaseManager.INSTANCE.loadUsers();
             } catch (Exception e) {
                 e.printStackTrace();
-                getLogger().severe("§c§lUnable to connect to the database, stopping server...");
+                getLogger().severe("Unable to connect to the database, stopping server...");
                 Bukkit.shutdown();
                 return;
             }
         } else {
-            getLogger().info("Found YAML storage method, starting it...");
+            console.sendMessage("§6Found §bYAML §6storage method, starting it...");
             LocalStorageManager.INSTANCE.setup();
         }
 
-        getLogger().info("Starting moderation module...");
+        console.sendMessage("§6Starting moderation module...");
         new SanctionApplier();
         new SanctionRevoker();
         Vanish();
         UsersManager.INSTANCE.checkForOnlinePlayersIfTheyAreUsers();
 
-        getLogger().info("Looking for messages...");
+        console.sendMessage("§6Looking for messages...");
         new MessageManager();
 
-        getLogger().info("Initializing GUIs...");
+        console.sendMessage("§6Initializing GUIs...");
         FastInvManager.register(INSTANCE);
         new GuiManager();
 
-        getLogger().info("Starting listeners...");
+        console.sendMessage("§6Starting listeners...");
         getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 
-        getLogger().info("Starting commands...");
+        console.sendMessage("§6Starting commands...");
         this.getCommand("vanish").setExecutor(new VanishCmd());
         this.getCommand("report").setExecutor(new ReportCmd());
         this.getCommand("rsadmin").setExecutor(new RsAdminCmd());
@@ -100,51 +102,49 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("history").setExecutor(new HistoryCmd());
         this.getCommand("kick").setExecutor(new KickCmd());
 
-        getLogger().info("Trying to get the TimeZone from config");
-        try {
-            TimeZone.setDefault(TimeZone.getTimeZone(getConfig().getString("TimeZone")));
-        } catch (Exception e) {
-            getLogger().warning("§c§lUnable to get the TimeZone from config, using default one...");
-            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
-        }
-        getLogger().info("TimeZone set to : " + TimeZone.getDefault().getID());
+        selectTimeZone();
 
-        if (getConfig().getBoolean("Discord.active")) {
-            getLogger().info("Starting discord webhook...");
-            try {
-                DISCORD_WEBHOOK_URL = getConfig().getString("Discord.webhook_url");
-            } catch (Exception e) {
-                getLogger().warning("§c§lUnable to start discord webhook, disabling it...");
-                getConfig().set("discord.active", false);
-                saveConfig();
-            }
-        }
+        startDiscordWebhook();
 
-        getLogger().info("[ReaperSanction] Plugin enabled !");
-        getLogger().info("Official website : https://reaper.farmeurimmo.fr/reapersanction/");
-        getLogger().info("-----------------------------------------------------------------------------------------------------");
+        console.sendMessage("§aPlugin enabled !");
+        console.sendMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction/");
+        console.sendMessage("§6-----------------------------------------------------------------------------------------------------");
 
         checkForUpdate();
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("-----------------------------------------------------------------------------------------------------");
-        getLogger().info("[ReaperSanction] Plugin disabled !");
-        getLogger().info("-----------------------------------------------------------------------------------------------------");
+        console.sendMessage("§6-----------------------------------------------------------------------------------------------------");
+        console.sendMessage("§aPlugin disabled !");
+        console.sendMessage("§6-----------------------------------------------------------------------------------------------------");
     }
 
     public void reload() {
         FilesManager.INSTANCE.reloadData();
 
+        selectTimeZone();
+        startDiscordWebhook();
+    }
+
+    public void selectTimeZone() {
+        console.sendMessage("§6Trying to get the TimeZone from config");
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone(getConfig().getString("TimeZone")));
+        } catch (Exception e) {
+            getLogger().warning("Unable to get the TimeZone from config, using default one...");
+            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+        }
+        console.sendMessage("§6TimeZone set to : §b" + TimeZone.getDefault().getID());
+    }
+
+    public void startDiscordWebhook() {
         if (getConfig().getBoolean("Discord.active")) {
-            getLogger().info("Starting discord webhook...");
-            DISCORD_WEBHOOK_URL = "";
+            console.sendMessage("§6Starting discord webhook...");
             try {
                 DISCORD_WEBHOOK_URL = getConfig().getString("Discord.webhook_url");
-                new DiscordWebhook(DISCORD_WEBHOOK_URL);
             } catch (Exception e) {
-                getLogger().warning("§c§lUnable to start discord webhook, disabling it...");
+                getLogger().warning("Unable to start discord webhook, disabling it...");
                 getConfig().set("discord.active", false);
                 saveConfig();
             }
@@ -166,10 +166,10 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     public void checkForUpdate() {
         new UpdateChecker(this, 89580).getVersion(version -> {
             if (this.getDescription().getVersion().equals(version)) {
-                getLogger().info("§6No update found.");
+                console.sendMessage("§6No update found.");
             } else {
                 if (version.contains("RC")) {
-                    getLogger().warning("§c§lA new RC update is available, you can try it but it may contains bugs !");
+                    console.sendMessage("§c§lA new Release candidate update is available, you can try it but it may contains bugs and breaking changes so be careful !");
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (player.hasPermission("reapersanction.rsadmin")) {
                             player.sendMessage("§c§lA new Release candidate update is available, you can try it but it may contains bugs and breaking changes so be careful !");
@@ -177,15 +177,15 @@ public class ReaperSanction extends JavaPlugin implements Listener {
                     }
                 } else {
                     getLogger().warning("A new update is available please consider updating if you want to receive support !");
-                    getLogger().info("Newest version detected at spigot : " + version);
-                    getLogger().info("Your version : " + this.getDescription().getVersion());
-                    getLogger().info("Download link : https://www.spigotmc.org/resources/reapersanction.89580/");
+                    console.sendMessage("§cNewest version detected at spigot : §4§l" + version);
+                    console.sendMessage("§6Your version : §c" + this.getDescription().getVersion());
+                    console.sendMessage("§6Download link : §ahttps://reaper.farmeurimmo.fr/reapersanction/");
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (player.hasPermission("reapersanction.rsadmin")) {
                             player.sendMessage("§c§lA new update is available please consider updating if you want to receive support !");
                         }
                     }
-                    getLogger().info("§4§lA new update is available please consider updating if you want to receive support ! (the spigot api is taking time to update the version)");
+                    console.sendMessage("§4§lA new update is available please consider updating if you want to receive support ! (the spigot api is taking time to update the version)");
                 }
             }
         });
