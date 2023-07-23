@@ -100,7 +100,7 @@ public class User {
     }
 
     public void requestUserUpdate() {
-        if (ReaperSanction.STORAGEMETHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.updatePlayer(this);
+        if (ReaperSanction.STORAGE_METHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.updatePlayer(this);
         else LocalStorageManager.INSTANCE.saveUser(this, true);
     }
 
