@@ -1,7 +1,7 @@
 name: ReaperSanction
-version: 1.5.0
+version: 1.6.0
 author: Farmeurimmo
-main: fr.farmeurimmo.reapersanction.ReaperSanction
+main: fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction
 website: https://reaper.farmeurimmo.fr/reapersanction
 description: A plugin to punish players with simple gui
 commands:
