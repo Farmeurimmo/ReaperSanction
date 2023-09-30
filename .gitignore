@@ -2,3 +2,6 @@
 /target/
 *.iml
 dependency-reduced-pom.xml
+
+maven.sh
+publish.sh
