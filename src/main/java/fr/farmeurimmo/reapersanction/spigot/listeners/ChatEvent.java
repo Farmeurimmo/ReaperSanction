@@ -18,14 +18,12 @@ public class ChatEvent implements Listener {
         if (user.isMuted()) {
             e.setCancelled(true);
             if (user.isPermaMuted()) {
-                player.sendMessage(MessageManager.prefix +
-                        MessageManager.INSTANCE.getMessage("PermaMutedPlayerChat")
-                                .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
+                player.sendMessage(MessageManager.INSTANCE.getMessage("PermaMutedPlayerChat", true)
+                        .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
                 return;
             }
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("TempMutedPlayerChat")
-                            .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("TempMutedPlayerChat", true)
+                    .replace("%player%", player.getName()).replace("%banner%", user.getMutedBy()));
         }
     }
 

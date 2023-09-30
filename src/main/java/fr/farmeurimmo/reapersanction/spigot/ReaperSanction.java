@@ -11,7 +11,7 @@ import fr.farmeurimmo.reapersanction.spigot.cmd.*;
 import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.listeners.ChatEvent;
-import fr.farmeurimmo.reapersanction.spigot.listeners.JoinLeaveEvent;
+import fr.farmeurimmo.reapersanction.spigot.listeners.ConnectionEvent;
 import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionRevoker;
 import fr.mrmicky.fastinv.FastInvManager;
@@ -90,7 +90,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         new CustomInventories();
 
         main.sendLogMessage("§6Starting listeners...", 0);
-        getServer().getPluginManager().registerEvents(new JoinLeaveEvent(), this);
+        getServer().getPluginManager().registerEvents(new ConnectionEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 
         main.sendLogMessage("§6Starting commands...", 0);
@@ -117,6 +117,22 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
 
         CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(getVersion(), main));
+
+        //detect if the server is behind a proxy like bungeecord or velocity
+
+        int proxy = detectProxy();
+        if (proxy == 0) {
+            main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
+            main.sendLogMessage("§cYou are using BungeeCord, please use the BungeeCord version of ReaperSanction !", 0);
+            main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
+
+        } else if (proxy == 1) {
+            main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
+            main.sendLogMessage("§cYou are using Velocity, please use the Velocity version of ReaperSanction !", 0);
+            main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
+
+        }
+
     }
 
     @Override
@@ -188,5 +204,9 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public boolean isDiscordWebhookActive() {
         return DISCORD_WEBHOOK_URL.length() > 0;
+    }
+
+    private int detectProxy() {
+        return 2;
     }
 }

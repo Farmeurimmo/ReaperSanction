@@ -24,13 +24,12 @@ public class BanIpCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorBanIpArg"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorBanIpArg", true));
             return true;
         }
         if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
-            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
+            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
             assert p != null;
             if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
                     .replace("%banner%", sender.getName())

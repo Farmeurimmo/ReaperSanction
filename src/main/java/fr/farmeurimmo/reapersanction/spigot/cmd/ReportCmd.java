@@ -21,24 +21,23 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
             return false;
         }
         Player player = (Player) sender;
         if (args.length != 1) {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("Report-ErrorArg"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("Report-ErrorArg", true));
             return true;
         }
         if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
             if (FilesManager.INSTANCE.getConfig().getBoolean("Report.Enabled")) {
                 CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
             } else {
-                player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Disabled"));
+                player.sendMessage(MessageManager.INSTANCE.getMessage("Report-Disabled", true));
             }
             return true;
         }
-        player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-PlayerNotonline"));
+        player.sendMessage(MessageManager.INSTANCE.getMessage("Report-PlayerNotonline", true));
         return true;
     }
 

@@ -27,15 +27,15 @@ public class HistoryGui extends FastInv {
         super(ci.getSize(), ci.getName().replace("%player%", userTarget.getName()).replace("%page%", String.valueOf(page)));
 
         if (!p.hasPermission("mod")) {
-            p.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NoPermission"));
+            p.sendMessage(MessageManager.INSTANCE.getMessage("NoPermission", true));
             p.closeInventory();
             return;
         }
 
         if (page < 1) page = 1;
 
-        if (userTarget.getHistory().size() == 0) {
-            p.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable"));
+        if (userTarget.getHistory().isEmpty()) {
+            p.sendMessage(MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable", true));
             p.closeInventory();
             return;
         }
@@ -46,7 +46,7 @@ public class HistoryGui extends FastInv {
         LinkedList<Sanction> historyForPage = getContentForPage(userTarget.getHistory(), page);
 
         for (int i = 0; i < PER_PAGE; i++) {
-            if (historyForPage.size() == 0) break;
+            if (historyForPage.isEmpty()) break;
             ItemStack item = new ItemStack(Material.PAPER);
             ItemMeta meta = item.getItemMeta();
             Sanction sanction = historyForPage.getLast();
@@ -83,11 +83,11 @@ public class HistoryGui extends FastInv {
         if (page == 1) return content;
         LinkedList<Sanction> toReturn = new LinkedList<>();
         for (int i = 0; i < PER_PAGE * (page - 1); i++) {
-            if (content.size() == 0) break;
+            if (content.isEmpty()) break;
             content.removeLast();
         }
         for (int i = 0; i < PER_PAGE; i++) {
-            if (content.size() == 0) break;
+            if (content.isEmpty()) break;
             toReturn.add(content.getFirst());
             content.removeFirst();
         }

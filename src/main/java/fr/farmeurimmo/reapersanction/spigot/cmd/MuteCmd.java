@@ -19,18 +19,16 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorMuteArg"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorMuteArg", true));
             return false;
         }
         Player p = Bukkit.getPlayer(args[0]);
         if (p == null) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
         if (args.length == 1) {
-            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
+            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
             SanctionApplier.INSTANCE.ApplyPermaMute(p, reason.trim(), sender.getName(), sender);
             return false;
         }

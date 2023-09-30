@@ -231,11 +231,11 @@ public class ActionGuiInterpreter {
     }
 
     public void sendMessageReported(Player player, String cible, String ReportReason) {
-        player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Sended").replace("%player%", cible).replace("%reason%", ReportReason));
+        player.sendMessage(MessageManager.INSTANCE.getMessage("Report-Sended", true).replace("%player%", cible).replace("%reason%", ReportReason));
         player.closeInventory();
         for (Player all : Bukkit.getServer().getOnlinePlayers()) {
             if (all.hasPermission("reportview"))
-                all.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Obtain").replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
+                all.sendMessage(MessageManager.INSTANCE.getMessage("Report-Obtain", true).replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getName()));
         }
     }
 }

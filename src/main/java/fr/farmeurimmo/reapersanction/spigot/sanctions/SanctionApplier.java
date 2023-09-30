@@ -40,8 +40,7 @@ public class SanctionApplier {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
-                            + MessageManager.INSTANCE.getMessage("PlayerGotPermaBan"),
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaBan", true),
                     "null", player.getName(), banner, reason, user.getBannedAt(), user.getBannedUntil()));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
@@ -83,8 +82,7 @@ public class SanctionApplier {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
-                            + MessageManager.INSTANCE.getMessage("PlayerGotPermaBanIp"),
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaBanIp", true),
                     "null", player.getName(), banner, reason, user.getBannedAt(), user.getBannedUntil()));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
@@ -111,8 +109,7 @@ public class SanctionApplier {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
 
         if (user.isPermaBan()) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("AlreadyBanned"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("AlreadyBanned", true));
             return;
         }
         long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
@@ -141,8 +138,7 @@ public class SanctionApplier {
 
             user.requestUserUpdate();
 
-            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.prefix
-                            + MessageManager.INSTANCE.getMessage("PlayerGotTempBan"),
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempBan", true),
                     finalDuration, player.getName(), sender.getName(), reason, user.getBannedAt(), user.getBannedUntil()));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
@@ -168,8 +164,7 @@ public class SanctionApplier {
     public void ApplyTempMute(Player player, String reason, CommandSender sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(player.getUniqueId(), player.getName());
         if (user.isPermaMuted()) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("AlreadyMuted"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("AlreadyMuted", true));
             return;
         }
         long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
@@ -189,13 +184,11 @@ public class SanctionApplier {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            player.sendMessage(TimeConverter.replaceArgs(MessageManager.prefix
-                            + MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted"),
+            player.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
                     finalDuration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
-            Bukkit.broadcastMessage(MessageManager.prefix +
-                    TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempMute"),
-                            finalDuration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempMute", true),
+                    finalDuration, player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
@@ -232,10 +225,10 @@ public class SanctionApplier {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            player.sendMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted"),
+            player.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
                     "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
-            Bukkit.broadcastMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaMute"),
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaMute", true),
                     "null", player.getName(), sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
@@ -273,7 +266,7 @@ public class SanctionApplier {
 
         CompletableFuture.runAsync(() -> {
 
-            Bukkit.broadcastMessage(MessageManager.prefix + TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotKicked"),
+            Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotKicked", true),
                     "null", target.getName(), banner, reason, System.currentTimeMillis(), -1));
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;

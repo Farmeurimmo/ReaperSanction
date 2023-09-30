@@ -39,20 +39,18 @@ public class SanctionRevoker {
 
         Player player = Bukkit.getPlayer(user.getUuid());
         if (player != null) {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("MuteEnded"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("MuteEnded", true));
         }
     }
 
     public void revokeMuteAdmin(User user, CommandSender requester) {
         if (!user.isMuted()) {
-            requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotMuted"));
+            requester.sendMessage(MessageManager.INSTANCE.getMessage("NotMuted", true));
             return;
         }
         revokeMute(user);
-        requester.sendMessage(MessageManager.prefix +
-                MessageManager.INSTANCE.getMessage("SuccefullyUnmuted")
-                        .replace("%player%", user.getName()));
+        requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccefullyUnmuted", true)
+                .replace("%player%", user.getName()));
     }
 
     public void revokeBan(User user) {
@@ -66,17 +64,16 @@ public class SanctionRevoker {
 
         Player player = Bukkit.getPlayer(user.getUuid());
         if (player != null) {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("BanEnded"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("BanEnded", true));
         }
     }
 
     public void revokeBanAdmin(User user, CommandSender requester) {
         if (!user.isBanned()) {
-            requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotBanned"));
+            requester.sendMessage(MessageManager.INSTANCE.getMessage("NotBanned", true));
             return;
         }
         revokeBan(user);
-        requester.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("SuccefullyUnbanned").replace("%player%", user.getName()));
+        requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccefullyUnbanned", true).replace("%player%", user.getName()));
     }
 }

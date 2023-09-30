@@ -15,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 
-public class JoinLeaveEvent implements Listener {
+public class ConnectionEvent implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void AsyncPlayer(AsyncPlayerPreLoginEvent e) {
@@ -65,7 +65,7 @@ public class JoinLeaveEvent implements Listener {
         if (ReaperSanction.VANISHED.contains(player)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             ReaperSanction.VANISHED.remove(player);
-            player.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff", false));
         }
     }
 }

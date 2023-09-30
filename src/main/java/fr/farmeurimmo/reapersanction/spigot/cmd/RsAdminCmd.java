@@ -20,8 +20,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorArgAdminCommands"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorArgAdminCommands", true));
             sender.sendMessage("Subs commands available: infos, reload, rl");
             return true;
         }
@@ -33,14 +32,12 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (!sender.hasPermission("reapersanction.rsadmin")) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("NoPermission"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("NoPermission", true));
             return true;
         }
         if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
             ReaperSanction.INSTANCE.reload();
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ReloadMessage"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ReloadMessage", true));
             return true;
         }
         if (args[0].equalsIgnoreCase("migratedb")) {

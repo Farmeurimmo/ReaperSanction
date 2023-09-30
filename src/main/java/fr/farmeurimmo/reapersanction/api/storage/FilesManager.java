@@ -102,7 +102,7 @@ public class FilesManager {
             e.printStackTrace();
         }
         try {
-            MessageManager.messages.clear();
+            MessageManager.INSTANCE.clearMessages();
             messagesData.load(messagesFile);
             MessageManager.INSTANCE.load();
             MessageManager.INSTANCE.readFromFile();

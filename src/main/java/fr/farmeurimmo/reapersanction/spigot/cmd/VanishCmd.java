@@ -22,11 +22,11 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg3) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
             return false;
         }
         if (!ReaperSanction.INSTANCE.getConfig().getBoolean("Vanish.Enabled")) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Command-Disabled"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("Command-Disabled", true));
             return false;
         }
         Player p = (Player) sender;
@@ -54,7 +54,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
                 }
             }
             ReaperSanction.VANISHED.remove(p);
-            p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff"));
+            p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff", false));
             return true;
         }
         for (Player players : Bukkit.getOnlinePlayers()) {
@@ -74,7 +74,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
                 p.setFlying(true);
             }
         }
-        p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Ison"));
+        p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Ison", false));
         return true;
     }
 

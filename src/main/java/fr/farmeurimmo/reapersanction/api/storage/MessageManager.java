@@ -1,6 +1,8 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,9 +11,9 @@ import java.util.HashMap;
 
 public class MessageManager {
 
-    public static final HashMap<String, String> messages = new HashMap<>();
     public static MessageManager INSTANCE;
-    public static String prefix = "";
+    public static String PREFIX = "";
+    private final HashMap<String, String> messages = new HashMap<>();
 
     public MessageManager() {
         INSTANCE = this;
@@ -24,7 +26,11 @@ public class MessageManager {
         if (count <= 1) regenConfig();
         else readFromFile();
 
-        prefix = getPrefix();
+        PREFIX = getPrefix();
+    }
+
+    public void clearMessages() {
+        messages.clear();
     }
 
     public String getPrefix() {
@@ -41,9 +47,13 @@ public class MessageManager {
         });
     }*/
 
-    public String getMessage(String key) {
-        return (messages.containsKey(key) && key != null ? messages.get(key).replace("&", "§") :
-                "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)");
+    public Component getComponent(String key, boolean withPrefix) {
+        return Component.text((withPrefix ? PREFIX : "") + (messages.containsKey(key) && key != null ? messages.get(key).replace("&", "§") :
+                "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)"));
+    }
+
+    public String getMessage(String key, boolean withPrefix) {
+        return LegacyComponentSerializer.legacySection().serialize(getComponent(key, withPrefix));
     }
 
     public void regenConfig() {

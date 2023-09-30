@@ -18,16 +18,16 @@ public class KickCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorKickArg"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorKickArg", true));
             return false;
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
         if (args.length == 1) {
-            SanctionApplier.INSTANCE.kickPlayer(target, MessageManager.INSTANCE.getMessage("UnkownReasonSpecified"), sender.getName());
+            SanctionApplier.INSTANCE.kickPlayer(target, MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false), sender.getName());
             return false;
         }
         String reason = String.join(" ", args).replace(args[0] + " ", "");

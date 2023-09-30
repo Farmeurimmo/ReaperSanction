@@ -301,7 +301,7 @@ public class CustomInventories {
     public void startInventoryOpenProcess(Player p, InventoryType type, String cible) {
         final CustomInventory ci = CustomInventories.INSTANCE.getCustomInventory(type);
         if (ci == null) {
-            p.sendMessage(MessageManager.prefix +
+            p.sendMessage(MessageManager.PREFIX +
                     "§cInternal Error: " + type.toString() + " is not found in the inventories list.");
             return;
         }
@@ -311,7 +311,7 @@ public class CustomInventories {
     public void startInventoryOpenOfHistoryGui(Player p, User user, int page) {
         final CustomInventory ci = CustomInventories.INSTANCE.getCustomInventory(InventoryType.HISTORY);
         if (ci == null) {
-            p.sendMessage(MessageManager.prefix +
+            p.sendMessage(MessageManager.PREFIX +
                     "§cInternal Error: HISTORY is not found in the inventories list.");
             return;
         }

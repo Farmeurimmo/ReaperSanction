@@ -23,13 +23,12 @@ public class BanCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorBanArg"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorBanArg", true));
             return true;
         }
         if (args.length == 1) {
             Player p = Bukkit.getPlayer(args[0]);
-            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
+            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
             assert p != null;
             if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
                     .replace("%banner%", sender.getName())
@@ -39,8 +38,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (Bukkit.getPlayer(args[0]) == null) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return true;
         }
         Player p = Bukkit.getPlayer(args[0]);

@@ -18,14 +18,12 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorUnBanArg"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorUnBanArg", true));
             return false;
         }
         User user = UsersManager.INSTANCE.getUser(args[0]);
         if (user == null) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
         SanctionRevoker.INSTANCE.revokeBanAdmin(user, sender);

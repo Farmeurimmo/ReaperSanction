@@ -20,19 +20,19 @@ public class HistoryCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
             return false;
         }
         Player player = (Player) sender;
 
         if (args.length != 1) {
-            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("ErrorHistoryArg"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("ErrorHistoryArg", true));
             return false;
         }
 
         User targetUser = UsersManager.INSTANCE.getUser(args[0]);
         if (targetUser == null) {
-            player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
         CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(player, targetUser, 0);

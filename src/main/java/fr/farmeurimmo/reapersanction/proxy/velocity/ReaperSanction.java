@@ -9,6 +9,7 @@ import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.BanCmd;
 import org.slf4j.Logger;
 
 import java.util.Optional;
@@ -41,6 +42,8 @@ public class ReaperSanction {
         main = new Main(logger, null, 1);
 
         Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
+
+        proxy.getCommandManager().register("ban", new BanCmd());
 
         CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(getPluginVersion(), main));
     }

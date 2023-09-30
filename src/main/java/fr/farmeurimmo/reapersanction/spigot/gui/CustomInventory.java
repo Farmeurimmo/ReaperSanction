@@ -57,7 +57,7 @@ public class CustomInventory {
     public void applyCible(String cible) {
         this.name = this.name.replace("%player%", cible);
         Player target = Bukkit.getPlayer(cible);
-        String ip = target != null ? target.getAddress().getAddress().getHostAddress() : MessageManager.INSTANCE.getMessage("InvalidPlayer");
+        String ip = target != null ? target.getAddress().getAddress().getHostAddress() : MessageManager.INSTANCE.getMessage("InvalidPlayer", false);
         for (int i : items.keySet()) {
             ItemStack item = items.get(i);
             ItemMeta meta = item.getItemMeta();
