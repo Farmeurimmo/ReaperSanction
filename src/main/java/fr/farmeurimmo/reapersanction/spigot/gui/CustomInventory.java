@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.server.spigot.gui;
+package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import org.bukkit.Bukkit;

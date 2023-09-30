@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.server.spigot.listeners;
+package fr.farmeurimmo.reapersanction.spigot.listeners;
 
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.User;

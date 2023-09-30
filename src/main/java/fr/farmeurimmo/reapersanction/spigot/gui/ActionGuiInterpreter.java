@@ -1,9 +1,9 @@
-package fr.farmeurimmo.reapersanction.server.spigot.gui;
+package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

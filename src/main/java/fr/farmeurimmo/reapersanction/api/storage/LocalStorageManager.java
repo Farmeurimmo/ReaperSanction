@@ -3,7 +3,7 @@ package fr.farmeurimmo.reapersanction.api.storage;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;

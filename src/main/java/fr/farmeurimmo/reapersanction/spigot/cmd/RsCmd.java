@@ -1,8 +1,8 @@
-package fr.farmeurimmo.reapersanction.server.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmd;
 
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.utils.StrUtils;
+import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
+import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,37 +14,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MuteCmd implements CommandExecutor, TabCompleter {
+public class RsCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 0) {
-            sender.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorMuteArg"));
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
         }
-        Player p = Bukkit.getPlayer(args[0]);
-        if (p == null) {
-            sender.sendMessage(MessageManager.prefix +
+        Player player = (Player) sender;
+        if (args.length != 1) {
+            player.sendMessage(MessageManager.prefix +
+                    MessageManager.INSTANCE.getMessage("ErrorArg"));
+            return false;
+        }
+        if (Bukkit.getPlayer(args[0]) != null) {
+            CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
+        } else {
+            player.sendMessage(MessageManager.prefix +
                     MessageManager.INSTANCE.getMessage("InvalidPlayer"));
-            return false;
         }
-        if (args.length == 1) {
-            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified");
-            SanctionApplier.INSTANCE.ApplyPermaMute(p, reason.trim(), sender.getName(), sender);
-            return false;
-        }
-        String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
-        SanctionApplier.INSTANCE.ApplyPermaMute(p, reason, sender.getName(), sender);
         return false;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("mute")) {
+        if (cmd.getName().equalsIgnoreCase("rs") || cmd.getName().equalsIgnoreCase("reapersanction")) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equalsIgnoreCase(sender.getName())) continue;
                     subcmd.add(player.getName());
                 }
             } else if (args.length >= 2) {

@@ -2,7 +2,7 @@ package fr.farmeurimmo.reapersanction.api.users;
 
 import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
 import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
-import fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 
 import java.util.LinkedList;
 import java.util.UUID;

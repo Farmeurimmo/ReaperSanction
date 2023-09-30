@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.api.users;
 
 import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
-import fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

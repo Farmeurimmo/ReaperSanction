@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.server.spigot;
+package fr.farmeurimmo.reapersanction.spigot;
 
 import fr.farmeurimmo.reapersanction.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.Main;
@@ -7,13 +7,13 @@ import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import fr.farmeurimmo.reapersanction.server.spigot.cmd.*;
-import fr.farmeurimmo.reapersanction.server.spigot.gui.ActionGuiInterpreter;
-import fr.farmeurimmo.reapersanction.server.spigot.gui.CustomInventories;
-import fr.farmeurimmo.reapersanction.server.spigot.listeners.ChatEvent;
-import fr.farmeurimmo.reapersanction.server.spigot.listeners.JoinLeaveEvent;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.spigot.cmd.*;
+import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
+import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
+import fr.farmeurimmo.reapersanction.spigot.listeners.ChatEvent;
+import fr.farmeurimmo.reapersanction.spigot.listeners.JoinLeaveEvent;
+import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionRevoker;
 import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

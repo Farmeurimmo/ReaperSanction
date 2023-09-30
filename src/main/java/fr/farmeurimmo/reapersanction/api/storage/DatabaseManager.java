@@ -2,7 +2,7 @@ package fr.farmeurimmo.reapersanction.api.storage;
 
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 
 import java.sql.*;
 import java.util.ArrayList;

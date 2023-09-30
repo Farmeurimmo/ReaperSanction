@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.server.spigot.gui;
+package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.entity.Player;

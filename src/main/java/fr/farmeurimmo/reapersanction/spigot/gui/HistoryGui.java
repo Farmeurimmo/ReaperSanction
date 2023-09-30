@@ -1,10 +1,10 @@
-package fr.farmeurimmo.reapersanction.server.spigot.gui;
+package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
 import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;

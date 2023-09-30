@@ -1,8 +1,8 @@
-package fr.farmeurimmo.reapersanction.server.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmd;
 
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.server.spigot.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.BanList.Type;

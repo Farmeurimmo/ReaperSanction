@@ -1,8 +1,9 @@
-package fr.farmeurimmo.reapersanction.server.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.server.spigot.gui.CustomInventories;
-import fr.farmeurimmo.reapersanction.server.spigot.gui.InventoryType;
+import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
+import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,11 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RsCmd implements CommandExecutor, TabCompleter {
+public class ReportCmd implements CommandExecutor, TabCompleter {
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         if (!(sender instanceof Player)) {
             sender.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("NotAvailableInConsole"));
             return false;
@@ -26,22 +27,25 @@ public class RsCmd implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         if (args.length != 1) {
             player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("ErrorArg"));
-            return false;
+                    MessageManager.INSTANCE.getMessage("Report-ErrorArg"));
+            return true;
         }
-        if (Bukkit.getPlayer(args[0]) != null) {
-            CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
-        } else {
-            player.sendMessage(MessageManager.prefix +
-                    MessageManager.INSTANCE.getMessage("InvalidPlayer"));
+        if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
+            if (FilesManager.INSTANCE.getConfig().getBoolean("Report.Enabled")) {
+                CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
+            } else {
+                player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-Disabled"));
+            }
+            return true;
         }
-        return false;
+        player.sendMessage(MessageManager.prefix + MessageManager.INSTANCE.getMessage("Report-PlayerNotonline"));
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("rs") || cmd.getName().equalsIgnoreCase("reapersanction")) {
+        if (cmd.getName().equalsIgnoreCase("report")) {
             if (args.length == 1) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getName().equalsIgnoreCase(sender.getName())) continue;

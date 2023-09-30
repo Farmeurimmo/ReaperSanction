@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
-import fr.farmeurimmo.reapersanction.server.spigot.ReaperSanction;
-import fr.farmeurimmo.reapersanction.server.spigot.gui.CustomInventories;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
