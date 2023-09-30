@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.BanList.Type;
@@ -35,7 +35,7 @@ public class BanIpCmd implements CommandExecutor, TabCompleter {
                     .replace("%banner%", sender.getName())
                     .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                     .replace("%reason%", reason));
-            SanctionApplier.INSTANCE.ApplyPermaBanIp(p, reason, sender.getName());
+            SanctionApplier.INSTANCE.banIp(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
             Bukkit.getBanList(Type.IP).addBan(p.getAddress().getHostName(), reason,
                     null, sender.getName());
             return true;
@@ -47,7 +47,7 @@ public class BanIpCmd implements CommandExecutor, TabCompleter {
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                 .replace("%reason%", reason));
-        SanctionApplier.INSTANCE.ApplyPermaBanIp(p, reason, sender.getName());
+        SanctionApplier.INSTANCE.banIp(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
         return true;
     }
 

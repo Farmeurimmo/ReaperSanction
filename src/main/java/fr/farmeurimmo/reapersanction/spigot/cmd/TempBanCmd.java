@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -53,7 +53,7 @@ public class TempBanCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
-        SanctionApplier.INSTANCE.ApplyTempBan(p, reason, sender, cb.toString(), type);
+        SanctionApplier.INSTANCE.tempBan(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender, cb.toString(), type);
         return false;
     }
 

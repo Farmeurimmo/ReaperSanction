@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,11 +27,11 @@ public class KickCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         if (args.length == 1) {
-            SanctionApplier.INSTANCE.kickPlayer(target, MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false), sender.getName());
+            SanctionApplier.INSTANCE.kick(target.getUniqueId(), target.getName(), MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false), sender.getName());
             return false;
         }
         String reason = String.join(" ", args).replace(args[0] + " ", "");
-        SanctionApplier.INSTANCE.kickPlayer(target, reason, sender.getName());
+        SanctionApplier.INSTANCE.kick(target.getUniqueId(), target.getName(), reason, sender.getName());
         return false;
     }
 

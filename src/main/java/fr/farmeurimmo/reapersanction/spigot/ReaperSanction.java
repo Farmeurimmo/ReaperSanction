@@ -2,6 +2,8 @@ package fr.farmeurimmo.reapersanction.spigot;
 
 import fr.farmeurimmo.reapersanction.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionRevoker;
 import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
@@ -12,8 +14,6 @@ import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.listeners.ChatEvent;
 import fr.farmeurimmo.reapersanction.spigot.listeners.ConnectionEvent;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionRevoker;
 import fr.mrmicky.fastinv.FastInvManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

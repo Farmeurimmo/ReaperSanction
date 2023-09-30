@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.spigot.sanctions;
+package fr.farmeurimmo.reapersanction.api.sanctions;
 
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.User;

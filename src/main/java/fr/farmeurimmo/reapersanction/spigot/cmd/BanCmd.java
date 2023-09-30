@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
@@ -34,7 +34,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                     .replace("%banner%", sender.getName())
                     .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                     .replace("%reason%", reason.trim()));
-            SanctionApplier.INSTANCE.ApplyPermaBan(p, reason, sender.getName());
+            SanctionApplier.INSTANCE.ban(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
             return true;
         }
         if (Bukkit.getPlayer(args[0]) == null) {
@@ -48,7 +48,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                 .replace("%reason%", reason));
-        SanctionApplier.INSTANCE.ApplyPermaBan(p, reason, sender.getName());
+        SanctionApplier.INSTANCE.ban(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
         return true;
     }
 

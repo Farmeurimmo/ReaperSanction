@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -53,7 +53,8 @@ public class TempMuteCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorPlayerNotFound", true));
             return false;
         }
-        SanctionApplier.INSTANCE.ApplyTempMute(player, reason.trim(), sender, cb.toString(), type.replace(cb, ""));
+        SanctionApplier.INSTANCE.tempMute(player.getUniqueId(), player.getName(), player.getAddress().getAddress().getHostAddress(),
+                reason.trim(), sender, cb.toString(), type.replace(cb, ""));
         return false;
     }
 

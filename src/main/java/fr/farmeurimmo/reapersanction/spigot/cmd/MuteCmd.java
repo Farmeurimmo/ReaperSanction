@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.spigot.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -29,11 +29,11 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
         }
         if (args.length == 1) {
             String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
-            SanctionApplier.INSTANCE.ApplyPermaMute(p, reason.trim(), sender.getName(), sender);
+            SanctionApplier.INSTANCE.mute(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason.trim(), sender.getName(), sender);
             return false;
         }
         String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
-        SanctionApplier.INSTANCE.ApplyPermaMute(p, reason, sender.getName(), sender);
+        SanctionApplier.INSTANCE.mute(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName(), sender);
         return false;
     }
 
