@@ -25,6 +25,23 @@ public class SanctionApplier {
         INSTANCE = this;
     }
 
+    public DiscordWebhook getWebhook(String type, String banner, String playerName, String reason, String duration) {
+        DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
+        String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".desc"), banner, playerName, duration, reason);
+        String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".thumbnail"), banner, playerName, duration, reason);
+        String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.name"), banner, playerName, duration, reason);
+        String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.url"), banner, playerName, duration, reason);
+        String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.icon_url"), banner, playerName, duration, reason);
+        String color = ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".color");
+        webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
+                .setDescription(desc)
+                .setThumbnail(thumbnail)
+                .setAuthor(author_name, author_url, author_icon_url)
+                .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
+                .setColor(Color.decode(color)));
+        return webhook_message;
+    }
+
     public void ban(UUID uuid, String playerName, String host, String reason, String banner) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(1, reason, banner, System.currentTimeMillis(), -1, true, false, "Permanent");
@@ -45,21 +62,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.desc"), banner, playerName, "null", reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.thumbnail"), banner, playerName, "null", reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.author.name"), banner, playerName, "null", reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.author.url"), banner, playerName, "null", reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.author.icon_url"), banner, playerName, "null", reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.ban.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("ban", banner, playerName, reason, "null");
         });
     }
 
@@ -87,21 +90,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.desc"), banner, playerName, "null", reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.thumbnail"), banner, playerName, "null", reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.author.name"), banner, playerName, "null", reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.author.url"), banner, playerName, "null", reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.author.icon_url"), banner, playerName, "null", reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.ban_ip.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("ban", banner, playerName, reason, "null");
         });
     }
 
@@ -145,21 +134,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.desc"), sender.getName(), playerName, finalDuration, reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.thumbnail"), sender.getName(), playerName, finalDuration, reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.author.name"), sender.getName(), playerName, finalDuration, reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.author.url"), sender.getName(), playerName, finalDuration, reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.author.icon_url"), sender.getName(), playerName, finalDuration, reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.tempban.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("tempban", sender.getName(), playerName, reason, finalDuration);
         });
     }
 
@@ -196,21 +171,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.desc"), sender.getName(), playerName, finalDuration, reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.thumbnail"), sender.getName(), playerName, finalDuration, reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.author.name"), sender.getName(), playerName, finalDuration, reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.author.url"), sender.getName(), playerName, finalDuration, reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.author.icon_url"), sender.getName(), playerName, finalDuration, reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.tempmute.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("tempmute", sender.getName(), playerName, reason, finalDuration);
         });
     }
 
@@ -239,21 +200,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.desc"), sender.getName(), playerName, "null", reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.thumbnail"), sender.getName(), playerName, "null", reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.author.name"), sender.getName(), playerName, "null", reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.author.url"), sender.getName(), playerName, "null", reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.author.icon_url"), sender.getName(), playerName, "null", reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.mute.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("mute", sender.getName(), playerName, reason, "null");
         });
     }
 
@@ -279,21 +226,7 @@ public class SanctionApplier {
 
             if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
 
-            DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-            String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.desc"), banner, playerName, "null", reason);
-            String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.thumbnail"), banner, playerName, "null", reason);
-            String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.author.name"), banner, playerName, "null", reason);
-            String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.author.url"), banner, playerName, "null", reason);
-            String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.author.icon_url"), banner, playerName, "null", reason);
-            String color = ReaperSanction.INSTANCE.getConfig().getString("Discord.kick.color");
-            webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setDescription(desc)
-                    .setThumbnail(thumbnail)
-                    .setAuthor(author_name, author_url, author_icon_url)
-                    .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                    .setColor(Color.decode(color)));
-
-            sendDiscordWebHook(webhook_message);
+            sendDiscordWebHook("kick", banner, playerName, reason, "null");
         });
     }
 
@@ -332,12 +265,13 @@ public class SanctionApplier {
                 .replace("%server_name%", ReaperSanction.INSTANCE.getServerName());
     }
 
-    public void sendDiscordWebHook(DiscordWebhook dwh) {
+    public void sendDiscordWebHook(String type, String banner, String playerName, String reason, String duration) {
+        DiscordWebhook webhook = getWebhook(type, banner, playerName, reason, duration);
         try {
-            dwh.setTts(false);
-            dwh.setUsername("ReaperSanction - " + ReaperSanction.INSTANCE.getVersion());
-            dwh.setAvatarUrl("https://cdn.farmeurimmo.fr/img/reaper-solution.jpg");
-            dwh.execute();
+            webhook.setTts(false);
+            webhook.setUsername("ReaperSanction - " + ReaperSanction.INSTANCE.getVersion());
+            webhook.setAvatarUrl("https://cdn.farmeurimmo.fr/img/reaper-solution.jpg");
+            webhook.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

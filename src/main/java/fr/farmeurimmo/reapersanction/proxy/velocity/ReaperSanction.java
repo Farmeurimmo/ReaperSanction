@@ -58,4 +58,8 @@ public class ReaperSanction {
         }
         return "ERROR";
     }
+
+    public ProxyServer getProxy() {
+        return proxy;
+    }
 }
