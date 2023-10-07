@@ -49,6 +49,19 @@ public class Main {
         }
     }
 
+    public String getPluginVersion() {
+        switch (loggerInt) {
+            case 0:
+                return fr.farmeurimmo.reapersanction.spigot.ReaperSanction.INSTANCE.getDescription().getVersion();
+            case 1:
+                return fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction.INSTANCE.getPluginVersion();
+            case 2:
+                // TODO
+            default:
+                return "ERROR";
+        }
+    }
+
     public String getWithoutColor(String message) {
         return message.replaceAll("§.", "");
     }

@@ -7,8 +7,8 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.ProxyServer;
-import fr.farmeurimmo.reapersanction.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.api.UpdateChecker;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.BanCmd;
 import org.slf4j.Logger;
 
@@ -20,7 +20,8 @@ import java.util.concurrent.CompletableFuture;
         name = "ReaperSanction",
         description = "ReaperSanction velocity plugin",
         url = "https://reaper.farmeurimmo.fr",
-        authors = "Farmeurimmo"
+        authors = "Farmeurimmo",
+        version = "1.6.0-RC1"
 )
 public class ReaperSanction {
 
@@ -45,10 +46,10 @@ public class ReaperSanction {
 
         proxy.getCommandManager().register("ban", new BanCmd());
 
-        CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(getPluginVersion(), main));
+        CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(Main.INSTANCE.getPluginVersion(), main));
     }
 
-    private String getPluginVersion() {
+    public String getPluginVersion() {
         Optional<PluginContainer> plugin = proxy.getPluginManager().getPlugin("reapersanction");
         if (plugin.isPresent()) {
             Optional<PluginDescription> description = Optional.ofNullable(plugin.get().getDescription());

@@ -3,108 +3,76 @@ package fr.farmeurimmo.reapersanction.api.storage;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class FilesManager {
 
     public static FilesManager INSTANCE;
-    public FileConfiguration ddata;
-    public File dfile;
-    public FileConfiguration messagesData;
-    public File messagesFile;
-    public File inventoryFile;
-    public FileConfiguration inventoryData;
+    private Map<String, Object> sanctions = new HashMap<>();
+    private Map<String, Object> messages = new HashMap<>();
+    private Map<String, Object> inventories = new HashMap<>();
 
     public FilesManager() {
         INSTANCE = this;
 
-        setup();
+        setupMessages();
     }
 
-    public void setup_YAML_Storage() {
-        dfile = new File(ReaperSanction.INSTANCE.getDataFolder(), "Sanctions.yml");
-
-        if (!dfile.exists()) {
-            try {
-                dfile.createNewFile();
-            } catch (IOException e) {
-                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of Sanctions.yml");
-            }
+    public void setupSanctions() {
+        try (InputStream inputStream = Files.newInputStream(getSanctionsFile().toPath())) {
+            sanctions = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
         }
-
-        ddata = YamlConfiguration.loadConfiguration(dfile);
+        if (sanctions == null) sanctions = new HashMap<>();
     }
 
-    public void setup() {
-        messagesFile = new File(ReaperSanction.INSTANCE.getDataFolder(), "Messages.yml");
-
-        if (!messagesFile.exists()) {
-            try {
-                messagesFile.createNewFile();
-            } catch (IOException e) {
-                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of Messages.yml");
-            }
+    public void setupMessages() {
+        try (InputStream inputStream = Files.newInputStream(getMessagesFile().toPath())) {
+            messages = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
         }
-
-        messagesData = YamlConfiguration.loadConfiguration(messagesFile);
+        if (messages == null) messages = new HashMap<>();
     }
 
-    public void setup_inventory_file() {
-        inventoryFile = new File(ReaperSanction.INSTANCE.getDataFolder(), "Inventories.yml");
-
-        if (!inventoryFile.exists()) {
-            try {
-                inventoryFile.createNewFile();
-            } catch (IOException e) {
-                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of Inventories.yml");
-            }
+    public void setupInventories() {
+        try (InputStream inputStream = Files.newInputStream(getInventoryFile().toPath())) {
+            inventories = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
         }
-
-        inventoryData = YamlConfiguration.loadConfiguration(inventoryFile);
-    }
-
-    public FileConfiguration getData() {
-        return ddata;
-    }
-
-    public FileConfiguration getConfig() {
-        return ReaperSanction.INSTANCE.getConfig();
-    }
-
-    public FileConfiguration getInventoryData() {
-        return inventoryData;
+        if (inventories == null) inventories = new HashMap<>();
     }
 
     public String getFromConfigFormatted(String key) {
-        String toReturn = getConfig().getString(key);
+        String toReturn = ReaperSanction.INSTANCE.getConfig().getString(key);
         return (toReturn == null) ? "" : toReturn.replace("&", "§");
     }
 
-    public void deleteAndRecreateDataFile() {
+    public void deleteAndRecreateSanctionFile() {
         try {
-            dfile.delete();
+            getSanctionsFile().delete();
         } catch (Exception e) {
             ReaperSanction.INSTANCE.getLogger().info("§c§lError in deletion of Sanctions.yml");
         }
-        setup_YAML_Storage();
+        setupSanctions();
     }
 
     public void reloadData() {
         try {
-            ddata.load(dfile);
+            setupSanctions();
         } catch (Exception e) {
             ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Sanctions.yml!");
             e.printStackTrace();
         }
         try {
             MessageManager.INSTANCE.clearMessages();
-            messagesData.load(messagesFile);
-            MessageManager.INSTANCE.load();
+            setupMessages();
+            MessageManager.INSTANCE.getMessages().putAll(MessageManager.INSTANCE.getDefaultMessages());
             MessageManager.INSTANCE.readFromFile();
         } catch (Exception e) {
             ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Messages.yml!");
@@ -112,7 +80,7 @@ public class FilesManager {
         }
         ReaperSanction.INSTANCE.reloadConfig();
         try {
-            inventoryData.load(inventoryFile);
+            setupInventories();
         } catch (Exception e) {
             ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Inventories.yml!");
             e.printStackTrace();
@@ -120,57 +88,112 @@ public class FilesManager {
         CustomInventories.INSTANCE.loadInventories();
     }
 
-    public void saveData() {
-        try {
-            ddata.save(dfile);
+    public void saveSanctions() {
+        try (Writer writer = new FileWriter(getSanctionsFile())) {
+            new Yaml().dump(sanctions, writer);
         } catch (IOException e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in save for Sanctions.yml!");
+            e.printStackTrace();
         }
     }
 
     public void saveMessages() {
-        try {
-            messagesData.save(messagesFile);
+        try (Writer writer = new FileWriter(getMessagesFile())) {
+            new Yaml().dump(messages, writer);
         } catch (IOException e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in save for Messages.yml!");
+            e.printStackTrace();
         }
     }
 
-    public void saveInventory() {
-        try {
-            inventoryData.save(inventoryFile);
+    public void saveInventories() {
+        try (Writer writer = new FileWriter(getInventoryFile())) {
+            new Yaml().dump(inventories, writer);
         } catch (IOException e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in save for Inventories.yml!");
+            e.printStackTrace();
         }
     }
 
-    public FileConfiguration getMessagesData() {
-        return messagesData;
+    public Map<String, Object> getSanctions() {
+        return sanctions;
     }
 
-    public void setAndSaveAsyncMessages(HashMap<String, Object> values) {
-        CompletableFuture.runAsync(() -> {
-            for (String key : values.keySet()) {
-                ddata.set(key, values.get(key));
-            }
-            saveData();
-        });
-    }
-
-    public void setAndSaveAsyncData(HashMap<String, Object> values) {
-        CompletableFuture.runAsync(() -> {
-            for (String key : values.keySet()) {
-                ddata.set(key, values.get(key));
-            }
-            saveData();
-        });
-    }
-
-    public void setAndSaveAsyncDataBlockThread(HashMap<String, Object> values) {
+    public void setSanctions(HashMap<String, Object> values) {
         for (String key : values.keySet()) {
-            ddata.set(key, values.get(key));
+            getSanctions().put(key, values.get(key));
         }
-        saveData();
+        saveSanctions();
+    }
+
+    public Map<String, Object> getMessages() {
+        return messages;
+    }
+
+    public Map<String, Object> getInventories() {
+        return inventories;
+    }
+
+    public void setMessagesAsync(HashMap<String, Object> values) {
+        CompletableFuture.runAsync(() -> {
+            for (String key : values.keySet()) {
+                getSanctions().put(key, values.get(key));
+            }
+            saveMessages();
+        });
+    }
+
+    public void setSanctionsAsync(HashMap<String, Object> values) {
+        CompletableFuture.runAsync(() -> {
+            setSanctions(values);
+        });
+    }
+
+    public File getSanctionsFile() {
+        File sanction = new File(ReaperSanction.INSTANCE.getDataFolder(), "Sanctions.yml");
+        if (!sanction.exists()) {
+            try {
+                sanction.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sanction;
+    }
+
+    public File getMessagesFile() {
+        File messages = new File(ReaperSanction.INSTANCE.getDataFolder(), "Messages.yml");
+        if (!messages.exists()) {
+            try {
+                messages.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return messages;
+    }
+
+    public FileConfiguration getConfig() {
+        return ReaperSanction.INSTANCE.getConfig();
+    }
+
+    public File getInventoryFile() {
+        File inventory = new File(ReaperSanction.INSTANCE.getDataFolder(), "Inventories.yml");
+        if (!inventory.exists()) {
+            try {
+                inventory.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return inventory;
+    }
+
+    public Map<String, Object> getSanctionsKeys(String startWith) {
+        Map<String, Object> toReturn = new HashMap<>();
+        for (String key : getSanctions().keySet()) {
+            if (key.startsWith(startWith)) {
+                toReturn.put(key, getSanctions().get(key));
+            }
+        }
+        return toReturn;
     }
 
 }

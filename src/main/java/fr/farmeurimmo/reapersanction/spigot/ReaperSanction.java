@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot;
 
-import fr.farmeurimmo.reapersanction.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.api.UpdateChecker;
 import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.sanctions.SanctionRevoker;
 import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
@@ -116,7 +116,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction/", 0);
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
 
-        CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(getVersion(), main));
+        CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(Main.INSTANCE.getPluginVersion(), main));
 
         //detect if the server is behind a proxy like bungeecord or velocity
 

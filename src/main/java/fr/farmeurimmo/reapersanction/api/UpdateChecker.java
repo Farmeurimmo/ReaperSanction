@@ -1,6 +1,5 @@
-package fr.farmeurimmo.reapersanction;
+package fr.farmeurimmo.reapersanction.api;
 
-import fr.farmeurimmo.reapersanction.api.Main;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

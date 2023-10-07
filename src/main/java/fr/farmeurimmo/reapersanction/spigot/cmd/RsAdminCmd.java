@@ -43,7 +43,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("migratedb")) {
             if (!ReaperSanction.INSTANCE.matchRequirementsToMigrateToMYSQL()) {
                 sender.sendMessage("§l§cIf you want to upgrade to MYSQL and you have already sanctions on players, you can, just follow those steps !\n" +
-                        "§cPlease migrate your db when the server is empty, and make a backup of your old messages.yml to prevent data loss if the server crash !\n" +
+                        "§cPlease migrate your db when the server is empty, and make a backup of your old sanctions.yml to prevent data loss if the server crash !\n" +
                         "§l§c1. §7Stop your server\n" +
                         "§l§c2. §7Reset your config.yml or just add the missing part\n" +
                         "§7(you can check the default one here (https://github.com/Reaper-Solutions/Minecraft-ReaperSanction/blob/main/src/main/resources/config.yml)\n" +
@@ -56,12 +56,10 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cStarting migration, can take a while depending on how much users you have.");
             CompletableFuture.runAsync(() -> {
                 sender.sendMessage("§7Migrating users... (ASYNC)");
-                FilesManager.INSTANCE.setup_YAML_Storage();
-                if (LocalStorageManager.INSTANCE.isAnOldYAMLFile())
-                    LocalStorageManager.INSTANCE.convertFromOldStorageMethod();
-                else LocalStorageManager.INSTANCE.loadUsers();
+                FilesManager.INSTANCE.setupSanctions();
+                LocalStorageManager.INSTANCE.loadUsers();
                 DatabaseManager.INSTANCE.updateAllUsersFromMigratation();
-                FilesManager.INSTANCE.deleteAndRecreateDataFile();
+                FilesManager.INSTANCE.deleteAndRecreateSanctionFile();
                 sender.sendMessage("§aMigration done ! (took " + (System.currentTimeMillis() - start) + "ms)");
             });
             return false;

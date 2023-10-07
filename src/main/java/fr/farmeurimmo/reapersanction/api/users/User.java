@@ -4,7 +4,9 @@ import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
 import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.UUID;
 
 public class User {
@@ -86,6 +88,23 @@ public class User {
             if (sanction.isEmpty()) continue;
             sanctions.add(sanctionFromString(sanction));
         }
+        return sanctions;
+    }
+
+    public static Map<String, Object> getHistoryAsMap(LinkedList<Sanction> history) {
+        Map<String, Object> map = new HashMap<>();
+        int i = 0;
+        for (Sanction sanction : history) {
+            map.put(String.valueOf(i), sanctionAsString(sanction));
+            i++;
+        }
+        return map;
+    }
+
+    public static LinkedList<Sanction> getHistoryFromMap(Map<String, Object> map) {
+        LinkedList<Sanction> sanctions = new LinkedList<>();
+        map.forEach((key, value) -> sanctions.add(sanctionFromString((String) value)));
+        sanctions.sort((o1, o2) -> (int) (o1.getAt() - o2.getAt()));
         return sanctions;
     }
 

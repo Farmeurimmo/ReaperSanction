@@ -1,15 +1,11 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import org.bukkit.Bukkit;
+import fr.farmeurimmo.reapersanction.utils.Parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 
 public class LocalStorageManager {
 
@@ -20,119 +16,41 @@ public class LocalStorageManager {
     }
 
     public void setup() {
-        FilesManager.INSTANCE.setup_YAML_Storage();
-        if (isAnOldYAMLFile()) convertFromOldStorageMethod();
-        else loadUsers();
-    }
+        FilesManager.INSTANCE.setupSanctions();
 
-    public boolean isAnOldYAMLFile() {
-        for (String key : FilesManager.INSTANCE.getData().getKeys(false)) {
-            if (FilesManager.INSTANCE.getData().isSet(key + ".tempmute")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ArrayList<User> getUsersFromOldYAML() {
-        ArrayList<User> users = new ArrayList<>();
-        for (String name : FilesManager.INSTANCE.getData().getKeys(false)) {
-            if (name == null) continue;
-            UUID uuid;
-            if (FilesManager.INSTANCE.getData().get(name + ".uuid") != null)
-                uuid = UUID.fromString(FilesManager.INSTANCE.getData().getString(name + ".uuid"));
-            else uuid = Bukkit.getOfflinePlayer(name).getUniqueId();
-            if (uuid == null) continue;
-            long mutedUntil = 0;
-            long mutedAt = 0;
-            String mutedReason = "";
-            String mutedBy = "";
-            String mutedDuration = "";
-            String mutedType = "";
-            if (FilesManager.INSTANCE.getData().getBoolean(name + ".tempmute.istempmuted")) {
-                mutedUntil = FilesManager.INSTANCE.getData().getLong(name + ".tempmute.timemillis");
-                mutedReason = FilesManager.INSTANCE.getData().getString(name + ".tempmute.reason");
-                mutedBy = FilesManager.INSTANCE.getData().getString(name + ".tempmute.banner");
-                mutedDuration = FilesManager.INSTANCE.getData().getString(name + ".tempmute.duration");
-                mutedType = FilesManager.INSTANCE.getData().getString(name + ".tempmute.unit");
-                mutedAt = SanctionApplier.INSTANCE.getMillisOfEmission(mutedUntil, mutedDuration, mutedType);
-            }
-            if (FilesManager.INSTANCE.getData().getBoolean(name + ".mute.ismuted")) {
-                mutedUntil = -1;
-                mutedReason = FilesManager.INSTANCE.getData().getString(name + ".mute.reason");
-                mutedBy = "";
-                mutedAt = -1;
-                mutedDuration = "Permanent";
-                mutedType = "";
-            }
-            mutedDuration += mutedType;
-            long bannedUntil = 0;
-            long bannedAt = 0;
-            String bannedReason = "";
-            String bannedBy = "";
-            String bannedDuration = "";
-            String bannedType = "";
-            boolean isIpBanned = false;
-            if (FilesManager.INSTANCE.getData().getBoolean(name + ".tempban.istempbanned")) {
-                bannedUntil = FilesManager.INSTANCE.getData().getLong(name + ".tempban.timemillis");
-                bannedReason = FilesManager.INSTANCE.getData().getString(name + ".tempban.reason");
-                bannedBy = FilesManager.INSTANCE.getData().getString(name + ".tempban.banner");
-                bannedDuration = FilesManager.INSTANCE.getData().getString(name + ".tempban.duration");
-                bannedType = FilesManager.INSTANCE.getData().getString(name + ".tempban.unit");
-                bannedAt = SanctionApplier.INSTANCE.getMillisOfEmission(bannedUntil, bannedDuration, bannedType);
-            }
-            if (FilesManager.INSTANCE.getData().getBoolean(name + ".ban.isbanned")) {
-                bannedUntil = 0;
-                bannedReason = FilesManager.INSTANCE.getData().getString(name + ".ban.reason");
-                bannedBy = FilesManager.INSTANCE.getData().getString(name + ".ban.banner");
-                bannedAt = 0;
-                bannedDuration = "Permanent";
-                bannedType = "";
-            }
-            if (FilesManager.INSTANCE.getData().getBoolean(name + ".ipban.isipbanned")) {
-                bannedUntil = -1;
-                bannedReason = FilesManager.INSTANCE.getData().getString(name + ".ipban.reason");
-                bannedBy = FilesManager.INSTANCE.getData().getString(name + ".ipban.banner");
-                bannedAt = -1;
-                bannedDuration = "Permanent";
-                bannedType = "";
-                isIpBanned = true;
-            }
-            String ip = FilesManager.INSTANCE.getData().getString(name + ".ip");
-            LinkedList<Sanction> history = new LinkedList<>();
-            bannedDuration += bannedType;
-
-            users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
-        }
-        return users;
-    }
-
-    public void convertFromOldStorageMethod() {
-        ArrayList<User> users = getUsersFromOldYAML();
-        FilesManager.INSTANCE.deleteAndRecreateDataFile();
-        UsersManager.INSTANCE.users = users;
-        saveAllUsers(true);
+        loadUsers();
     }
 
     public void saveUser(User user, boolean async) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put(user.getUuid().toString() + ".name", user.getName());
-        data.put(user.getUuid().toString() + ".muted.until", user.getMutedUntil());
-        data.put(user.getUuid().toString() + ".muted.at", user.getMutedAt());
-        data.put(user.getUuid().toString() + ".muted.by", user.getMutedBy());
-        data.put(user.getUuid().toString() + ".muted.reason", user.getMutedReason());
-        data.put(user.getUuid().toString() + ".muted.duration", user.getMutedDuration());
-        data.put(user.getUuid().toString() + ".banned.until", user.getBannedUntil());
-        data.put(user.getUuid().toString() + ".banned.at", user.getBannedAt());
-        data.put(user.getUuid().toString() + ".banned.by", user.getBannedBy());
-        data.put(user.getUuid().toString() + ".banned.reason", user.getBannedReason());
-        data.put(user.getUuid().toString() + ".banned.duration", user.getBannedDuration());
-        data.put(user.getUuid().toString() + ".banned.isBanIp", user.isIpBanned());
-        data.put(user.getUuid().toString() + ".ip", user.getIp());
-        data.put(user.getUuid().toString() + ".history", User.getHistoryAsString(user.getHistory()));
+        HashMap<String, Object> toSend = new HashMap<>();
 
-        if (async) FilesManager.INSTANCE.setAndSaveAsyncData(data);
-        else FilesManager.INSTANCE.setAndSaveAsyncDataBlockThread(data);
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", user.getName());
+
+        Map<String, Object> muted = new HashMap<>();
+        muted.put("until", user.getMutedUntil());
+        muted.put("at", user.getMutedAt());
+        muted.put("by", user.getMutedBy());
+        muted.put("reason", user.getMutedReason());
+        muted.put("duration", user.getMutedDuration());
+        data.put("muted", muted);
+
+        Map<String, Object> banned = new HashMap<>();
+        banned.put("until", user.getBannedUntil());
+        banned.put("at", user.getBannedAt());
+        banned.put("by", user.getBannedBy());
+        banned.put("reason", user.getBannedReason());
+        banned.put("duration", user.getBannedDuration());
+        banned.put("isBanIp", user.isIpBanned());
+        data.put("banned", banned);
+
+        data.put("ip", user.getIp());
+        data.put("history", User.getHistoryAsMap(user.getHistory()));
+
+        toSend.put(user.getUuid().toString(), data);
+
+        if (async) FilesManager.INSTANCE.setSanctionsAsync(toSend);
+        else FilesManager.INSTANCE.setSanctions(toSend);
     }
 
     public void saveAllUsers(boolean async) {
@@ -143,23 +61,39 @@ public class LocalStorageManager {
 
     public void loadUsers() {
         ArrayList<User> users = new ArrayList<>();
-        for (String str : FilesManager.INSTANCE.getData().getKeys(false)) {
-            if (str == null) continue;
-            String name = FilesManager.INSTANCE.getData().getString(str + ".name");
-            UUID uuid = UUID.fromString(str);
-            long mutedUntil = FilesManager.INSTANCE.getData().getLong(str + ".muted.until");
-            String mutedReason = FilesManager.INSTANCE.getData().getString(str + ".muted.reason");
-            String mutedBy = FilesManager.INSTANCE.getData().getString(str + ".muted.by");
-            long mutedAt = FilesManager.INSTANCE.getData().getLong(str + ".muted.at");
-            String mutedDuration = FilesManager.INSTANCE.getData().getString(str + ".muted.duration");
-            long bannedUntil = FilesManager.INSTANCE.getData().getLong(str + ".banned.until");
-            String bannedReason = FilesManager.INSTANCE.getData().getString(str + ".banned.reason");
-            String bannedBy = FilesManager.INSTANCE.getData().getString(str + ".banned.by");
-            long bannedAt = FilesManager.INSTANCE.getData().getLong(str + ".banned.at");
-            String bannedDuration = FilesManager.INSTANCE.getData().getString(str + ".banned.duration");
-            boolean isIpBanned = FilesManager.INSTANCE.getData().getBoolean(str + ".banned.isBanIp");
-            String ip = FilesManager.INSTANCE.getData().getString(str + ".ip");
-            LinkedList<Sanction> history = User.getHistoryFromString(FilesManager.INSTANCE.getData().getString(str + ".history"));
+        for (Map.Entry<String, Object> entry : FilesManager.INSTANCE.getSanctionsKeys("").entrySet()) {
+            if (entry.getKey() == null) continue;
+            Map<String, Object> data = (Map<String, Object>) entry.getValue();
+            String name = (String) data.get("name");
+            UUID uuid = UUID.fromString(entry.getKey());
+
+            Map<String, Object> muted = (Map<String, Object>) data.get("muted");
+            long mutedUntil = Parser.PARSE_LONG(muted.get("until"));
+            String mutedReason = (String) muted.get("reason");
+            String mutedBy = (String) muted.get("by");
+            long mutedAt = Parser.PARSE_LONG(muted.get("at"));
+            String mutedDuration = (String) muted.get("duration");
+
+            Map<String, Object> banned = (Map<String, Object>) data.get("banned");
+            long bannedUntil = Parser.PARSE_LONG(banned.get("until"));
+            String bannedReason = (String) banned.get("reason");
+            String bannedBy = (String) banned.get("by");
+            long bannedAt = Parser.PARSE_LONG(banned.get("at"));
+            String bannedDuration = (String) banned.get("duration");
+            boolean isIpBanned = Parser.PARSE_BOOLEAN(banned.get("isBanIp"));
+
+            String ip = (String) data.get("ip");
+
+            LinkedList<Sanction> history = new LinkedList<>();
+
+            try {
+                history = User.getHistoryFromMap((Map<String, Object>) data.get("history"));
+            } catch (Exception ignored) {
+                try {
+                    history = User.getHistoryFromString((String) data.get("history"));
+                } catch (Exception ignored2) {
+                }
+            }
 
             users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
         }

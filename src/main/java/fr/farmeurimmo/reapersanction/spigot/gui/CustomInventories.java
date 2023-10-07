@@ -4,6 +4,7 @@ import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
+import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,7 @@ public class CustomInventories {
 
         applyDefaultInventories();
 
-        FilesManager.INSTANCE.setup_inventory_file();
+        FilesManager.INSTANCE.setupInventories();
         loadInventories();
         saveInventories();
     }
@@ -321,73 +322,94 @@ public class CustomInventories {
 
     public void saveInventories() {
         for (CustomInventory inv : inventories.values()) {
-            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".name", inv.getName());
-            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".size", inv.getSize());
-            FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".isFill", inv.isFill());
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("name", inv.getName());
+            map.put("size", inv.getSize());
+            map.put("isFill", inv.isFill());
+
+            Map<String, Object> items = new HashMap<>();
             for (Map.Entry<Integer, ItemStack> entry : inv.getItems().entrySet()) {
-                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".type", entry.getValue().getType().name());
+                Map<String, Object> itemMap = new HashMap<>();
+
+                itemMap.put("type", entry.getValue().getType().name());
                 if (entry.getValue().getType() == Material.SKULL_ITEM) {
                     SkullMeta meta = (SkullMeta) entry.getValue().getItemMeta();
-                    FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".owner", meta.getOwner());
+                    itemMap.put("owner", meta.getOwner());
                 }
-                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".amount", entry.getValue().getAmount());
-                FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".display", entry.getValue().getItemMeta().getDisplayName());
+                itemMap.put("amount", entry.getValue().getAmount());
+                itemMap.put("display", entry.getValue().getItemMeta().getDisplayName());
                 if (entry.getValue().getItemMeta().getLore() != null) {
+                    Map<String, Object> lore = new HashMap<>();
                     for (int i = 0; i < entry.getValue().getItemMeta().getLore().size(); i++) {
-                        FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".lore." + i, entry.getValue().getItemMeta().getLore().get(i));
+                        lore.put(i + "", entry.getValue().getItemMeta().getLore().get(i));
                     }
+                    itemMap.put("lore", lore);
                 }
                 if (inv.getActionPerItem().containsKey(entry.getKey())) {
+                    Map<String, Object> actions = new HashMap<>();
                     int i = 0;
                     for (String action : inv.getActionPerItem().get(entry.getKey())) {
-                        FilesManager.INSTANCE.getInventoryData().set(inv.getType() + ".items." + entry.getKey() + ".actions." + i, action);
+                        actions.put(i + "", action);
                         i++;
                     }
+                    itemMap.put("actions", actions);
                 }
+                items.put(entry.getKey().toString(), itemMap);
             }
+            map.put("items", items);
+
+            FilesManager.INSTANCE.getInventories().put(inv.getType().toString(), map);
         }
-        FilesManager.INSTANCE.saveInventory();
+        FilesManager.INSTANCE.saveInventories();
     }
 
     public void loadInventories() {
         for (InventoryType type : InventoryType.values()) {
             try {
-                if (FilesManager.INSTANCE.getInventoryData().contains(type + ".name")) {
-                    String name = FilesManager.INSTANCE.getInventoryData().getString(type + ".name");
-                    int size = FilesManager.INSTANCE.getInventoryData().getInt(type + ".size");
-                    boolean isFill = FilesManager.INSTANCE.getInventoryData().getBoolean(type + ".isFill");
-                    HashMap<Integer, ItemStack> items = new HashMap<>();
-                    HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
-                    for (String key : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items").getKeys(false)) {
-                        int slot = Integer.parseInt(key);
-                        Material material = Material.valueOf(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".type"));
-                        int amount = FilesManager.INSTANCE.getInventoryData().getInt(type + ".items." + key + ".amount");
-                        String display = FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".display");
-                        ArrayList<String> lore = new ArrayList<>();
-                        if (FilesManager.INSTANCE.getInventoryData().contains(type + ".items." + key + ".lore")) {
-                            for (String loreKey : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items." + key + ".lore").getKeys(false)) {
-                                lore.add(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".lore." + loreKey));
-                            }
-                        }
-                        ItemStack item;
-                        if (material != Material.SKULL_ITEM) {
-                            item = ItemStackUtils.getItemStack(material, display, lore, amount);
-                        } else {
-                            String owner = FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".owner");
-                            item = ItemStackUtils.getSkull(display, owner, lore);
-                        }
-                        items.put(slot, item);
-                        if (FilesManager.INSTANCE.getInventoryData().contains(type + ".items." + key + ".actions")) {
-                            ArrayList<String> actionList = new ArrayList<>();
-                            for (String actionKey : FilesManager.INSTANCE.getInventoryData().getConfigurationSection(type + ".items." + key + ".actions").getKeys(false)) {
-                                actionList.add(FilesManager.INSTANCE.getInventoryData().getString(type + ".items." + key + ".actions." + actionKey));
-                            }
-                            actions.put(slot, actionList);
+                Map<String, Object> map = (Map<String, Object>) FilesManager.INSTANCE.getInventories().get(type.toString());
+                if (map.isEmpty()) continue;
+
+                String name = (String) map.get("name");
+                int size = Parser.PARSE_INT(map.get("size"));
+
+                boolean isFill = Parser.PARSE_BOOLEAN(map.get("isFill"));
+                HashMap<Integer, ItemStack> items = new HashMap<>();
+                HashMap<Integer, ArrayList<String>> actions = new HashMap<>();
+                Map<String, Object> itemsMap = (Map<String, Object>) map.get("items");
+                for (String key : itemsMap.keySet()) {
+                    Map<String, Object> itemMap = (Map<String, Object>) itemsMap.get(key);
+                    int slot = Parser.PARSE_INT(key);
+                    Material material = Material.valueOf((String) itemMap.get("type"));
+                    int amount = Parser.PARSE_INT(itemMap.get("amount"));
+                    String display = (String) itemMap.get("display");
+                    ArrayList<String> lore = new ArrayList<>();
+                    if (itemMap.containsKey("lore")) {
+                        Map<String, Object> loreMap = (Map<String, Object>) itemMap.get("lore");
+                        for (Map.Entry<String, Object> entry : loreMap.entrySet()) {
+                            lore.add((String) entry.getValue());
                         }
                     }
-                    inventories.put(type, new CustomInventory(name, size, items, actions, isFill, type));
+                    ItemStack item;
+                    if (material != Material.SKULL_ITEM) {
+                        item = ItemStackUtils.getItemStack(material, display, lore, amount);
+                    } else {
+                        String owner = (String) itemMap.get("owner");
+                        item = ItemStackUtils.getSkull(display, owner, lore);
+                    }
+                    items.put(slot, item);
+                    if (itemMap.containsKey("actions")) {
+                        ArrayList<String> actionList = new ArrayList<>();
+                        Map<String, Object> actionsMap = (Map<String, Object>) itemMap.get("actions");
+                        for (Map.Entry<String, Object> entry : actionsMap.entrySet()) {
+                            actionList.add((String) entry.getValue());
+                        }
+                        actions.put(slot, actionList);
+                    }
                 }
-            } catch (Exception ignored) {
+                inventories.put(type, new CustomInventory(name, size, items, actions, isFill, type));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

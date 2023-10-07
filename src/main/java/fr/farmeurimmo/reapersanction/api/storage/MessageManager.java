@@ -1,40 +1,41 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
-import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MessageManager {
 
     public static MessageManager INSTANCE;
     public static String PREFIX = "";
-    private final HashMap<String, String> messages = new HashMap<>();
+    private final Map<String, String> messages = new HashMap<>();
 
     public MessageManager() {
         INSTANCE = this;
 
-        int count = 0;
-        for (String ignored : FilesManager.INSTANCE.messagesData.getKeys(false)) count++;
+        int count = FilesManager.INSTANCE.getMessages().size();
 
-        load();
+        getMessages().putAll(getDefaultMessages());
 
         if (count <= 1) regenConfig();
         else readFromFile();
+
+        saveMessages();
 
         PREFIX = getPrefix();
     }
 
     public void clearMessages() {
-        messages.clear();
+        getMessages().clear();
     }
 
     public String getPrefix() {
-        return messages.get("Prefix").replace("&", "§");
+        return getMessages().get("Prefix").replace("&", "§");
     }
 
     /*public CompletableFuture<String> getMessage(String key) {
@@ -48,7 +49,7 @@ public class MessageManager {
     }*/
 
     public Component getComponent(String key, boolean withPrefix) {
-        return Component.text((withPrefix ? PREFIX : "") + (messages.containsKey(key) && key != null ? messages.get(key).replace("&", "§") :
+        return Component.text((withPrefix ? PREFIX : "") + (getMessages().containsKey(key) && key != null ? getMessages().get(key).replace("&", "§") :
                 "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)"));
     }
 
@@ -57,88 +58,91 @@ public class MessageManager {
     }
 
     public void regenConfig() {
-        if (FilesManager.INSTANCE.messagesFile.exists()) {
-            File old = new File(ReaperSanction.INSTANCE.getDataFolder(), "OLD-Messages.yml");
-            try {
-                if (old.exists()) old.delete();
-                old.createNewFile();
-                FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(old);
-                for (String key : FilesManager.INSTANCE.messagesData.getKeys(false)) {
-                    oldConfig.set(key, FilesManager.INSTANCE.messagesData.get(key));
-                }
-                oldConfig.save(old);
-            } catch (Exception e) {
-                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of OLD-Messages.yml");
-            }
+        File file = FilesManager.INSTANCE.getMessagesFile();
+        try {
+            file.delete();
+            file.createNewFile();
+        } catch (Exception ignored) {
         }
 
-        for (String key : FilesManager.INSTANCE.messagesData.getKeys(false))
-            FilesManager.INSTANCE.messagesData.set(key, null);
-        FilesManager.INSTANCE.saveMessages();
+        FilesManager.INSTANCE.setupMessages();
 
-        save();
+        saveMessages();
+
         readFromFile();
     }
 
-    public void load() {
-        messages.put("Prefix", "&6[&4ReaperSanction&6] ");
-        messages.put("ErrorArg", "&cUsage, /rs <player-name>");
-        messages.put("ErrorArgAdminCommands", "&cUsage, /rsadmin <command>");
-        messages.put("ErrorBanArg", "&cUsage, /ban <player-name> [Reason]");
-        messages.put("ErrorTempBanArg", "&cUsage, /tempban <player-name> <number + sec/min/day/year> [Reason]");
-        messages.put("ErrorMuteArg", "&cUsage, /mute <player-name> [Reason]");
-        messages.put("ErrorTempMuteArg", "&cUsage, /tempmute <player-name> <number + sec/min/day/year> [Reason]");
-        messages.put("ErrorUnMuteArg", "&cUsage, /unmute <player-name>");
-        messages.put("ErrorBanIpArg", "&cUsage, /ban-ip <player-name> [Reason]");
-        messages.put("ErrorUnBanArg", "&cUsage, /unban <player-name>");
-        messages.put("ErrorHistoryArg", "&cUsage, /history <player-name>");
-        messages.put("SanctionWaitForApplication", "&6The sanction has been successfuly set !");
-        messages.put("SanctionWaitEnd", "&6All sanctions has been removed !");
-        messages.put("AlreadyMuted", "&cThis player is already muted !");
-        messages.put("AlreadyBanned", "&cThis player is already banned !");
-        messages.put("NotBanned", "&cThis player is not banned !");
-        messages.put("NotMuted", "&cThis player is not muted !");
-        messages.put("PlayerGotPermaBan", "&c%player% got banned by %banner% for %reason% !");
-        messages.put("PlayerGotTempBan", "&c%player% got tempbanned for %duration% by %banner% for %reason% !");
-        messages.put("PlayerGotTempMute", "&c%player% got tempmuted for %duration% by %banner% for %reason% !");
-        messages.put("PlayerGotPermaBanIp", "&c%player% got banned ip by %banner% for %reason% !");
-        messages.put("PlayerGotPermaMute", "&c%player% got perma mute by %banner% for %reason% !");
-        messages.put("MessageToPlayerGotPermaMuted", "&cYou got perma muted by %banner% !");
-        messages.put("MessageToPlayerGotTempMuted", "&cYou got muted for %duration% by %banner% !");
-        messages.put("PermaMutedPlayerChat", "&cYou can't talk because you are perma muted by %banner% !");
-        messages.put("TempMutedPlayerChat", "&cYou can't talk because you are tempmuted by %banner% !");
-        messages.put("MuteEnded", "&aYour mute is now done !");
-        messages.put("SuccefullyUnbanned", "&c%player% has been unbanned !");
-        messages.put("SuccefullyUnmuted", "&c%player% has been unmuted !");
-        messages.put("UnkownReasonSpecified", "N/A");
-        messages.put("NoPermission", "&cYou don't have the permission to do this !");
-        messages.put("ReloadMessage", "&6Reload done !");
-        messages.put("InvalidPlayer", "&6Player unknown or offline !");
-        messages.put("Report-Sended", "&eYou have successfuly report &6%player% &efor %reason% &e!");
-        messages.put("Report-ErrorArg", "&6Usage, /report <player-name>");
-        messages.put("Report-Disabled", "&6This command is disabled !");
-        messages.put("Report-Obtain", "&6The player %sender% has report %player% for %reason% !");
-        messages.put("Report-PlayerNotonline", "&6This player is not online !");
-        messages.put("Vanish-Ison", "§aVanish on");
-        messages.put("Vanish-Isoff", "§cVanish off");
-        messages.put("NotAvailableInConsole", "&cThis command is not available in console !");
-        messages.put("PlayerNoHistoryAvailable", "&cThis player has no history available !");
-        messages.put("Command-Disabled", "&cThis command is disabled !");
-        messages.put("PlayerGotKicked", "&c%player% got kicked by %banner% for %reason% !");
-        messages.put("ErrorKickArg", "&cUsage, /kick <player-name> [Reason]");
+    public Map<String, String> getDefaultMessages() {
+        Map<String, String> toReturn = new HashMap<>();
+
+        toReturn.put("Prefix", "&6[&4ReaperSanction&6] ");
+        toReturn.put("ErrorArg", "&cUsage, /rs <player-name>");
+        toReturn.put("ErrorArgAdminCommands", "&cUsage, /rsadmin <command>");
+        toReturn.put("ErrorBanArg", "&cUsage, /ban <player-name> [Reason]");
+        toReturn.put("ErrorTempBanArg", "&cUsage, /tempban <player-name> <number + sec/min/day/year> [Reason]");
+        toReturn.put("ErrorMuteArg", "&cUsage, /mute <player-name> [Reason]");
+        toReturn.put("ErrorTempMuteArg", "&cUsage, /tempmute <player-name> <number + sec/min/day/year> [Reason]");
+        toReturn.put("ErrorUnMuteArg", "&cUsage, /unmute <player-name>");
+        toReturn.put("ErrorBanIpArg", "&cUsage, /ban-ip <player-name> [Reason]");
+        toReturn.put("ErrorUnBanArg", "&cUsage, /unban <player-name>");
+        toReturn.put("ErrorHistoryArg", "&cUsage, /history <player-name>");
+        toReturn.put("SanctionWaitForApplication", "&6The sanction has been successfuly set !");
+        toReturn.put("SanctionWaitEnd", "&6All sanctions has been removed !");
+        toReturn.put("AlreadyMuted", "&cThis player is already muted !");
+        toReturn.put("AlreadyBanned", "&cThis player is already banned !");
+        toReturn.put("NotBanned", "&cThis player is not banned !");
+        toReturn.put("NotMuted", "&cThis player is not muted !");
+        toReturn.put("PlayerGotPermaBan", "&c%player% got banned by %banner% for %reason% !");
+        toReturn.put("PlayerGotTempBan", "&c%player% got tempbanned for %duration% by %banner% for %reason% !");
+        toReturn.put("PlayerGotTempMute", "&c%player% got tempmuted for %duration% by %banner% for %reason% !");
+        toReturn.put("PlayerGotPermaBanIp", "&c%player% got banned ip by %banner% for %reason% !");
+        toReturn.put("PlayerGotPermaMute", "&c%player% got perma mute by %banner% for %reason% !");
+        toReturn.put("MessageToPlayerGotPermaMuted", "&cYou got perma muted by %banner% !");
+        toReturn.put("MessageToPlayerGotTempMuted", "&cYou got muted for %duration% by %banner% !");
+        toReturn.put("PermaMutedPlayerChat", "&cYou can't talk because you are perma muted by %banner% !");
+        toReturn.put("TempMutedPlayerChat", "&cYou can't talk because you are tempmuted by %banner% !");
+        toReturn.put("MuteEnded", "&aYour mute is now done !");
+        toReturn.put("SuccefullyUnbanned", "&c%player% has been unbanned !");
+        toReturn.put("SuccefullyUnmuted", "&c%player% has been unmuted !");
+        toReturn.put("UnkownReasonSpecified", "N/A");
+        toReturn.put("NoPermission", "&cYou don't have the permission to do this !");
+        toReturn.put("ReloadMessage", "&6Reload done !");
+        toReturn.put("InvalidPlayer", "&6Player unknown or offline !");
+        toReturn.put("Report-Sended", "&eYou have successfuly report &6%player% &efor %reason% &e!");
+        toReturn.put("Report-ErrorArg", "&6Usage, /report <player-name>");
+        toReturn.put("Report-Disabled", "&6This command is disabled !");
+        toReturn.put("Report-Obtain", "&6The player %sender% has report %player% for %reason% !");
+        toReturn.put("Report-PlayerNotonline", "&6This player is not online !");
+        toReturn.put("Vanish-Ison", "§aVanish on");
+        toReturn.put("Vanish-Isoff", "§cVanish off");
+        toReturn.put("NotAvailableInConsole", "&cThis command is not available in console !");
+        toReturn.put("PlayerNoHistoryAvailable", "&cThis player has no history available !");
+        toReturn.put("Command-Disabled", "&cThis command is disabled !");
+        toReturn.put("PlayerGotKicked", "&c%player% got kicked by %banner% for %reason% !");
+        toReturn.put("ErrorKickArg", "&cUsage, /kick <player-name> [Reason]");
+
+        return toReturn;
     }
 
     public void readFromFile() {
-        for (String key : FilesManager.INSTANCE.messagesData.getKeys(false)) {
-            messages.put(key, FilesManager.INSTANCE.messagesData.getString(key));
+        for (Map.Entry<String, Object> entry : FilesManager.INSTANCE.getMessages().entrySet()) {
+            if (entry.getKey() == null) continue;
+            if (entry.getKey().equals("infos-file")) continue;
+            getMessages().put(entry.getKey(), (String) entry.getValue());
         }
-        save();
     }
 
-    public void save() {
-        for (String key : messages.keySet()) {
-            FilesManager.INSTANCE.messagesData.set(key, messages.get(key));
-        }
+    public Map<String, String> getMessages() {
+        return messages;
+    }
+
+    public void saveMessages() {
+        Map<String, Object> version = new HashMap<>();
+        version.put("last-update-of-missing-messages", TimeConverter.getDateFormatted(System.currentTimeMillis()));
+        version.put("plugin-version", Main.INSTANCE.getPluginVersion());
+
+        FilesManager.INSTANCE.getMessages().put("infos-file", version);
+
         FilesManager.INSTANCE.saveMessages();
     }
 
