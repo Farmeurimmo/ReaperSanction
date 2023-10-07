@@ -61,11 +61,6 @@ public class SanctionRevoker {
         user.setBannedBy("");
         user.setIpBanned(false);
         user.requestUserUpdate();
-
-        Player player = Bukkit.getPlayer(user.getUuid());
-        if (player != null) {
-            player.sendMessage(MessageManager.INSTANCE.getMessage("BanEnded", true));
-        }
     }
 
     public void revokeBanAdmin(User user, CommandSender requester) {
