@@ -49,6 +49,8 @@ public class UpdateChecker {
     }
 
     public void checkForUpdate(String v, Main console) {
+        //TODO: get from config update checker with update channel
+
         if (v.contains("ERROR")) {
             console.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
             return;
@@ -57,14 +59,10 @@ public class UpdateChecker {
         new UpdateChecker(89580).getVersion(version -> {
             JSONObject json = getVersionViaAPI();
             if (json != null && json.containsKey("version") && !json.get("version").equals(version)) {
-                if (isLatest(json.get("version").toString(), version)) {
-                    version = json.get("version").toString();
-                    return;
-                }
-                return;
+                if (isLatest(json.get("version").toString(), version)) version = json.get("version").toString();
             }
             boolean latest = isLatest(v, version);
-            console.sendLogMessage("§6Detected version : §b" + v + "§6, Spigot version : §b" + version, 0);
+            console.sendLogMessage("§6Detected version : §b" + v + "§6, Current production version : §b" + version, 0);
             if (version.contains("RC")) {
                 if (latest) {
                     console.sendLogMessage("§6No update found. §eYou are using a release candidate version, bugs may be present ! §b" + v, 0);
@@ -83,7 +81,7 @@ public class UpdateChecker {
                         " (the spigot api is taking time to update the version)", 1);
                 return;
             }
-            console.sendLogMessage("§6No update found.", 0);
+            console.sendLogMessage("§6No major update found.", 0);
 
         });
     }

@@ -5,6 +5,12 @@ IP:
 
 TimeZone: Europe/Paris
 
+updates:
+  check: true
+  # Available channel: RELEASE-CANDIDATE, RELEASE
+  # RELEASE-CANDIDATE: Get the latest release-candidate version or the latest release if there is no release-candidate version
+  release-channel: RELEASE-CANDIDATE
+
 # Available YAML and MYSQL(need to edit credentials)
 # Be careful with the storage method option, if you type it wrong, the plugin will automatically switch to YAML
 storage:
