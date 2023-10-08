@@ -93,7 +93,7 @@ public class DatabaseManager {
         }
     }
 
-    public void updateAllUsersFromMigratation() {
+    public void updateAllUsersFromMigration() {
         for (User user : UsersManager.INSTANCE.users) {
             createUser(user);
             updatePlayer(user);
@@ -108,11 +108,7 @@ public class DatabaseManager {
             ArrayList<User> users = new ArrayList<>();
 
             while (resultSet.next()) {
-                users.add(new User(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("name"), resultSet.getLong("mutedUntil"),
-                        resultSet.getString("mutedFor"), resultSet.getString("mutedBy"), resultSet.getLong("mutedAt"),
-                        resultSet.getString("mutedDuration"), resultSet.getLong("bannedUntil"), resultSet.getString("bannedFor"),
-                        resultSet.getString("bannedBy"), resultSet.getLong("bannedAt"), resultSet.getBoolean("ipBanned"),
-                        resultSet.getString("bannedDuration"), resultSet.getString("ip"), User.getHistoryFromString(resultSet.getString("history"))));
+                users.add(getUser(UUID.fromString(resultSet.getString("uuid"))));
             }
 
             UsersManager.INSTANCE.users = users;

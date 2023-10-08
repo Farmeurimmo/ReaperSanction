@@ -58,7 +58,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
                 sender.sendMessage("§7Migrating users... (ASYNC)");
                 FilesManager.INSTANCE.setupSanctions();
                 LocalStorageManager.INSTANCE.loadUsers();
-                DatabaseManager.INSTANCE.updateAllUsersFromMigratation();
+                DatabaseManager.INSTANCE.updateAllUsersFromMigration();
                 FilesManager.INSTANCE.deleteAndRecreateSanctionFile();
                 sender.sendMessage("§aMigration done ! (took " + (System.currentTimeMillis() - start) + "ms)");
             });
