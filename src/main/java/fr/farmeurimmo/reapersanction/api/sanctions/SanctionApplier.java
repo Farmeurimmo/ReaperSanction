@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.api.sanctions;
 
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
@@ -82,6 +82,8 @@ public class SanctionApplier {
         user.setBannedDuration(sanction.getDuration());
         user.addSanction(sanction);
 
+        //FIXME: proxy impl
+
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
@@ -117,7 +119,7 @@ public class SanctionApplier {
 
         //FIXME: proxy impl
 
-        /*player.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("TempBan.lines")
+        /*player.kickPlayer(SettingsManager.INSTANCE.getSetting("sanctions.tempban")
                 .replace("%banner%", sanction.getBy())
                 .replace("%date%", TimeConverter.getDateFormatted(sanction.getAt()))
                 .replace("%reason%", reason)
@@ -205,7 +207,7 @@ public class SanctionApplier {
     }
 
     public void kick(UUID uuid, String playerName, String reason, String banner) {
-        String kickMessage = FilesManager.INSTANCE.getFromConfigFormatted("Kick.lines")
+        String kickMessage = SettingsManager.INSTANCE.getSetting("sanctions.kick")
                 .replace("%banner%", banner)
                 .replace("%date%", TimeConverter.getDateFormatted(System.currentTimeMillis()))
                 .replace("%reason%", reason);

@@ -1,11 +1,8 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
-import fr.farmeurimmo.reapersanction.api.Main;
-import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +19,8 @@ public class MessageManager {
 
         getMessages().putAll(getDefaultMessages());
 
-        if (count <= 1) regenConfig();
-        else readFromFile();
+        if (count <= 1) regen();
+        else loadFromMap();
 
         saveMessages();
 
@@ -57,19 +54,12 @@ public class MessageManager {
         return LegacyComponentSerializer.legacySection().serialize(getComponent(key, withPrefix));
     }
 
-    public void regenConfig() {
-        File file = FilesManager.INSTANCE.getMessagesFile();
-        try {
-            file.delete();
-            file.createNewFile();
-        } catch (Exception ignored) {
-        }
-
+    protected void regen() {
         FilesManager.INSTANCE.setupMessages();
 
         saveMessages();
 
-        readFromFile();
+        loadFromMap();
     }
 
     public Map<String, String> getDefaultMessages() {
@@ -124,7 +114,7 @@ public class MessageManager {
         return toReturn;
     }
 
-    public void readFromFile() {
+    public void loadFromMap() {
         for (Map.Entry<String, Object> entry : FilesManager.INSTANCE.getMessages().entrySet()) {
             if (entry.getKey() == null) continue;
             if (entry.getKey().equals("infos-file")) continue;
@@ -136,12 +126,9 @@ public class MessageManager {
         return messages;
     }
 
-    public void saveMessages() {
-        Map<String, Object> version = new HashMap<>();
-        version.put("last-update-of-missing-messages", TimeConverter.getDateFormatted(System.currentTimeMillis()));
-        version.put("plugin-version", Main.INSTANCE.getPluginVersion());
-
-        FilesManager.INSTANCE.getMessages().put("infos-file", version);
+    protected void saveMessages() {
+        Map<String, Object> toSend = new HashMap<>(getMessages());
+        FilesManager.INSTANCE.applyInfosFile(toSend);
 
         FilesManager.INSTANCE.saveMessages();
     }

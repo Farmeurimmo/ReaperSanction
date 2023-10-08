@@ -21,7 +21,7 @@ public class LocalStorageManager {
         loadUsers();
     }
 
-    public void saveUser(User user, boolean async) {
+    public void saveUser(User user) {
         HashMap<String, Object> toSend = new HashMap<>();
 
         Map<String, Object> data = new HashMap<>();
@@ -49,19 +49,18 @@ public class LocalStorageManager {
 
         toSend.put(user.getUuid().toString(), data);
 
-        if (async) FilesManager.INSTANCE.setSanctionsAsync(toSend);
-        else FilesManager.INSTANCE.setSanctions(toSend);
+        FilesManager.INSTANCE.setSanctions(toSend);
     }
 
-    public void saveAllUsers(boolean async) {
+    public void saveAllUsers() {
         for (User user : UsersManager.INSTANCE.users) {
-            saveUser(user, async);
+            saveUser(user);
         }
     }
 
     public void loadUsers() {
         ArrayList<User> users = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : FilesManager.INSTANCE.getSanctionsKeys("").entrySet()) {
+        for (Map.Entry<String, Object> entry : FilesManager.INSTANCE.getSanctions().entrySet()) {
             if (entry.getKey() == null) continue;
             Map<String, Object> data = (Map<String, Object>) entry.getValue();
             String name = (String) data.get("name");

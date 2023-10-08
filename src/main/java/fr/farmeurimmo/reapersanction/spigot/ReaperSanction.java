@@ -45,16 +45,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
         main.sendLogMessage("§6This server is using minecraft : §b" + version, 0);
 
-        if (getVersion().contains("RC"))
-            getLogger().warning("This version is a release candidate, bugs may be present !");
-
-        main.sendLogMessage("§6Starting configs files...", 0);
-        new FilesManager();
-        new LocalStorageManager();
-
-        main.sendLogMessage("§6Starting users manager...", 0);
-        new UsersManager();
-
         STORAGE_METHOD = getConfig().getString("storage.method");
         if (STORAGE_METHOD.equalsIgnoreCase("MYSQL")) {
             main.sendLogMessage("§6Found §bMYSQL§6 storage database, trying to connect...", 0);

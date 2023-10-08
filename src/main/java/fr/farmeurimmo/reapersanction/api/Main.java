@@ -1,5 +1,9 @@
 package fr.farmeurimmo.reapersanction.api;
 
+import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
+import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.api.users.UsersManager;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
@@ -25,6 +29,16 @@ public class Main {
             loggerSpigot = (java.util.logging.Logger) logger;
             loggerInt = 2;
         }
+
+        sendLogMessage("§a[CORE]§e Loading ReaperSanction...", 0);
+        sendLogMessage("§a[CORE]§6 Booting up files...", 0);
+        new FilesManager();
+        new LocalStorageManager();
+        new SettingsManager();
+
+
+        sendLogMessage("§a[CORE]§6 Starting users manager...", 0);
+        new UsersManager();
     }
 
     public void sendLogMessage(String message, int type) {

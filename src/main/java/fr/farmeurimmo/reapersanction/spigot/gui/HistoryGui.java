@@ -1,11 +1,9 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
 import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,8 +17,9 @@ import java.util.Map;
 
 public class HistoryGui extends FastInv {
 
-    public static final String EXPIRED_YES = FilesManager.INSTANCE.getFromConfigFormatted("History.isExpired");
-    public static final String EXPIRED_NO = FilesManager.INSTANCE.getFromConfigFormatted("History.isNotExpired");
+    //FIXME
+    public static final String EXPIRED_YES = /*FilesManager.INSTANCE.getFromConfigFormatted("History.isExpired");*/"broken";
+    public static final String EXPIRED_NO = /*FilesManager.INSTANCE.getFromConfigFormatted("History.isNotExpired");*/"broken";
     public static int PER_PAGE = 45;
 
     public HistoryGui(CustomInventory ci, Player p, User userTarget, int page) {
@@ -51,14 +50,19 @@ public class HistoryGui extends FastInv {
             ItemMeta meta = item.getItemMeta();
             Sanction sanction = historyForPage.getLast();
             historyForPage.removeLast();
-            meta.setDisplayName(TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.displayname"),
+
+            //FIXME
+            meta.setDisplayName(/*TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.displayname"),
                             sanction.getDuration(), userTarget.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
-                    .replace("%sanctiontype%", sanction.getSanctionTypeStr()));
+                    .replace("%sanctiontype%", sanction.getSanctionTypeStr())*/"broken");
             boolean expired = SanctionApplier.INSTANCE.isSanctionStillActive(sanction, userTarget);
             String expiredStr = expired ? EXPIRED_NO : EXPIRED_YES;
-            String lore = TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.lore"),
+
+            //FIXME
+            String lore = /*TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.lore"),
                             sanction.getDuration(), userTarget.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
-                    .replace("%sanctiontype%", sanction.getSanctionTypeStr()).replace("%expired%", expiredStr);
+                    .replace("%sanctiontype%", sanction.getSanctionTypeStr()).replace("%expired%", expiredStr);*/
+                    "broken";
             ArrayList<String> loreList = new ArrayList<>(Arrays.asList(lore.split("%%")));
             meta.setLore(loreList);
             item.setItemMeta(meta);

@@ -1,9 +1,10 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
+import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReportCmd implements CommandExecutor, TabCompleter {
+
+    //TODO: recode the report
 
     @SuppressWarnings("deprecation")
     @Override
@@ -30,7 +33,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
-            if (FilesManager.INSTANCE.getConfig().getBoolean("Report.Enabled")) {
+            if (Parser.PARSE_BOOLEAN(SettingsManager.INSTANCE.getSetting("report.status"))) {
                 CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
             } else {
                 player.sendMessage(MessageManager.INSTANCE.getMessage("Report-Disabled", true));

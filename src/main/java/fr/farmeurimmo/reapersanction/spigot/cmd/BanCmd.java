@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
 import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
@@ -30,7 +30,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
             Player p = Bukkit.getPlayer(args[0]);
             String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
             assert p != null;
-            if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
+            if (p.isOnline()) p.kickPlayer(SettingsManager.INSTANCE.getSetting("sanctions.ban")
                     .replace("%banner%", sender.getName())
                     .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                     .replace("%reason%", reason.trim()));
@@ -44,7 +44,7 @@ public class BanCmd implements CommandExecutor, TabCompleter {
         Player p = Bukkit.getPlayer(args[0]);
         String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         assert p != null;
-        if (p.isOnline()) p.kickPlayer(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
+        if (p.isOnline()) p.kickPlayer(SettingsManager.INSTANCE.getSetting("sanctions.ban")
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
                 .replace("%reason%", reason));

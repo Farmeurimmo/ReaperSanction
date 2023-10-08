@@ -1,15 +1,15 @@
 package fr.farmeurimmo.reapersanction.api.storage;
 
+import fr.farmeurimmo.reapersanction.api.Main;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
-import org.bukkit.configuration.file.FileConfiguration;
+import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class FilesManager {
 
@@ -17,11 +17,13 @@ public class FilesManager {
     private Map<String, Object> sanctions = new HashMap<>();
     private Map<String, Object> messages = new HashMap<>();
     private Map<String, Object> inventories = new HashMap<>();
+    private Map<String, Object> settings = new HashMap<>();
 
     public FilesManager() {
         INSTANCE = this;
 
         setupMessages();
+        setupConfig();
     }
 
     public void setupSanctions() {
@@ -48,9 +50,12 @@ public class FilesManager {
         if (inventories == null) inventories = new HashMap<>();
     }
 
-    public String getFromConfigFormatted(String key) {
-        String toReturn = ReaperSanction.INSTANCE.getConfig().getString(key);
-        return (toReturn == null) ? "" : toReturn.replace("&", "§");
+    public void setupConfig() {
+        try (InputStream inputStream = Files.newInputStream(getSettingsFile().toPath())) {
+            settings = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
+        }
+        if (settings == null) settings = new HashMap<>();
     }
 
     public void deleteAndRecreateSanctionFile() {
@@ -73,7 +78,7 @@ public class FilesManager {
             MessageManager.INSTANCE.clearMessages();
             setupMessages();
             MessageManager.INSTANCE.getMessages().putAll(MessageManager.INSTANCE.getDefaultMessages());
-            MessageManager.INSTANCE.readFromFile();
+            MessageManager.INSTANCE.loadFromMap();
         } catch (Exception e) {
             ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Messages.yml!");
             e.printStackTrace();
@@ -88,28 +93,28 @@ public class FilesManager {
         CustomInventories.INSTANCE.loadInventories();
     }
 
-    public void saveSanctions() {
-        try (Writer writer = new FileWriter(getSanctionsFile())) {
-            new Yaml().dump(sanctions, writer);
+    protected void saveFile(File file, Map<String, Object> map) {
+        try (Writer writer = new FileWriter(file)) {
+            new Yaml().dump(map, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveSanctions() {
+        saveFile(getSanctionsFile(), sanctions);
     }
 
     public void saveMessages() {
-        try (Writer writer = new FileWriter(getMessagesFile())) {
-            new Yaml().dump(messages, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveFile(getMessagesFile(), messages);
     }
 
     public void saveInventories() {
-        try (Writer writer = new FileWriter(getInventoryFile())) {
-            new Yaml().dump(inventories, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveFile(getInventoryFile(), inventories);
+    }
+
+    public void saveSettings() {
+        saveFile(getSettingsFile(), settings);
     }
 
     public Map<String, Object> getSanctions() {
@@ -131,69 +136,52 @@ public class FilesManager {
         return inventories;
     }
 
-    public void setMessagesAsync(HashMap<String, Object> values) {
-        CompletableFuture.runAsync(() -> {
-            for (String key : values.keySet()) {
-                getSanctions().put(key, values.get(key));
-            }
-            saveMessages();
-        });
+    public Map<String, Object> getSettings() {
+        return settings;
     }
 
-    public void setSanctionsAsync(HashMap<String, Object> values) {
-        CompletableFuture.runAsync(() -> {
-            setSanctions(values);
-        });
+    public void setSettings(HashMap<String, Object> values) {
+        for (String key : values.keySet()) {
+            getSettings().put(key, values.get(key));
+        }
+        saveSettings();
+    }
+
+    protected File getFileOrCreateIt(File folder, String fileName) {
+        File file = new File(folder, fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of " + fileName);
+            }
+        }
+        return file;
     }
 
     public File getSanctionsFile() {
-        File sanction = new File(ReaperSanction.INSTANCE.getDataFolder(), "Sanctions.yml");
-        if (!sanction.exists()) {
-            try {
-                sanction.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sanction;
+        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Sanctions.yml");
     }
 
     public File getMessagesFile() {
-        File messages = new File(ReaperSanction.INSTANCE.getDataFolder(), "Messages.yml");
-        if (!messages.exists()) {
-            try {
-                messages.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return messages;
-    }
-
-    public FileConfiguration getConfig() {
-        return ReaperSanction.INSTANCE.getConfig();
+        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Messages.yml");
     }
 
     public File getInventoryFile() {
-        File inventory = new File(ReaperSanction.INSTANCE.getDataFolder(), "Inventories.yml");
-        if (!inventory.exists()) {
-            try {
-                inventory.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return inventory;
+        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Inventories.yml");
     }
 
-    public Map<String, Object> getSanctionsKeys(String startWith) {
-        Map<String, Object> toReturn = new HashMap<>();
-        for (String key : getSanctions().keySet()) {
-            if (key.startsWith(startWith)) {
-                toReturn.put(key, getSanctions().get(key));
-            }
-        }
-        return toReturn;
+    public File getSettingsFile() {
+        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Settings.yml");
+    }
+
+    public void applyInfosFile(Map<String, Object> map) {
+        Map<String, Object> version = new HashMap<>();
+        version.put("last-update-of-missing", TimeConverter.getDateFormatted(System.currentTimeMillis()));
+        version.put("plugin-version", Main.INSTANCE.getPluginVersion());
+        version.put("documentation", "https://reaper.farmeurimmo.fr/reapersanction");
+
+        map.put("infos-file", version);
     }
 
 }

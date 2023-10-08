@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.listeners;
 
 import fr.farmeurimmo.reapersanction.api.sanctions.SanctionRevoker;
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.api.users.User;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
@@ -25,7 +25,7 @@ public class ConnectionEvent implements Listener {
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         SanctionRevoker.INSTANCE.checkForSanctionExpiration(user);
         if (ReaperSanction.INSTANCE.ipblocked.containsKey(partialIp)) {
-            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
+            e.setKickMessage(SettingsManager.INSTANCE.getSetting("sanctions.banip")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -33,7 +33,7 @@ public class ConnectionEvent implements Listener {
             return;
         }
         if (user.isIpBanned()) {
-            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("BanIp.lines")
+            e.setKickMessage(SettingsManager.INSTANCE.getSetting("sanctions.banip")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -41,7 +41,7 @@ public class ConnectionEvent implements Listener {
             return;
         }
         if (user.isPermaBan()) {
-            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("Ban.lines")
+            e.setKickMessage(SettingsManager.INSTANCE.getSetting("sanctions.ban")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason()));
@@ -49,7 +49,7 @@ public class ConnectionEvent implements Listener {
             return;
         }
         if (user.isBanned() && !user.isPermaBan()) {
-            e.setKickMessage(FilesManager.INSTANCE.getFromConfigFormatted("TempBan.lines")
+            e.setKickMessage(SettingsManager.INSTANCE.getSetting("sanctions.tempban")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))
                     .replace("%reason%", user.getBannedReason())

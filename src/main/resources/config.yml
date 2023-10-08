@@ -1,16 +1,3 @@
-#Config version 1.5.0
-IP:
-  ShowIpForAdmin: true
-  ShowIpForMod: true
-
-TimeZone: Europe/Paris
-
-updates:
-  check: true
-  # Available channel: RELEASE-CANDIDATE, RELEASE
-  # RELEASE-CANDIDATE: Get the latest release-candidate version or the latest release if there is no release-candidate version
-  release-channel: RELEASE-CANDIDATE
-
 # Available YAML and MYSQL(need to edit credentials)
 # Be careful with the storage method option, if you type it wrong, the plugin will automatically switch to YAML
 storage:
@@ -23,22 +10,6 @@ storage:
     port: 3306
     username: root
     password: root
-
-FillInventoryWithGlassPane: false
-
-#Use \n to go to the next line (max ~25)
-BanIp:
-  lines: "&cConnection refused \n \n&4You are permantly ip banned from this server \n\n&6Date of ban : &e%date% \n&6By : &e%banner% \n&6Reason : &e%reason%"
-
-Ban:
-  lines: "&cConnection refused \n \n&4You are permantly banned from this server \n\n&6Date of ban : &e%date% \n&6By : &e%banner% \n&6Reason : &e%reason%"
-
-TempBan:
-  lines: "&cConnection refused \n \n&4You are temp banned from this server \n\n&6Date of ban : &e%date% \n&6By: &e%banner% \n&6Expiration : &e%expiration% \n&6Reason : &e%reason% \n&6Duration : &e%duration%"
-
-Kick:
-  lines: "&cConnection stopped \n \n&4You have been kicked from this server \n\n&6Date of kick : &e%date% \n&6By : &e%banner% \n&6Reason : &e%reason%"
-
 History:
   # %% is a line break
   displayname: "&6%sanctiontype% §e%player% %date%"
@@ -53,16 +24,6 @@ History:
     tempmute: "&9Tempmute"
     kick: "&eKick"
     unknown: "&7Unknown"
-Vanish:
-  Enabled: true
-  #Change gamemode when enter in vanish mode
-  #Gamemode 0 to 3
-  ChangeGamemode: true
-  Gamemode: 2
-  #Gamemode after going out of the vanish
-  ExitGamemode: true
-  ExGamemode: 0
-  Fly: true
 
 Discord:
   active: false

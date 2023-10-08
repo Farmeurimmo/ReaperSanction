@@ -120,7 +120,7 @@ public class User {
 
     public void requestUserUpdate() {
         if (ReaperSanction.STORAGE_METHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.updatePlayer(this);
-        else LocalStorageManager.INSTANCE.saveUser(this, true);
+        else LocalStorageManager.INSTANCE.saveUser(this);
     }
 
     public UUID getUuid() {
