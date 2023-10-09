@@ -35,16 +35,6 @@ public class MessageManager {
         return getMessages().get("Prefix").replace("&", "§");
     }
 
-    /*public CompletableFuture<String> getMessage(String key) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (messages.containsKey(key)) {
-                return messages.get(key).replace("&", "§");
-            } else {
-                return "&cAn error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)";
-            }
-        });
-    }*/
-
     public Component getComponent(String key, boolean withPrefix) {
         return Component.text((withPrefix ? PREFIX : "") + (getMessages().containsKey(key) && key != null ? getMessages().get(key).replace("&", "§") :
                 "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)"));
@@ -129,6 +119,8 @@ public class MessageManager {
     protected void saveMessages() {
         Map<String, Object> toSend = new HashMap<>(getMessages());
         FilesManager.INSTANCE.applyInfosFile(toSend);
+
+        FilesManager.INSTANCE.getMessages().putAll(toSend);
 
         FilesManager.INSTANCE.saveMessages();
     }

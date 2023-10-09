@@ -48,11 +48,11 @@ public class UpdateChecker {
         return new JSONObject();
     }
 
-    public void checkForUpdate(String v, Main console) {
+    public void checkForUpdate(String v) {
         //TODO: get from config update checker with update channel
 
         if (v.contains("ERROR")) {
-            console.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
+            Main.INSTANCE.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
             return;
         }
 
@@ -62,26 +62,26 @@ public class UpdateChecker {
                 if (isLatest(json.get("version").toString(), version)) version = json.get("version").toString();
             }
             boolean latest = isLatest(v, version);
-            console.sendLogMessage("§6Detected version : §b" + v + "§6, Current production version : §b" + version, 0);
+            Main.INSTANCE.sendLogMessage("§6Detected version : §b" + v + "§6, Current production version : §b" + version, 0);
             if (version.contains("RC")) {
                 if (latest) {
-                    console.sendLogMessage("§6No update found. §eYou are using a release candidate version, bugs may be present ! §b" + v, 0);
+                    Main.INSTANCE.sendLogMessage("§6No update found. §eYou are using a release candidate version, bugs may be present ! §b" + v, 0);
                     return;
                 }
-                console.sendLogMessage("§c§lA Release Candidate version is available, you are currently using a stable version, " +
+                Main.INSTANCE.sendLogMessage("§c§lA Release Candidate version is available, you are currently using a stable version, " +
                         "you can try the new version but bugs may be present !", 2);
                 return;
             }
             if (!latest) {
-                console.sendLogMessage("A new update is available please consider updating if you want to receive support !", 1);
-                console.sendLogMessage("§cNewest version detected at spigot : §4§l" + version, 1);
-                console.sendLogMessage("§6Your version : §c" + v, 1);
-                console.sendLogMessage("§6Download link : §ahttps://reaper.farmeurimmo.fr/reapersanction/", 1);
-                console.sendLogMessage("§4§lA new update is available please consider updating if you want to receive support !" +
+                Main.INSTANCE.sendLogMessage("A new update is available please consider updating if you want to receive support !", 1);
+                Main.INSTANCE.sendLogMessage("§cNewest version detected at spigot : §4§l" + version, 1);
+                Main.INSTANCE.sendLogMessage("§6Your version : §c" + v, 1);
+                Main.INSTANCE.sendLogMessage("§6Download link : §ahttps://reaper.farmeurimmo.fr/reapersanction/", 1);
+                Main.INSTANCE.sendLogMessage("§4§lA new update is available please consider updating if you want to receive support !" +
                         " (the spigot api is taking time to update the version)", 1);
                 return;
             }
-            console.sendLogMessage("§6No major update found.", 0);
+            Main.INSTANCE.sendLogMessage("§6No major update found.", 0);
 
         });
     }

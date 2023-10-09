@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.api.Main;
 import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
 import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
@@ -36,7 +37,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
-            ReaperSanction.INSTANCE.reload();
+            Main.INSTANCE.reload();
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ReloadMessage", true));
             return true;
         }

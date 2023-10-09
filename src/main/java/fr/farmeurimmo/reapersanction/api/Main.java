@@ -1,11 +1,13 @@
 package fr.farmeurimmo.reapersanction.api;
 
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
-import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
-import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.api.storage.*;
 import fr.farmeurimmo.reapersanction.api.users.UsersManager;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
+
+import java.io.File;
+import java.util.TimeZone;
+import java.util.concurrent.CompletableFuture;
 
 public class Main {
 
@@ -15,7 +17,7 @@ public class Main {
     private Logger loggerVelocity;
     private int loggerInt = -1;
 
-    public Main(Object logger, Object logger2, int i) {
+    public Main(Object logger, Object logger2, int i, File dataFolder) {
         INSTANCE = this;
 
         if (i == 0) { // Spigot
@@ -32,13 +34,59 @@ public class Main {
 
         sendLogMessage("§a[CORE]§e Loading ReaperSanction...", 0);
         sendLogMessage("§a[CORE]§6 Booting up files...", 0);
-        new FilesManager();
+        new FilesManager(dataFolder);
+        try {
+            new DBCredentialsManager();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendLogMessage("§c[CORE]§4 Unable to load database credentials, stopping server...", 2);
+            shutdown();
+            return;
+        }
         new LocalStorageManager();
         new SettingsManager();
-
+        new MessageManager();
 
         sendLogMessage("§a[CORE]§6 Starting users manager...", 0);
         new UsersManager();
+
+        sendLogMessage("§a[CORE]§6 Detecting storage and starting it...", 0);
+        String STORAGE_METHOD = DBCredentialsManager.INSTANCE.getMethod();
+        if (STORAGE_METHOD.equalsIgnoreCase("MYSQL")) {
+            Main.INSTANCE.sendLogMessage("§6Found §bMYSQL§6 storage database, trying to connect...", 0);
+
+            getCredentialsAndInitialize();
+
+            try {
+                DatabaseManager.INSTANCE.startConnection();
+                DatabaseManager.INSTANCE.loadUsers();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Main.INSTANCE.sendLogMessage("Unable to connect to the database, stopping server...", 2);
+                Main.INSTANCE.shutdown();
+                return;
+            }
+        } else {
+            Main.INSTANCE.sendLogMessage("§6Found §bYAML§6 storage method, starting it...", 0);
+            LocalStorageManager.INSTANCE.setup();
+        }
+
+        Main.INSTANCE.sendLogMessage("§a[CORE]§6 Detecting TimeZone...", 0);
+        selectTimeZone();
+
+        Main.INSTANCE.sendLogMessage("§a[CORE]§6 Starting Discord Webhook...", 0);
+        //startDiscordWebhook();
+
+        //TODO: end message of start
+
+        CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(Main.INSTANCE.getPluginVersion()));
+    }
+
+    public void reload() {
+        FilesManager.INSTANCE.reloadData();
+
+        selectTimeZone();
+        //startDiscordWebhook();
     }
 
     public void sendLogMessage(String message, int type) {
@@ -76,7 +124,41 @@ public class Main {
         }
     }
 
+    public void getCredentialsAndInitialize() {
+        String db_url = "jdbc:mysql://" + DBCredentialsManager.INSTANCE.getHost() + ":" + DBCredentialsManager.INSTANCE.getPort();
+        String db_user = DBCredentialsManager.INSTANCE.getUsername();
+        String db_password = DBCredentialsManager.INSTANCE.getPassword();
+
+        new DatabaseManager(db_url, db_user, db_password);
+    }
+
+    public void shutdown() {
+        switch (loggerInt) {
+            case 0:
+                fr.farmeurimmo.reapersanction.spigot.ReaperSanction.INSTANCE.getServer().shutdown();
+                break;
+            case 1:
+                fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction.INSTANCE.getProxy().shutdown();
+                break;
+            case 2:
+                // TODO
+            default:
+                throw new RuntimeException("Can't shutdown server");
+        }
+    }
+
     public String getWithoutColor(String message) {
         return message.replaceAll("§.", "");
+    }
+
+    public void selectTimeZone() {
+        sendLogMessage("§6Trying to get the TimeZone from config", 0);
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone(SettingsManager.INSTANCE.getSetting("timeZone")));
+        } catch (Exception e) {
+            sendLogMessage("Unable to get the TimeZone from config, using default one...", 1);
+            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+        }
+        sendLogMessage("§6TimeZone set to : §b" + TimeZone.getDefault().getID(), 0);
     }
 }

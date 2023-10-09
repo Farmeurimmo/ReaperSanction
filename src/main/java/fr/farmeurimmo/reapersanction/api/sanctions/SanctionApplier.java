@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.api.sanctions;
 
+import fr.farmeurimmo.reapersanction.api.Main;
 import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.api.users.Sanction;
@@ -271,7 +272,7 @@ public class SanctionApplier {
         DiscordWebhook webhook = getWebhook(type, banner, playerName, reason, duration);
         try {
             webhook.setTts(false);
-            webhook.setUsername("ReaperSanction - " + ReaperSanction.INSTANCE.getVersion());
+            webhook.setUsername("ReaperSanction - " + Main.INSTANCE.getPluginVersion());
             webhook.setAvatarUrl("https://cdn.farmeurimmo.fr/img/reaper-solution.jpg");
             webhook.execute();
         } catch (IOException e) {

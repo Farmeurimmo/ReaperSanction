@@ -14,16 +14,22 @@ import java.util.Map;
 public class FilesManager {
 
     public static FilesManager INSTANCE;
+    private final File dataFolder;
     private Map<String, Object> sanctions = new HashMap<>();
     private Map<String, Object> messages = new HashMap<>();
     private Map<String, Object> inventories = new HashMap<>();
     private Map<String, Object> settings = new HashMap<>();
+    private Map<String, Object> dbCredentials = new HashMap<>();
 
-    public FilesManager() {
+    public FilesManager(File dataFolder) {
         INSTANCE = this;
+
+        this.dataFolder = dataFolder;
+        if (!dataFolder.exists()) dataFolder.mkdirs();
 
         setupMessages();
         setupConfig();
+        setupDbCredentials();
     }
 
     public void setupSanctions() {
@@ -58,11 +64,19 @@ public class FilesManager {
         if (settings == null) settings = new HashMap<>();
     }
 
+    public void setupDbCredentials() {
+        try (InputStream inputStream = Files.newInputStream(getDbCredentialsFile().toPath())) {
+            dbCredentials = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
+        }
+        if (dbCredentials == null) dbCredentials = new HashMap<>();
+    }
+
     public void deleteAndRecreateSanctionFile() {
         try {
             getSanctionsFile().delete();
         } catch (Exception e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in deletion of Sanctions.yml");
+            Main.INSTANCE.sendLogMessage("§c§lError in deletion of Sanctions.yml", 1);
         }
         setupSanctions();
     }
@@ -71,8 +85,18 @@ public class FilesManager {
         try {
             setupSanctions();
         } catch (Exception e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Sanctions.yml!");
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Sanctions.yml!", 1);
             e.printStackTrace();
+        }
+        try {
+            setupConfig();
+        } catch (Exception e) {
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Settings.yml!", 1);
+        }
+        try {
+            setupDbCredentials();
+        } catch (Exception e) {
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Storage.yml!", 1);
         }
         try {
             MessageManager.INSTANCE.clearMessages();
@@ -80,14 +104,14 @@ public class FilesManager {
             MessageManager.INSTANCE.getMessages().putAll(MessageManager.INSTANCE.getDefaultMessages());
             MessageManager.INSTANCE.loadFromMap();
         } catch (Exception e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Messages.yml!");
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Messages.yml!", 1);
             e.printStackTrace();
         }
         ReaperSanction.INSTANCE.reloadConfig();
         try {
             setupInventories();
         } catch (Exception e) {
-            ReaperSanction.INSTANCE.getLogger().info("§c§lError in reloading data for Inventories.yml!");
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Inventories.yml!", 1);
             e.printStackTrace();
         }
         CustomInventories.INSTANCE.loadInventories();
@@ -115,6 +139,10 @@ public class FilesManager {
 
     public void saveSettings() {
         saveFile(getSettingsFile(), settings);
+    }
+
+    public void saveDbCredentials() {
+        saveFile(getDbCredentialsFile(), dbCredentials);
     }
 
     public Map<String, Object> getSanctions() {
@@ -147,32 +175,40 @@ public class FilesManager {
         saveSettings();
     }
 
+    public Map<String, Object> getDbCredentials() {
+        return dbCredentials;
+    }
+
     protected File getFileOrCreateIt(File folder, String fileName) {
         File file = new File(folder, fileName);
         if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                ReaperSanction.INSTANCE.getLogger().info("§c§lError in creation of " + fileName);
+                Main.INSTANCE.sendLogMessage("§c§lError in creation of " + fileName, 1);
             }
         }
         return file;
     }
 
     public File getSanctionsFile() {
-        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Sanctions.yml");
+        return getFileOrCreateIt(dataFolder, "Sanctions.yml");
     }
 
     public File getMessagesFile() {
-        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Messages.yml");
+        return getFileOrCreateIt(dataFolder, "Messages.yml");
     }
 
     public File getInventoryFile() {
-        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Inventories.yml");
+        return getFileOrCreateIt(dataFolder, "Inventories.yml");
     }
 
     public File getSettingsFile() {
-        return getFileOrCreateIt(ReaperSanction.INSTANCE.getDataFolder(), "Settings.yml");
+        return getFileOrCreateIt(dataFolder, "Settings.yml");
+    }
+
+    public File getDbCredentialsFile() {
+        return getFileOrCreateIt(dataFolder, "Storage.yml");
     }
 
     public void applyInfosFile(Map<String, Object> map) {
