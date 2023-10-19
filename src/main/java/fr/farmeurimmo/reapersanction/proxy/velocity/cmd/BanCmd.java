@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.proxy.velocity.cmd;
 
 import com.velocitypowered.api.command.SimpleCommand;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -12,7 +12,6 @@ public class BanCmd implements SimpleCommand {
         String[] args = invocation.arguments();
         if (args.length == 0) {
             invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorBanArg", true));
-            return;
         }
     }
 

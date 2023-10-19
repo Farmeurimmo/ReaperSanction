@@ -1,8 +1,8 @@
-package fr.farmeurimmo.reapersanction.api.storage;
+package fr.farmeurimmo.reapersanction.core.storage;
 
-import fr.farmeurimmo.reapersanction.api.users.Sanction;
-import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
+import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.utils.Parser;
 
 import java.util.*;

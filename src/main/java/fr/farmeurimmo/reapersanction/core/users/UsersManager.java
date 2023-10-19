@@ -1,7 +1,7 @@
-package fr.farmeurimmo.reapersanction.api.users;
+package fr.farmeurimmo.reapersanction.core.users;
 
-import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
-import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.storage.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -29,7 +29,7 @@ public class UsersManager {
                 return user;
             }
         }
-        if (ReaperSanction.STORAGE_METHOD.equalsIgnoreCase("MYSQL")) return DatabaseManager.INSTANCE.getUser(uuid);
+        if (Main.INSTANCE.getStorageMethod().equalsIgnoreCase("MYSQL")) return DatabaseManager.INSTANCE.getUser(uuid);
         return null;
     }
 
@@ -45,7 +45,7 @@ public class UsersManager {
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);
-        if (ReaperSanction.STORAGE_METHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.createUser(user);
+        if (Main.INSTANCE.getStorageMethod().equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.createUser(user);
         return user;
     }
 

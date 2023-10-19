@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;

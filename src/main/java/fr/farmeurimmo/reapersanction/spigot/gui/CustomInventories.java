@@ -1,9 +1,9 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.utils.ItemStackUtils;
+import fr.farmeurimmo.reapersanction.core.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.spigot.utils.ItemStackUtils;
 import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

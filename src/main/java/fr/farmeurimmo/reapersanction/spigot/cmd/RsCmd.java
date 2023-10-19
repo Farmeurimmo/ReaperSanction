@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
 import org.bukkit.Bukkit;

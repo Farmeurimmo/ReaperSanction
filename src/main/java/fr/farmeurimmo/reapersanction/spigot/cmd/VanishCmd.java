@@ -1,7 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Bukkit;

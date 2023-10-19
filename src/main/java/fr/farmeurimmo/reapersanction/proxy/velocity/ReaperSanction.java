@@ -8,7 +8,7 @@ import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.BanCmd;
 import org.slf4j.Logger;
 

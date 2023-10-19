@@ -1,9 +1,9 @@
 package fr.farmeurimmo.reapersanction.spigot;
 
-import fr.farmeurimmo.reapersanction.api.Main;
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionRevoker;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
+import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.cmd.*;
 import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
@@ -22,8 +22,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public static final ArrayList<Player> VANISHED = new ArrayList<>();
     public static ReaperSanction INSTANCE;
-    public static String STORAGE_METHOD = "YAML";
-    public static String DISCORD_WEBHOOK_URL = "";
     public final HashMap<String, String> ipblocked = new HashMap<>();
     private Main main;
 
@@ -68,8 +66,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         this.getCommand("history").setExecutor(new HistoryCmd());
         this.getCommand("kick").setExecutor(new KickCmd());
 
-        startDiscordWebhook();
-
         main.sendLogMessage("§aPlugin enabled !", 0);
         main.sendLogMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction/", 0);
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
@@ -84,23 +80,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
     }
 
-    public void startDiscordWebhook() {
-        if (getConfig().getBoolean("Discord.active")) {
-            main.sendLogMessage("§6Starting discord webhook...", 0);
-            try {
-                DISCORD_WEBHOOK_URL = getConfig().getString("Discord.webhook_url");
-            } catch (Exception e) {
-                getLogger().warning("Unable to start discord webhook, disabling it...");
-                getConfig().set("discord.active", false);
-                saveConfig();
-            }
-        }
-    }
-
-    public boolean matchRequirementsToMigrateToMYSQL() {
-        return getConfig().getString("storage.method").equalsIgnoreCase("MYSQL");
-    }
-
     public void Vanish() {
         for (Player players : Bukkit.getOnlinePlayers()) {
             for (Player pl : VANISHED) {
@@ -112,9 +91,5 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public String getServerName() {
         return Bukkit.getServerName();
-    }
-
-    public boolean isDiscordWebhookActive() {
-        return DISCORD_WEBHOOK_URL.length() > 0;
     }
 }

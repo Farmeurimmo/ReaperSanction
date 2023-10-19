@@ -1,10 +1,10 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.api.Main;
-import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
-import fr.farmeurimmo.reapersanction.api.storage.FilesManager;
-import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.storage.DatabaseManager;
+import fr.farmeurimmo.reapersanction.core.storage.FilesManager;
+import fr.farmeurimmo.reapersanction.core.storage.LocalStorageManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,7 +42,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         if (args[0].equalsIgnoreCase("migratedb")) {
-            if (!ReaperSanction.INSTANCE.matchRequirementsToMigrateToMYSQL()) {
+            if (!Main.INSTANCE.matchRequirementsToMigrateToMYSQL()) {
                 sender.sendMessage("§l§cIf you want to upgrade to MYSQL and you have already sanctions on players, you can, just follow those steps !\n" +
                         "§cPlease migrate your db when the server is empty, and make a backup of your old sanctions.yml to prevent data loss if the server crash !\n" +
                         "§l§c1. §7Stop your server\n" +

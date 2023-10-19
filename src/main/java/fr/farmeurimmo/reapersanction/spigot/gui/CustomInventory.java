@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,10 +16,10 @@ public class CustomInventory {
 
     private final int size;
     private final InventoryType type;
+    private final HashMap<Integer, ItemStack> items;
+    private final HashMap<Integer, ArrayList<String>> actionPerItem;
+    private final boolean isFill;
     private String name;
-    private HashMap<Integer, ItemStack> items;
-    private HashMap<Integer, ArrayList<String>> actionPerItem;
-    private boolean isFill;
 
     public CustomInventory(String name, int size, HashMap<Integer, ItemStack> items, HashMap<Integer, ArrayList<String>> actionPerItem, boolean isFill, InventoryType type) {
         this.name = name;

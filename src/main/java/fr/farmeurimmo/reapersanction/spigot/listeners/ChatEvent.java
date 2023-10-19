@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.listeners;
 
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

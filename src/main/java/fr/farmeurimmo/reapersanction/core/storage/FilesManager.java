@@ -1,6 +1,6 @@
-package fr.farmeurimmo.reapersanction.api.storage;
+package fr.farmeurimmo.reapersanction.core.storage;
 
-import fr.farmeurimmo.reapersanction.api.Main;
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -20,6 +20,7 @@ public class FilesManager {
     private Map<String, Object> inventories = new HashMap<>();
     private Map<String, Object> settings = new HashMap<>();
     private Map<String, Object> dbCredentials = new HashMap<>();
+    private Map<String, Object> webhooks = new HashMap<>();
 
     public FilesManager(File dataFolder) {
         INSTANCE = this;
@@ -30,6 +31,7 @@ public class FilesManager {
         setupMessages();
         setupConfig();
         setupDbCredentials();
+        setupWebhooks();
     }
 
     public void setupSanctions() {
@@ -72,6 +74,14 @@ public class FilesManager {
         if (dbCredentials == null) dbCredentials = new HashMap<>();
     }
 
+    public void setupWebhooks() {
+        try (InputStream inputStream = Files.newInputStream(getWebhooksFile().toPath())) {
+            webhooks = (Map<String, Object>) new Yaml().load(inputStream);
+        } catch (IOException ignored) {
+        }
+        if (webhooks == null) webhooks = new HashMap<>();
+    }
+
     public void deleteAndRecreateSanctionFile() {
         try {
             getSanctionsFile().delete();
@@ -97,6 +107,11 @@ public class FilesManager {
             setupDbCredentials();
         } catch (Exception e) {
             Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Storage.yml!", 1);
+        }
+        try {
+            setupWebhooks();
+        } catch (Exception e) {
+            Main.INSTANCE.sendLogMessage("§c§lError in reloading data for Webhooks.yml!", 1);
         }
         try {
             MessageManager.INSTANCE.clearMessages();
@@ -145,6 +160,10 @@ public class FilesManager {
         saveFile(getDbCredentialsFile(), dbCredentials);
     }
 
+    public void saveWebhooks() {
+        saveFile(getWebhooksFile(), webhooks);
+    }
+
     public Map<String, Object> getSanctions() {
         return sanctions;
     }
@@ -179,6 +198,10 @@ public class FilesManager {
         return dbCredentials;
     }
 
+    public Map<String, Object> getWebhooks() {
+        return webhooks;
+    }
+
     protected File getFileOrCreateIt(File folder, String fileName) {
         File file = new File(folder, fileName);
         if (!file.exists()) {
@@ -209,6 +232,10 @@ public class FilesManager {
 
     public File getDbCredentialsFile() {
         return getFileOrCreateIt(dataFolder, "Storage.yml");
+    }
+
+    public File getWebhooksFile() {
+        return getFileOrCreateIt(dataFolder, "Webhooks.yml");
     }
 
     public void applyInfosFile(Map<String, Object> map) {

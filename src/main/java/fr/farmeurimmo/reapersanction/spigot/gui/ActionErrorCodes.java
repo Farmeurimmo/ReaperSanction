@@ -14,7 +14,7 @@ public enum ActionErrorCodes {
     NO_DURATION_FOR_TEMP(9);
 
 
-    private int code;
+    private final int code;
 
     ActionErrorCodes(int code) {
         this.code = code;

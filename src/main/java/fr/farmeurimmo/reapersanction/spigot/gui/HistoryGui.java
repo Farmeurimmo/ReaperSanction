@@ -1,9 +1,9 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.users.Sanction;
-import fr.farmeurimmo.reapersanction.api.users.User;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

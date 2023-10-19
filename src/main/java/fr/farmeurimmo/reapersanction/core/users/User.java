@@ -1,8 +1,8 @@
-package fr.farmeurimmo.reapersanction.api.users;
+package fr.farmeurimmo.reapersanction.core.users;
 
-import fr.farmeurimmo.reapersanction.api.storage.DatabaseManager;
-import fr.farmeurimmo.reapersanction.api.storage.LocalStorageManager;
-import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.storage.DatabaseManager;
+import fr.farmeurimmo.reapersanction.core.storage.LocalStorageManager;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -119,7 +119,7 @@ public class User {
     }
 
     public void requestUserUpdate() {
-        if (ReaperSanction.STORAGE_METHOD.equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.updatePlayer(this);
+        if (Main.INSTANCE.getStorageMethod().equalsIgnoreCase("MYSQL")) DatabaseManager.INSTANCE.updatePlayer(this);
         else LocalStorageManager.INSTANCE.saveUser(this);
     }
 

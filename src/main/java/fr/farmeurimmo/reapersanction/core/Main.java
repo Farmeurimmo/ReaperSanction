@@ -1,7 +1,7 @@
-package fr.farmeurimmo.reapersanction.api;
+package fr.farmeurimmo.reapersanction.core;
 
-import fr.farmeurimmo.reapersanction.api.storage.*;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
+import fr.farmeurimmo.reapersanction.core.storage.*;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
@@ -75,7 +75,7 @@ public class Main {
         selectTimeZone();
 
         Main.INSTANCE.sendLogMessage("§a[CORE]§6 Starting Discord Webhook...", 0);
-        //startDiscordWebhook();
+        new WebhookManager();
 
         //TODO: end message of start
 
@@ -86,7 +86,11 @@ public class Main {
         FilesManager.INSTANCE.reloadData();
 
         selectTimeZone();
-        //startDiscordWebhook();
+        WebhookManager.INSTANCE.setup();
+    }
+
+    public String getStorageMethod() {
+        return DBCredentialsManager.INSTANCE.getMethod();
     }
 
     public void sendLogMessage(String message, int type) {
@@ -160,5 +164,9 @@ public class Main {
             TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
         }
         sendLogMessage("§6TimeZone set to : §b" + TimeZone.getDefault().getID(), 0);
+    }
+
+    public boolean matchRequirementsToMigrateToMYSQL() {
+        return getStorageMethod().equalsIgnoreCase("MYSQL");
     }
 }

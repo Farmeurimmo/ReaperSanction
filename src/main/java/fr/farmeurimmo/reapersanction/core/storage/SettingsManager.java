@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.api.storage;
+package fr.farmeurimmo.reapersanction.core.storage;
 
 import java.util.Arrays;
 import java.util.HashMap;

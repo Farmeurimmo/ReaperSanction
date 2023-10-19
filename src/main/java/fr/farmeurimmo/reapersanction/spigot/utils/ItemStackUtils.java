@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.utils;
+package fr.farmeurimmo.reapersanction.spigot.utils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -1,10 +1,10 @@
 package fr.farmeurimmo.reapersanction.spigot.listeners;
 
-import fr.farmeurimmo.reapersanction.api.sanctions.SanctionRevoker;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
-import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.entity.Player;

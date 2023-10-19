@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.api.users;
+package fr.farmeurimmo.reapersanction.core.users;
 
 public class Sanction {
 

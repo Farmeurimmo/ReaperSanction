@@ -1,19 +1,15 @@
-package fr.farmeurimmo.reapersanction.api.sanctions;
+package fr.farmeurimmo.reapersanction.core.sanctions;
 
-import fr.farmeurimmo.reapersanction.api.Main;
-import fr.farmeurimmo.reapersanction.api.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.api.storage.SettingsManager;
-import fr.farmeurimmo.reapersanction.api.users.Sanction;
-import fr.farmeurimmo.reapersanction.api.users.User;
-import fr.farmeurimmo.reapersanction.api.users.UsersManager;
-import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
-import fr.farmeurimmo.reapersanction.utils.DiscordWebhook;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.storage.WebhookManager;
+import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -24,23 +20,6 @@ public class SanctionApplier {
 
     public SanctionApplier() {
         INSTANCE = this;
-    }
-
-    public DiscordWebhook getWebhook(String type, String banner, String playerName, String reason, String duration) {
-        DiscordWebhook webhook_message = new DiscordWebhook(ReaperSanction.DISCORD_WEBHOOK_URL);
-        String desc = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".desc"), banner, playerName, duration, reason);
-        String thumbnail = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".thumbnail"), banner, playerName, duration, reason);
-        String author_name = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.name"), banner, playerName, duration, reason);
-        String author_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.url"), banner, playerName, duration, reason);
-        String author_icon_url = replaceArgs(ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".author.icon_url"), banner, playerName, duration, reason);
-        String color = ReaperSanction.INSTANCE.getConfig().getString("Discord." + type + ".color");
-        webhook_message.addEmbed(new DiscordWebhook.EmbedObject()
-                .setDescription(desc)
-                .setThumbnail(thumbnail)
-                .setAuthor(author_name, author_url, author_icon_url)
-                .setFooter(TimeConverter.getDateFormatted(System.currentTimeMillis()), "")
-                .setColor(Color.decode(color)));
-        return webhook_message;
     }
 
     public void ban(UUID uuid, String playerName, String host, String reason, String banner) {
@@ -61,9 +40,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaBan", true),
                     "null", playerName, banner, reason, user.getBannedAt(), user.getBannedUntil()));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("ban", banner, playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("ban", banner, playerName, reason, "null");
         });
     }
 
@@ -91,9 +68,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaBanIp", true),
                     "null", playerName, banner, reason, user.getBannedAt(), user.getBannedUntil()));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("ban", banner, playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("ban", banner, playerName, reason, "null");
         });
     }
 
@@ -135,9 +110,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempBan", true),
                     finalDuration, playerName, sender.getName(), reason, user.getBannedAt(), user.getBannedUntil()));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("tempban", sender.getName(), playerName, reason, finalDuration);
+            WebhookManager.INSTANCE.sendDiscordWebHook("tempBan", sender.getName(), playerName, reason, finalDuration);
         });
     }
 
@@ -172,9 +145,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotTempMute", true),
                     finalDuration, playerName, sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("tempmute", sender.getName(), playerName, reason, finalDuration);
+            WebhookManager.INSTANCE.sendDiscordWebHook("tempMute", sender.getName(), playerName, reason, finalDuration);
         });
     }
 
@@ -201,9 +172,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotPermaMute", true),
                     "null", playerName, sender.getName(), reason, user.getMutedAt(), user.getMutedUntil()));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("mute", sender.getName(), playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("mute", sender.getName(), playerName, reason, "null");
         });
     }
 
@@ -227,9 +196,7 @@ public class SanctionApplier {
             Bukkit.broadcastMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("PlayerGotKicked", true),
                     "null", playerName, banner, reason, System.currentTimeMillis(), -1));
 
-            if (!ReaperSanction.INSTANCE.isDiscordWebhookActive()) return;
-
-            sendDiscordWebHook("kick", banner, playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("kick", banner, playerName, reason, "null");
         });
     }
 
@@ -257,26 +224,5 @@ public class SanctionApplier {
         if (type.equalsIgnoreCase("day")) until += Integer.parseInt(duration) * 86400000L;
         if (type.equalsIgnoreCase("year")) until += Integer.parseInt(duration) * 31536000000L;
         return until;
-    }
-
-    public String replaceArgs(String str, String author, String target, String duration, String reason) {
-        return str
-                .replace("%author%", author)
-                .replace("%target%", target)
-                .replace("%duration%", duration)
-                .replace("%reason%", reason)
-                .replace("%server_name%", ReaperSanction.INSTANCE.getServerName());
-    }
-
-    public void sendDiscordWebHook(String type, String banner, String playerName, String reason, String duration) {
-        DiscordWebhook webhook = getWebhook(type, banner, playerName, reason, duration);
-        try {
-            webhook.setTts(false);
-            webhook.setUsername("ReaperSanction - " + Main.INSTANCE.getPluginVersion());
-            webhook.setAvatarUrl("https://cdn.farmeurimmo.fr/img/reaper-solution.jpg");
-            webhook.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

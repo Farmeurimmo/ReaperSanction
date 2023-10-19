@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.api.storage;
+package fr.farmeurimmo.reapersanction.core.storage;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
