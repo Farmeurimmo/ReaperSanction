@@ -3,8 +3,8 @@ package fr.farmeurimmo.reapersanction.spigot.cmd;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,32 +21,29 @@ public class HistoryCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
-            return false;
+            return true;
         }
         Player player = (Player) sender;
 
         if (args.length != 1) {
             player.sendMessage(MessageManager.INSTANCE.getMessage("ErrorHistoryArg", true));
-            return false;
+            return true;
         }
 
         User targetUser = UsersManager.INSTANCE.getUser(args[0]);
         if (targetUser == null) {
             player.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return false;
+            return true;
         }
         CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(player, targetUser, 0);
-        return false;
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
         if (args.length == 1) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equalsIgnoreCase(sender.getName())) continue;
-                subcmd.add(player.getName());
-            }
+            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
         } else if (args.length >= 2) {
             subcmd.add("");
         }

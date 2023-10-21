@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
@@ -55,7 +55,7 @@ public class HistoryGui extends FastInv {
             meta.setDisplayName(/*TimeConverter.replaceArgs(FilesManager.INSTANCE.getFromConfigFormatted("History.displayname"),
                             sanction.getDuration(), userTarget.getName(), sanction.getBy(), sanction.getReason(), sanction.getAt(), sanction.getUntil())
                     .replace("%sanctiontype%", sanction.getSanctionTypeStr())*/"broken");
-            boolean expired = SanctionApplier.INSTANCE.isSanctionStillActive(sanction, userTarget);
+            boolean expired = SanctionsManager.INSTANCE.isSanctionStillActive(sanction, userTarget);
             String expiredStr = expired ? EXPIRED_NO : EXPIRED_YES;
 
             //FIXME

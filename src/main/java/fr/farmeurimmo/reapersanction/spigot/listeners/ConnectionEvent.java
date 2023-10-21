@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.listeners;
 
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
@@ -23,7 +23,7 @@ public class ConnectionEvent implements Listener {
         user.setIp(e.getAddress().getHostAddress());
         String ip = e.getAddress().getHostAddress();
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
-        SanctionRevoker.INSTANCE.checkForSanctionExpiration(user);
+        SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
         if (ReaperSanction.INSTANCE.ipblocked.containsKey(partialIp)) {
             e.setKickMessage(SettingsManager.INSTANCE.getSetting("sanctions.banip")
                     .replace("%banner%", user.getBannedBy())

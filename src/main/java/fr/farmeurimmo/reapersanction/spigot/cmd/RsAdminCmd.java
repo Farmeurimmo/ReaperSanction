@@ -51,7 +51,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
                         "§l§c3. §7Place your credentials in the config.yml an change YAML to MYSQL\n" +
                         "§l§c4. §7Start your server\n" +
                         "§l§c5. §7Type this command again");
-                return false;
+                return true;
             }
             long start = System.currentTimeMillis();
             sender.sendMessage("§cStarting migration, can take a while depending on how much users you have.");
@@ -63,25 +63,23 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
                 FilesManager.INSTANCE.deleteAndRecreateSanctionFile();
                 sender.sendMessage("§aMigration done ! (took " + (System.currentTimeMillis() - start) + "ms)");
             });
-            return false;
+            return true;
         }
-        return false;
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("rsadmin")) {
-            if (args.length == 1) {
-                subcmd.add("reload");
-                subcmd.add("rl");
-                subcmd.add("infos");
-                subcmd.add("migratedb");
-            } else if (args.length >= 2) {
-                subcmd.add("");
-            }
-            Collections.sort(subcmd);
+        if (args.length == 1) {
+            subcmd.add("reload");
+            subcmd.add("rl");
+            subcmd.add("infos");
+            subcmd.add("migratedb");
+        } else if (args.length >= 2) {
+            subcmd.add("");
         }
+        Collections.sort(subcmd);
         return subcmd;
     }
 }

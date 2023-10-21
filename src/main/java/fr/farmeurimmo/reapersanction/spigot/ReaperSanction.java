@@ -1,8 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot;
 
 import fr.farmeurimmo.reapersanction.core.Main;
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionRevoker;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.cmd.*;
 import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
@@ -30,16 +28,13 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         saveDefaultConfig();
         INSTANCE = this;
 
-        main = new Main(Bukkit.getConsoleSender(), getLogger(), 0, INSTANCE.getDataFolder());
+        main = new Main(Bukkit.getConsoleSender(), getLogger(), INSTANCE.getDataFolder());
 
         String version = Bukkit.getServer().getBukkitVersion();
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
         main.sendLogMessage("§6This server is using minecraft : §b" + version, 0);
 
         main.sendLogMessage("§6Starting moderation module...", 0);
-        new SanctionApplier();
-        new SanctionRevoker();
-        Vanish();
         UsersManager.INSTANCE.checkForOnlinePlayersIfTheyAreUsers();
 
         main.sendLogMessage("§6Initializing GUIs...", 0);
@@ -52,41 +47,51 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
 
         main.sendLogMessage("§6Starting commands...", 0);
-        this.getCommand("vanish").setExecutor(new VanishCmd());
-        this.getCommand("report").setExecutor(new ReportCmd());
-        this.getCommand("rsadmin").setExecutor(new RsAdminCmd());
-        this.getCommand("rs").setExecutor(new RsCmd());
-        this.getCommand("ban").setExecutor(new BanCmd());
-        this.getCommand("tempban").setExecutor(new TempBanCmd());
-        this.getCommand("ban-ip").setExecutor(new BanIpCmd());
-        this.getCommand("mute").setExecutor(new MuteCmd());
-        this.getCommand("tempmute").setExecutor(new TempMuteCmd());
-        this.getCommand("unmute").setExecutor(new UnMuteCmd());
-        this.getCommand("unban").setExecutor(new UnBanCmd());
-        this.getCommand("history").setExecutor(new HistoryCmd());
-        this.getCommand("kick").setExecutor(new KickCmd());
+        getCommand("ban").setExecutor(new BanCmd());
+        getCommand("tempban").setExecutor(new TempBanCmd());
+        getCommand("ban-ip").setExecutor(new BanIpCmd());
+        getCommand("mute").setExecutor(new MuteCmd());
+        getCommand("tempmute").setExecutor(new TempMuteCmd());
+        getCommand("unmute").setExecutor(new UnMuteCmd());
+        getCommand("unban").setExecutor(new UnBanCmd());
+        getCommand("kick").setExecutor(new KickCmd());
+        getCommand("report").setExecutor(new ReportCmd());
 
-        main.sendLogMessage("§aPlugin enabled !", 0);
-        main.sendLogMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction/", 0);
+        getCommand("vanish").setExecutor(new VanishCmd());
+        getCommand("rsadmin").setExecutor(new RsAdminCmd());
+        getCommand("rs").setExecutor(new RsCmd());
+        getCommand("history").setExecutor(new HistoryCmd());
+
+        vanish();
+
+        main.endOfStart();
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
-
-        //TODO: detect if the server is behind a proxy like bungeecord or velocity
     }
 
     @Override
     public void onDisable() {
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
-        main.sendLogMessage("§aPlugin disabled !", 0);
+
+        main.disable();
+
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
     }
 
-    public void Vanish() {
+    public void vanish() {
         for (Player players : Bukkit.getOnlinePlayers()) {
             for (Player pl : VANISHED) {
                 players.hidePlayer(pl);
             }
         }
-        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.INSTANCE, this::Vanish, 20);
+        Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.INSTANCE, this::vanish, 20);
+    }
+
+    public ArrayList<String> getEveryoneExceptMe(String playerName) {
+        ArrayList<String> players = new ArrayList<>();
+
+        Bukkit.getOnlinePlayers().stream().filter(p -> !p.getName().equals(playerName)).forEach(p -> players.add(p.getName()));
+
+        return players;
     }
 
     public String getServerName() {

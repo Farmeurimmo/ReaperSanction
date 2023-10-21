@@ -26,11 +26,11 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg3) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
-            return false;
+            return true;
         }
         if (!Parser.PARSE_BOOLEAN(SettingsManager.INSTANCE.getSetting("vanish.status"))) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("Command-Disabled", true));
-            return false;
+            return true;
         }
         Player p = (Player) sender;
         if (ReaperSanction.VANISHED.contains(p)) {

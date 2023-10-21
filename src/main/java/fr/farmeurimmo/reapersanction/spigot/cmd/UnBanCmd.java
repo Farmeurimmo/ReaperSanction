@@ -1,6 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionRevoker;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
@@ -19,35 +19,33 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorUnBanArg", true));
-            return false;
+            return true;
         }
         User user = UsersManager.INSTANCE.getUser(args[0]);
         if (user == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return false;
+            return true;
         }
-        SanctionRevoker.INSTANCE.revokeBanAdmin(user, sender);
-        return false;
+        SanctionsManager.INSTANCE.revokeBanAdmin(user, sender);
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("unban")) {
-            if (args.length == 1) {
-                for (User user : UsersManager.INSTANCE.users) {
-                    if (user.isBanned()) {
-                        subcmd.add(user.getName());
-                    }
-                    if (user.isIpBanned()) {
-                        subcmd.add(user.getIp());
-                    }
+        if (args.length == 1) {
+            for (User user : UsersManager.INSTANCE.users) {
+                if (user.isBanned()) {
+                    subcmd.add(user.getName());
                 }
-            } else if (args.length >= 2) {
-                subcmd.add("");
+                if (user.isIpBanned()) {
+                    subcmd.add(user.getIp());
+                }
             }
-            Collections.sort(subcmd);
+        } else {
+            return Collections.emptyList();
         }
+        Collections.sort(subcmd);
         return subcmd;
     }
 }

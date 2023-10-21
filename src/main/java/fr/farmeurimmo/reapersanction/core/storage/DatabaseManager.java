@@ -30,9 +30,17 @@ public class DatabaseManager {
             throw new Exception("Unable to connect to the database");
         }
 
+        String tableName;
+        if (SettingsManager.INSTANCE.getSetting("context").equalsIgnoreCase("global")) {
+            tableName = "users";
+        } else {
+            tableName = "users_" + SettingsManager.INSTANCE.getSetting("context");
+        }
+        //edit the state for the creation of table and replace the table name with the variable
+
         connection.prepareStatement("CREATE DATABASE IF NOT EXISTS reapersanction").executeUpdate();
         connection.prepareStatement("USE reapersanction").executeUpdate();
-        connection.prepareStatement("CREATE TABLE IF NOT EXISTS users (uuid VARCHAR(36) primary key, name VARCHAR(24), mutedAt BIGINT, mutedUntil BIGINT, " +
+        connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tableName + " (uuid VARCHAR(36) primary key, name VARCHAR(24), mutedAt BIGINT, mutedUntil BIGINT, " +
                 "mutedFor LONGTEXT, mutedBy VARCHAR(24), mutedDuration LONGTEXT, bannedUntil BIGINT, bannedAt BIGINT, bannedBy VARCHAR(24), bannedFor LONGTEXT, ipBanned BOOL, " +
                 "bannedDuration LONGTEXT, ip VARCHAR(32), history LONGTEXT)").executeUpdate();
     }

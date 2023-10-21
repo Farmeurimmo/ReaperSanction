@@ -2,6 +2,7 @@ package fr.farmeurimmo.reapersanction.core.storage;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SettingsManager {
@@ -48,6 +49,9 @@ public class SettingsManager {
         toReturn.put("dateFormat", "dd/MM/yyyy");
         toReturn.put("timeFormat", "dd/MM/yyyy HH:mm:ss");
 
+        toReturn.put("context", "global");
+        toReturn.put("proxy", false);
+
         //FIXME: add %until% for temporary sanctions
         Map<String, Object> sanctions = new HashMap<>();
         sanctions.put("banip", Arrays.asList("&cConnection refused", " ",
@@ -78,6 +82,13 @@ public class SettingsManager {
         toReturn.put("report", report);
 
         return toReturn;
+    }
+
+    public String getSanctionMessage(String type) {
+        Map<String, Object> sanctions = (Map<String, Object>) getSettings().get("sanctions");
+        if (sanctions == null) return "";
+        if (sanctions.get(type) == null) return "";
+        return String.join("\n", (List<String>) sanctions.get(type)).replace("&", "§");
     }
 
     protected void loadSettings() {

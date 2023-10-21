@@ -278,4 +278,24 @@ public class User {
     public void setBannedDuration(String bannedDuration) {
         this.bannedDuration = bannedDuration;
     }
+
+    public void applyBan(Sanction sanction, String host) {
+        setBannedUntil(sanction.getUntil());
+        setBannedBy(sanction.getBy());
+        setBannedReason(sanction.getReason());
+        setBannedAt(sanction.getAt());
+        setIpBanned(sanction.isIp());
+        setIp(host);
+        setBannedDuration(sanction.getDuration());
+        addSanction(sanction);
+    }
+
+    public void applyMute(Sanction sanction, String host) {
+        setMutedUntil(sanction.getUntil());
+        setMutedBy(sanction.getBy());
+        setMutedReason(sanction.getReason());
+        setMutedAt(sanction.getAt());
+        setMutedDuration(sanction.getDuration());
+        addSanction(sanction);
+    }
 }

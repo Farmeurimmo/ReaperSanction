@@ -1,8 +1,10 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
-import fr.farmeurimmo.reapersanction.core.sanctions.SanctionApplier;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
@@ -12,53 +14,39 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 public class BanIpCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorBanIpArg", true));
             return true;
         }
-        if (args.length == 1) {
-            Player p = Bukkit.getPlayer(args[0]);
-            String reason = MessageManager.INSTANCE.getMessage("UnkownReasonSpecified", false);
-            assert p != null;
-            if (p.isOnline()) p.kickPlayer(SettingsManager.INSTANCE.getSetting("sanctions.banip")
-                    .replace("%banner%", sender.getName())
-                    .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
-                    .replace("%reason%", reason));
-            SanctionApplier.INSTANCE.banIp(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
+        Player target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return true;
         }
-        Player p = Bukkit.getPlayer(args[0]);
-        String reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
-        assert p != null;
-        if (p.isOnline()) p.kickPlayer(SettingsManager.INSTANCE.getSetting("sanctions.banip")
-                .replace("%banner%", sender.getName())
-                .replace("%date%", TimeConverter.getFormatTimeWithTZ(calendar.getTime()))
-                .replace("%reason%", reason));
-        SanctionApplier.INSTANCE.banIp(p.getUniqueId(), p.getName(), p.getAddress().getAddress().getHostAddress(), reason, sender.getName());
+        String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
+        if (args.length != 1) {
+            reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
+        }
+        Sanction s = SanctionsManager.INSTANCE.banIp(target.getUniqueId(), target.getName(), target.getAddress().getAddress().getHostAddress(), reason, sender.getName());
+        if (target.isOnline()) target.kickPlayer(SettingsManager.INSTANCE.getSanctionMessage("banip")
+                .replace("%banner%", s.getBy())
+                .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
+                .replace("%reason%", s.getReason()));
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        List<String> subcmd = new ArrayList<>();
         if (args.length == 1) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equalsIgnoreCase(sender.getName())) continue;
-                subcmd.add(player.getName());
-            }
+            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
         }
-        Collections.sort(subcmd);
-        return subcmd;
+        return null;
     }
 
 }
