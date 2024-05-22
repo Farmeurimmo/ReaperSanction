@@ -43,20 +43,18 @@ public class UpdateChecker {
             responseStream.close();
 
             return (JSONObject) new JSONParser().parse(response);
-
         } catch (IOException | ParseException ignored) {
         }
         return new JSONObject();
     }
 
     public void checkForUpdate(String v) {
-        //TODO: get from config update checker with update channel
+        //TODO: channel update??
 
         if (v.contains("ERROR")) {
             Main.INSTANCE.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
             return;
         }
-
         new UpdateChecker(89580).getVersion(version -> {
             JSONObject json = getVersionViaAPI();
             if (json != null && json.containsKey("version") && !json.get("version").equals(version)) {

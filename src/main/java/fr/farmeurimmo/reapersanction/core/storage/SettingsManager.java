@@ -81,6 +81,8 @@ public class SettingsManager {
         report.put("status", true);
         toReturn.put("report", report);
 
+        toReturn.put("proxy", false);
+
         return toReturn;
     }
 

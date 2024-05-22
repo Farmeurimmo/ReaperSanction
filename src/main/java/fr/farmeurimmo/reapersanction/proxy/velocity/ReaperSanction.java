@@ -12,11 +12,14 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.BanCmd;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.TempBanCmd;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Plugin(
@@ -48,25 +51,30 @@ public class ReaperSanction {
     public void onProxyInitialization(ProxyInitializeEvent e) {
         main = new Main(logger, null, dataFolder);
 
-        Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
-
         proxy.getCommandManager().register("ban", new BanCmd());
+        proxy.getCommandManager().register("tempban", new TempBanCmd());
+
+        //init custom plugin message channel "reapersanction:main"
+        proxy.getEventManager().register(this, new CPMManager(proxy, logger));
+
+        Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
     }
 
     @Subscribe
     public void playerGotKick(KickedFromServerEvent e) {
-        System.out.println("KICKED");
         Player p = e.getPlayer();
         if (!e.getServerKickReason().isPresent()) return;
-        System.out.println("KICKED2");
         Component reason = e.getServerKickReason().get();
         String reasonText = String.valueOf(reason);
-        System.out.println(reasonText);
         if (reasonText.contains("RS:IMP:")) {
-            System.out.println("KICKED3");
             e.setResult(KickedFromServerEvent.DisconnectPlayer.create(
                     Component.text("§cYou have been kicked from the server for the following reason: §4" + reason)));
         }
+    }
+
+    public Player getPlayer(String name) {
+        Optional<Player> player = proxy.getPlayer(name);
+        return player.orElse(null);
     }
 
     public String getPluginVersion() {
@@ -82,5 +90,13 @@ public class ReaperSanction {
 
     public ProxyServer getProxy() {
         return proxy;
+    }
+
+    public ArrayList<String> getEveryoneExceptMe(String me) {
+        ArrayList<String> list = new ArrayList<>();
+        for (Player p : proxy.getAllPlayers()) {
+            if (!p.getUsername().equals(me)) list.add(p.getUsername());
+        }
+        return list;
     }
 }

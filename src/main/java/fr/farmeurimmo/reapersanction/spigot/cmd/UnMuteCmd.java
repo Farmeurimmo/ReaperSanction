@@ -1,13 +1,16 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import fr.farmeurimmo.reapersanction.spigot.cpm.CPMManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,15 +22,20 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorUnMuteArg", true));
-            return true;
+            return false;
+        }
+        if (Main.INSTANCE.isProxyMode()) {
+            CPMManager.INSTANCE.sendMessage((Player) sender, "unban", args[0]);
+            sender.sendMessage("Proxy mode enabled, sending unmute request to proxy, it can fail if the proxy is not running");
+            return false;
         }
         User user = UsersManager.INSTANCE.getUser(args[0]);
         if (user == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return true;
+            return false;
         }
         SanctionsManager.INSTANCE.revokeMuteAdmin(user, sender);
-        return true;
+        return false;
     }
 
     @Override

@@ -60,53 +60,45 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction tempBan(UUID uuid, String playerName, String host, String reason, CommandSender sender, String duration, String type) {
+    public Sanction tempBan(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
 
-        if (user.isPermaBan()) {
-            sender.sendMessage(MessageManager.INSTANCE.getMessage("AlreadyBanned", true));
-            return null;
-        }
         long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
 
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
-        Sanction sanction = new Sanction(2, reason, sender.getName(), System.currentTimeMillis(), timemillis, true, false, duration);
+        Sanction sanction = new Sanction(2, reason, sender, System.currentTimeMillis(), timemillis, true, false, duration);
         user.applyBan(sanction, host);
 
         String finalDuration = duration;
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            WebhookManager.INSTANCE.sendDiscordWebHook("tempBan", sender.getName(), playerName, reason, finalDuration);
+            WebhookManager.INSTANCE.sendDiscordWebHook("tempBan", sender, playerName, reason, finalDuration);
         });
 
         return sanction;
     }
 
-    public Sanction tempMute(UUID uuid, String playerName, String host, String reason, CommandSender sender, String duration, String type) {
+    public Sanction tempMute(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
-        if (user.isPermaMuted()) {
-            sender.sendMessage(MessageManager.INSTANCE.getMessage("AlreadyMuted", true));
-            return null;
-        }
         long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
-        Sanction sanction = new Sanction(4, reason, sender.getName(), System.currentTimeMillis(), timemillis, false, false, duration);
+        Sanction sanction = new Sanction(4, reason, sender, System.currentTimeMillis(), timemillis, false, false, duration);
         user.applyMute(sanction, host);
 
         String finalDuration = duration;
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            WebhookManager.INSTANCE.sendDiscordWebHook("tempMute", sender.getName(), playerName, reason, finalDuration);
+            WebhookManager.INSTANCE.sendDiscordWebHook("tempMute", sender, playerName, reason, finalDuration);
         });
 
         return sanction;
     }
 
-    public Sanction mute(UUID uuid, String playerName, String host, String reason, String banner, CommandSender sender) {
+    public Sanction mute(UUID uuid, String playerName, String host, String reason, String banner, String sender) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(3, reason, banner, System.currentTimeMillis(), -1, false, false, "Permanent");
         user.applyMute(sanction, host);
@@ -114,7 +106,7 @@ public class SanctionsManager {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            WebhookManager.INSTANCE.sendDiscordWebHook("mute", sender.getName(), playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("mute", sender, playerName, reason, "null");
         });
 
         return sanction;

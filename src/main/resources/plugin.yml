@@ -19,8 +19,6 @@ commands:
     description: Vanish command
     aliases: [ v ]
     permission: reapersanction.vanish
-  ban:
-    permission: reapersanction.ban
   tempban:
     permission: reapersanction.tempban
   ban-ip:

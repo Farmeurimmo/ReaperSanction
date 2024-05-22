@@ -23,23 +23,23 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
         if (args.length != 1) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorArgAdminCommands", true));
             sender.sendMessage("Subs commands available: infos, reload, rl");
-            return true;
+            return false;
         }
         if (args[0].equalsIgnoreCase("infos")) {
             sender.sendMessage("Plugin developper : Farmeurimmo");
             sender.sendMessage("Email : contact@farmeurimmo.fr");
             sender.sendMessage("Website : https://reaper.farmeurimmo.fr/reapersanction");
             sender.sendMessage("Version : " + ReaperSanction.INSTANCE.getDescription().getVersion());
-            return true;
+            return false;
         }
         if (!sender.hasPermission("reapersanction.rsadmin")) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("NoPermission", true));
-            return true;
+            return false;
         }
         if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
             Main.INSTANCE.reload();
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ReloadMessage", true));
-            return true;
+            return false;
         }
         if (args[0].equalsIgnoreCase("migratedb")) {
             if (!Main.INSTANCE.matchRequirementsToMigrateToMYSQL()) {
@@ -51,7 +51,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
                         "§l§c3. §7Place your credentials in the config.yml an change YAML to MYSQL\n" +
                         "§l§c4. §7Start your server\n" +
                         "§l§c5. §7Type this command again");
-                return true;
+                return false;
             }
             long start = System.currentTimeMillis();
             sender.sendMessage("§cStarting migration, can take a while depending on how much users you have.");
@@ -63,9 +63,9 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
                 FilesManager.INSTANCE.deleteAndRecreateSanctionFile();
                 sender.sendMessage("§aMigration done ! (took " + (System.currentTimeMillis() - start) + "ms)");
             });
-            return true;
+            return false;
         }
-        return true;
+        return false;
     }
 
     @Override

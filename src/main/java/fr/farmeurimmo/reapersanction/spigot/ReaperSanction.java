@@ -3,6 +3,7 @@ package fr.farmeurimmo.reapersanction.spigot;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.cmd.*;
+import fr.farmeurimmo.reapersanction.spigot.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.listeners.ChatEvent;
@@ -45,16 +46,20 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§6Starting listeners...", 0);
         getServer().getPluginManager().registerEvents(new ConnectionEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
+        //register the custom plugin message listener with channel "reapersanction:main"
+        getServer().getMessenger().registerIncomingPluginChannel(this, "reapersanction:main", new CPMManager());
 
         main.sendLogMessage("§6Starting commands...", 0);
-        getCommand("ban").setExecutor(new BanCmd());
-        getCommand("tempban").setExecutor(new TempBanCmd());
-        getCommand("ban-ip").setExecutor(new BanIpCmd());
-        getCommand("mute").setExecutor(new MuteCmd());
-        getCommand("tempmute").setExecutor(new TempMuteCmd());
-        getCommand("unmute").setExecutor(new UnMuteCmd());
-        getCommand("unban").setExecutor(new UnBanCmd());
-        getCommand("kick").setExecutor(new KickCmd());
+        if (!Main.INSTANCE.isProxyMode()) {
+            getCommand("ban").setExecutor(new BanCmd());
+            getCommand("tempban").setExecutor(new TempBanCmd());
+            getCommand("ban-ip").setExecutor(new BanIpCmd());
+            getCommand("mute").setExecutor(new MuteCmd());
+            getCommand("tempmute").setExecutor(new TempMuteCmd());
+            getCommand("unmute").setExecutor(new UnMuteCmd());
+            getCommand("unban").setExecutor(new UnBanCmd());
+            getCommand("kick").setExecutor(new KickCmd());
+        }
         getCommand("report").setExecutor(new ReportCmd());
 
         getCommand("vanish").setExecutor(new VanishCmd());

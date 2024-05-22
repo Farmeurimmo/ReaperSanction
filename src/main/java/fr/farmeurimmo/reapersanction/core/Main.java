@@ -195,4 +195,8 @@ public class Main {
     public boolean matchRequirementsToMigrateToMYSQL() {
         return getStorageMethod().equalsIgnoreCase("MYSQL");
     }
+
+    public boolean isProxyMode() {
+        return SettingsManager.INSTANCE.getSetting("proxy").equalsIgnoreCase("true");
+    }
 }

@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
@@ -20,14 +21,18 @@ public class KickCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorKickArg", true));
-            return true;
+            return false;
+        }
+        if (Main.INSTANCE.isProxyMode()) {
+            sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
+            return false;
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return true;
+            return false;
         }
-        String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
+        String reason = "UnknownReasonSpecified";
         if (args.length != 1) {
             reason = String.join(" ", args).replace(args[0] + " ", "");
         }
@@ -36,7 +41,7 @@ public class KickCmd implements CommandExecutor, TabCompleter {
                 .replace("%banner%", sender.getName())
                 .replace("%date%", TimeConverter.getDateFormatted(System.currentTimeMillis()))
                 .replace("%reason%", reason));
-        return true;
+        return false;
     }
 
     @Override

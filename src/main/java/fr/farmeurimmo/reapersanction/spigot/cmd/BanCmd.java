@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
@@ -14,33 +15,35 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class BanCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Calendar calendar = Calendar.getInstance();
         if (args.length == 0) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorBanArg", true));
-            return true;
+            return false;
         }
         Player target = Bukkit.getPlayer(args[0]);
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
         if (target == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return true;
+            return false;
         }
         if (args.length != 1) {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
+        }
+        if (Main.INSTANCE.isProxyMode()) {
+            sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
+            return false;
         }
         Sanction s = SanctionsManager.INSTANCE.ban(target.getUniqueId(), target.getName(), target.getAddress().getAddress().getHostAddress(), reason, sender.getName());
         if (target.isOnline()) target.kickPlayer(SettingsManager.INSTANCE.getSanctionMessage("ban")
                 .replace("%banner%", s.getBy())
                 .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
                 .replace("%reason%", s.getReason()));
-        return true;
+        return false;
     }
 
     @Override

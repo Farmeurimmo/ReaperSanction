@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
@@ -21,21 +22,26 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorMuteArg", true));
-            return true;
+            return false;
+        }
+        if (Main.INSTANCE.isProxyMode()) {
+            sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
+            return false;
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
-            return true;
+            return false;
         }
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
         if (args.length != 1) {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         }
-        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(), target.getAddress().getAddress().getHostAddress(), reason, sender.getName(), sender);
+        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(),
+                target.getAddress().getAddress().getHostAddress(), reason, sender.getName(), sender.getName());
         target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
                 "null", target.getName(), sender.getName(), reason, s.getAt(), s.getUntil()));
-        return true;
+        return false;
     }
 
     @Override
