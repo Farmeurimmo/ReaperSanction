@@ -1,8 +1,8 @@
 package fr.farmeurimmo.reapersanction.spigot.cmd;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
-import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,7 +33,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         Player p = (Player) sender;
-        if (ReaperSanction.VANISHED.contains(p)) {
+        if (Main.VANISHED.contains(p.getUniqueId())) {
             for (Player players : Bukkit.getOnlinePlayers()) {
                 players.showPlayer(p);
                 p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -56,7 +56,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
                         p.setGameMode(GameMode.SURVIVAL);
                 }
             }
-            ReaperSanction.VANISHED.remove(p);
+            Main.VANISHED.remove(p.getUniqueId());
             p.sendMessage(MessageManager.INSTANCE.getMessage("Vanish-Isoff", false));
             return false;
         }
@@ -64,7 +64,7 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
             players.hidePlayer(p);
             p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000000000, 1));
         }
-        ReaperSanction.VANISHED.add(p);
+        Main.VANISHED.add(p.getUniqueId());
         if (Parser.PARSE_BOOLEAN(SettingsManager.INSTANCE.getSetting("vanish.changeGamemode"))) {
             if (Parser.PARSE_INT(SettingsManager.INSTANCE.getSetting("vanish.gamemode")) == 1)
                 p.setGameMode(GameMode.CREATIVE);

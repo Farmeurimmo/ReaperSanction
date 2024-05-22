@@ -21,6 +21,8 @@ commands:
     permission: reapersanction.vanish
   tempban:
     permission: reapersanction.tempban
+  ban:
+    permission: reapersanction.ban
   ban-ip:
     permission: reapersanction.ban-ip
   mute:

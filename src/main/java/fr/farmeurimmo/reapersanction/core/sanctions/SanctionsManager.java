@@ -186,7 +186,7 @@ public class SanctionsManager {
             return;
         }
         revokeMute(user, requester.getName());
-        requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccessfullyUnbanned", true)
+        requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccessfullyUnmuted", true)
                 .replace("%player%", user.getName()));
     }
 

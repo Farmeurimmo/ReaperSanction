@@ -8,12 +8,17 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class Main {
 
+    public static final ArrayList<UUID> VANISHED = new ArrayList<>();
     public static Main INSTANCE;
+    public final HashMap<String, String> ipblocked = new HashMap<>();
     private final ServerType serverType;
     private ConsoleCommandSender bukkitConsole;
     private java.util.logging.Logger loggerSpigot;

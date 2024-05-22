@@ -14,6 +14,7 @@ import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.BanCmd;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.TempBanCmd;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
+import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
@@ -56,6 +57,7 @@ public class ReaperSanction {
 
         //init custom plugin message channel "reapersanction:main"
         proxy.getEventManager().register(this, new CPMManager(proxy, logger));
+        proxy.getEventManager().register(this, new PlayerListener());
 
         Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
     }

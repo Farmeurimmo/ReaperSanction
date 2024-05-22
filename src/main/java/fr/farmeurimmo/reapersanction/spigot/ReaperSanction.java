@@ -15,13 +15,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.UUID;
 
 public class ReaperSanction extends JavaPlugin implements Listener {
 
-    public static final ArrayList<Player> VANISHED = new ArrayList<>();
     public static ReaperSanction INSTANCE;
-    public final HashMap<String, String> ipblocked = new HashMap<>();
     private Main main;
 
     @Override
@@ -84,8 +82,10 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public void vanish() {
         for (Player players : Bukkit.getOnlinePlayers()) {
-            for (Player pl : VANISHED) {
-                players.hidePlayer(pl);
+            for (UUID pl : Main.VANISHED) {
+                Player plTarget = Bukkit.getPlayer(pl);
+                if (plTarget == null) continue;
+                players.hidePlayer(plTarget);
             }
         }
         Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(ReaperSanction.INSTANCE, this::vanish, 20);

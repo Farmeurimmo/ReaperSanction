@@ -20,7 +20,7 @@ public class TempBanCmd implements SimpleCommand {
 
     @Override
     public void execute(Invocation invocation) {
-        String args[] = invocation.arguments();
+        String[] args = invocation.arguments();
         if (args.length == 0 || args.length == 1) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempBanArg", true)));
             return;
