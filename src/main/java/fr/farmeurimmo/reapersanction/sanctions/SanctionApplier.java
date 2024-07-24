@@ -316,7 +316,7 @@ public class SanctionApplier {
     public long getMillisOfEmission(long until, String duration, String type) {
         if (type.equalsIgnoreCase("sec")) until += Integer.parseInt(duration) * 1000L;
         if (type.equalsIgnoreCase("min")) until += Integer.parseInt(duration) * 60000L;
-        if (type.equalsIgnoreCase("hour")) until += Integer.parseInt(duration) * 360000L;
+        if (type.equalsIgnoreCase("hour")) until += Integer.parseInt(duration) * 3600000L;
         if (type.equalsIgnoreCase("day")) until += Integer.parseInt(duration) * 86400000L;
         if (type.equalsIgnoreCase("year")) until += Integer.parseInt(duration) * 31536000000L;
         return until;
