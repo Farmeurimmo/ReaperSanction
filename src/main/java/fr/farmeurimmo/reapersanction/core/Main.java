@@ -8,10 +8,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class Main {
@@ -203,5 +200,15 @@ public class Main {
 
     public boolean isProxyMode() {
         return SettingsManager.INSTANCE.getSetting("proxy").equalsIgnoreCase("true");
+    }
+
+    public List<String> filterByStart(List<String> list, String start) {
+        List<String> filtered = new ArrayList<>();
+        for (String s : list) {
+            if (s.startsWith(start)) {
+                filtered.add(s);
+            }
+        }
+        return filtered;
     }
 }

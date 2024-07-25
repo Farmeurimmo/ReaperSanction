@@ -1,10 +1,12 @@
 package fr.farmeurimmo.reapersanction.core.sanctions;
 
+import com.velocitypowered.api.command.SimpleCommand;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.WebhookManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,11 +65,11 @@ public class SanctionsManager {
     public Sanction tempBan(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
 
-        long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
+        long timeMillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
 
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
-        Sanction sanction = new Sanction(2, reason, sender, System.currentTimeMillis(), timemillis, true, false, duration);
+        Sanction sanction = new Sanction(2, reason, sender, System.currentTimeMillis(), timeMillis, true, false, duration);
         user.applyBan(sanction, host);
 
         String finalDuration = duration;
@@ -82,10 +84,10 @@ public class SanctionsManager {
 
     public Sanction tempMute(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
-        long timemillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
+        long timeMillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
-        Sanction sanction = new Sanction(4, reason, sender, System.currentTimeMillis(), timemillis, false, false, duration);
+        Sanction sanction = new Sanction(4, reason, sender, System.currentTimeMillis(), timeMillis, false, false, duration);
         user.applyMute(sanction, host);
 
         String finalDuration = duration;
@@ -98,7 +100,7 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction mute(UUID uuid, String playerName, String host, String reason, String banner, String sender) {
+    public Sanction mute(UUID uuid, String playerName, String host, String reason, String banner) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(3, reason, banner, System.currentTimeMillis(), -1, false, false, "Permanent");
         user.applyMute(sanction, host);
@@ -106,7 +108,7 @@ public class SanctionsManager {
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
 
-            WebhookManager.INSTANCE.sendDiscordWebHook("mute", sender, playerName, reason, "null");
+            WebhookManager.INSTANCE.sendDiscordWebHook("mute", banner, playerName, reason, "null");
         });
 
         return sanction;
@@ -212,5 +214,24 @@ public class SanctionsManager {
         }
         revokeBan(user);
         requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccessfullyUnbanned", true).replace("%player%", user.getName()));
+    }
+
+    public void revokeBanAdmin(User user, SimpleCommand.Invocation invocation) {
+        if (!user.isBanned()) {
+            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("NotBanned", true));
+            return;
+        }
+        revokeBan(user);
+        invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("SuccessfullyUnbanned", true).replace("%player%", user.getName())));
+    }
+
+    public void revokeMuteAdmin(User user, SimpleCommand.Invocation invocation) {
+        if (!user.isMuted()) {
+            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("NotMuted", true));
+            return;
+        }
+        revokeMute(user, invocation.alias());
+        invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("SuccessfullyUnmuted", true)
+                .replace("%player%", user.getName())));
     }
 }

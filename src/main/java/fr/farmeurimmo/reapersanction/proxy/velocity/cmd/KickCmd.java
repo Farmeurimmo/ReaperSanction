@@ -13,12 +13,13 @@ import net.kyori.adventure.text.Component;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class BanCmd implements SimpleCommand {
+public class KickCmd implements SimpleCommand {
+
     @Override
     public void execute(Invocation invocation) {
         String[] args = invocation.arguments();
         if (args.length == 0) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorBanArg", true));
+            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorKickArg", true));
             return;
         }
         Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
@@ -31,21 +32,20 @@ public class BanCmd implements SimpleCommand {
             reason = String.join(" ", args).replace(args[0] + " ", "").trim();
         }
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
-        Sanction s = SanctionsManager.INSTANCE.ban(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, by);
-        if (target.isActive()) target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("ban")
+        Sanction s = SanctionsManager.INSTANCE.kick(target.getUniqueId(), target.getUsername(), reason, by);
+        if (target.isActive()) target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("kick")
                 .replace("%banner%", s.getBy())
                 .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
                 .replace("%reason%", s.getReason())));
     }
 
     @Override
-    public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
-        return ReaperSanction.INSTANCE.getListCompletableFuture(invocation);
+    public boolean hasPermission(Invocation invocation) {
+        return invocation.source().hasPermission("reapersanction.kick");
     }
 
     @Override
-    public boolean hasPermission(Invocation invocation) {
-        return invocation.source().hasPermission("reapersanction.ban");
+    public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
+        return ReaperSanction.INSTANCE.getListCompletableFuture(invocation);
     }
 }

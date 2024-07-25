@@ -38,7 +38,7 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         }
         Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, sender.getName(), sender.getName());
+                target.getAddress().getAddress().getHostAddress(), reason, sender.getName());
         target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
                 "null", target.getName(), sender.getName(), reason, s.getAt(), s.getUntil()));
         return false;
