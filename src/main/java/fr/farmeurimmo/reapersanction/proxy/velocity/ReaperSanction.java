@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
         description = "ReaperSanction velocity plugin",
         url = "https://reaper.farmeurimmo.fr",
         authors = "Farmeurimmo",
-        version = "1.6.0-RC1"
+        version = "2.0.0-RC1"
 )
 public class ReaperSanction {
 
