@@ -61,7 +61,7 @@ public class PlayerListener {
         Player p = e.getPlayer();
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(p.getUniqueId(), p.getUsername());
         if (user.isMuted()) {
-            e.setResult(PlayerChatEvent.ChatResult.message(""));
+            //FIXME: In velocity, we can't cancel the event, so we have to send a message to the player instead
             if (user.isPermaMuted()) {
                 p.sendMessage(Component.text(MessageManager.INSTANCE.getMessage("PermaMutedPlayerChat", true)
                         .replace("%player%", p.getUsername()).replace("%banner%", user.getMutedBy())));

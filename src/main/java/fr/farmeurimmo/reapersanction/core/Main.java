@@ -47,14 +47,14 @@ public class Main {
                 throw new RuntimeException("Can't determine server type");
         }
 
-        sendLogMessage("§a[CORE]§e Loading ReaperSanction on §b" + serverType.name() + "§e server...", 0);
-        sendLogMessage("§a[CORE]§6 Booting up files...", 0);
+        sendLogMessage("Loading ReaperSanction on §b" + serverType.name() + "§e server...", 0);
+        sendLogMessage("Booting up files...", 0);
         new FilesManager(dataFolder);
         try {
             new DBCredentialsManager();
         } catch (Exception e) {
             e.printStackTrace();
-            sendLogMessage("§c[CORE]§4 Unable to load database credentials, stopping server...", 2);
+            sendLogMessage("Unable to load database credentials, stopping server...", 2);
             shutdown();
             return;
         }
@@ -62,13 +62,13 @@ public class Main {
         new SettingsManager();
         new MessageManager();
 
-        sendLogMessage("§a[CORE]§6 Starting users manager...", 0);
+        sendLogMessage("Starting users manager...", 0);
         new UsersManager();
 
-        sendLogMessage("§a[CORE]§6 Detecting storage...", 0);
+        sendLogMessage("Detecting storage...", 0);
         String STORAGE_METHOD = DBCredentialsManager.INSTANCE.getMethod();
         if (STORAGE_METHOD.equalsIgnoreCase("MYSQL")) {
-            Main.INSTANCE.sendLogMessage("§a[CORE]§6 Found §bMYSQL§6 storage database, trying to connect...", 0);
+            Main.INSTANCE.sendLogMessage("Found §bMYSQL§6 storage database, trying to connect...", 0);
 
             getCredentialsAndInitialize();
 
@@ -77,34 +77,34 @@ public class Main {
                 DatabaseManager.INSTANCE.loadUsers();
             } catch (Exception e) {
                 e.printStackTrace();
-                Main.INSTANCE.sendLogMessage("§a[CORE]§6 Unable to connect to the database, stopping server...", 2);
+                Main.INSTANCE.sendLogMessage("Unable to connect to the database, stopping server...", 2);
                 Main.INSTANCE.shutdown();
                 return;
             }
         } else {
-            Main.INSTANCE.sendLogMessage("§a[CORE]§6 Found §bYAML§6 storage method, starting it...", 0);
+            Main.INSTANCE.sendLogMessage("Found §bYAML§6 storage method, starting it...", 0);
             LocalStorageManager.INSTANCE.setup();
         }
 
-        Main.INSTANCE.sendLogMessage("§a[CORE]§6 Detecting TimeZone...", 0);
+        Main.INSTANCE.sendLogMessage("Detecting TimeZone...", 0);
         selectTimeZone();
 
-        Main.INSTANCE.sendLogMessage("§a[CORE]§6 Starting sanctions manager...", 0);
+        Main.INSTANCE.sendLogMessage("Starting sanctions manager...", 0);
         new SanctionsManager();
 
-        Main.INSTANCE.sendLogMessage("§a[CORE]§6 Starting Discord Webhook...", 0);
+        Main.INSTANCE.sendLogMessage("Starting Discord Webhook...", 0);
         new WebhookManager();
 
         CompletableFuture.runAsync(() -> new UpdateChecker(89580).checkForUpdate(Main.INSTANCE.getPluginVersion()));
     }
 
     public void endOfStart() {
-        sendLogMessage("§a[CORE]§a ReaperSanction is now enabled", 0);
+        sendLogMessage("ReaperSanction is now enabled", 0);
         sendLogMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction", 0);
     }
 
     public void disable() {
-        sendLogMessage("§c[CORE]§4 ReaperSanction is now disabled", 0);
+        sendLogMessage("ReaperSanction is now disabled", 0);
     }
 
     public void reload() {
@@ -191,7 +191,7 @@ public class Main {
             sendLogMessage("Unable to get the TimeZone from config, using default one...", 1);
             TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
         }
-        sendLogMessage("§a[CORE]§6 TimeZone set to : §b" + TimeZone.getDefault().getID(), 0);
+        sendLogMessage("TimeZone set to : §b" + TimeZone.getDefault().getID(), 0);
     }
 
     public boolean matchRequirementsToMigrateToMYSQL() {
