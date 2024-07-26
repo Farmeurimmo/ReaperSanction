@@ -127,13 +127,13 @@ public class Main {
                     else bukkitConsole.sendMessage("§a" + message);
                     break;
                 case VELOCITY:
-                    if (type == 0) loggerVelocity.info(message);
-                    else if (type == 1) loggerVelocity.warn(message);
-                    else if (type == 2) loggerVelocity.error(message);
-                    else throw new RuntimeException("Can't send message : " + message);
+                    if (type == 0) loggerVelocity.info(getWithoutColor(message));
+                    else if (type == 1) loggerVelocity.warn(getWithoutColor(message));
+                    else if (type == 2) loggerVelocity.error(getWithoutColor(message));
+                    else throw new RuntimeException("Can't send message : " + getWithoutColor(message));
                     break;
                 default:
-                    throw new RuntimeException("Can't send info message : " + message);
+                    throw new RuntimeException("Can't send info message : " + getWithoutColor(message));
             }
         } catch (Exception e) {
             throw new RuntimeException("Can't send info message" + message);
