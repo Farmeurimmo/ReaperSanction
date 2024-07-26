@@ -25,7 +25,7 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
             return false;
         }
         if (Main.INSTANCE.isProxyMode()) {
-            CPMManager.INSTANCE.sendMessage((Player) sender, "unban", args[0]);
+            CPMManager.INSTANCE.sendPluginMessage((Player) sender, "unban", args[0]);
             sender.sendMessage("Proxy mode enabled, sending unban request to proxy, it can fail if the proxy is not running");
             return false;
         }

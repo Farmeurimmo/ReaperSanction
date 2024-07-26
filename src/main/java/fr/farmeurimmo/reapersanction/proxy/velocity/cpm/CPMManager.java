@@ -1,24 +1,27 @@
 package fr.farmeurimmo.reapersanction.proxy.velocity.cpm;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
+import fr.farmeurimmo.reapersanction.utils.StrUtils;
+import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.util.Optional;
 
 public class CPMManager {
 
     public static CPMManager INSTANCE;
     private final Logger logger;
 
-    MinecraftChannelIdentifier queue = MinecraftChannelIdentifier.from("reapersanction:main");
+    MinecraftChannelIdentifier queue = MinecraftChannelIdentifier.from("reaper:sanction");
 
     public CPMManager(ProxyServer server, Logger logger) {
         INSTANCE = this;
@@ -28,7 +31,7 @@ public class CPMManager {
     }
 
     @Subscribe
-    public void onPluginMessage(com.velocitypowered.api.event.connection.PluginMessageEvent e) {
+    public void onPluginMessage(PluginMessageEvent e) {
         if (!e.getIdentifier().getId().equals(queue.getId())) {
             return;
         }
@@ -36,6 +39,7 @@ public class CPMManager {
             return;
         }
         handle(((ServerConnection) e.getSource()).getPlayer(), e.getData());
+        e.setResult(PluginMessageEvent.ForwardResult.handled());
     }
 
     public void handle(Player player, byte[] data) {
@@ -43,14 +47,33 @@ public class CPMManager {
         try {
             String subchannel = in.readUTF();
             String msg = in.readUTF();
-            //logger.info("Received plugin message from " + player.getUsername() + " on subchannel " + subchannel + " with message " + msg);
+
             String[] args = msg.split(" ");
+
+            if (subchannel.equals("report")) {
+                sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
+                return;
+            }
+
+            CommandManager cmdManager = ReaperSanction.INSTANCE.getProxy().getCommandManager();
+
+            cmdManager.executeAsync(player, subchannel + " " + msg);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sendPluginMessage(Player player, String channel, String... data) {
+    public void sendMessageReported(Player player, String cible, String ReportReason) {
+        player.sendMessage(Component.text(MessageManager.INSTANCE.getMessage("Report-Sended", true)
+                .replace("%player%", cible).replace("%reason%", ReportReason)));
+        for (Player p : ReaperSanction.INSTANCE.getProxy().getAllPlayers()) {
+            if (p.hasPermission("reportview"))
+                p.sendMessage(Component.text(MessageManager.INSTANCE.getMessage("Report-Obtain", true)
+                        .replace("%player%", cible).replace("%reason%", ReportReason).replace("%sender%", player.getUsername())));
+        }
+    }
+
+    /*public void sendPluginMessage(Player player, String channel, String... data) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(channel);
         for (String s : data) {
@@ -58,5 +81,5 @@ public class CPMManager {
         }
         Optional<ServerConnection> server = player.getCurrentServer();
         server.ifPresent(serverConnection -> serverConnection.sendPluginMessage(queue, out.toByteArray()));
-    }
+    }*/
 }

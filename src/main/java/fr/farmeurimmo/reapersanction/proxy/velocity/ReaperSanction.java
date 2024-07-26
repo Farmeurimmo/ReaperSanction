@@ -12,7 +12,6 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
-import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
@@ -136,8 +135,7 @@ public class ReaperSanction {
     public CompletableFuture<List<String>> getUsersCompletableFuture(SimpleCommand.Invocation invocation, boolean bans) {
         return CompletableFuture.supplyAsync(() -> {
             if (invocation.arguments().length == 1) {
-                return UsersManager.INSTANCE.users.stream().filter(user -> (bans ? user.isBanned() : user.isMuted()) && user.getName()
-                        .startsWith(invocation.arguments()[0])).collect(ArrayList::new, (l, u) -> l.add(u.getName()), ArrayList::addAll);
+                return handleSingleArgument(invocation);
             }
             return new ArrayList<>();
         });
@@ -147,10 +145,7 @@ public class ReaperSanction {
     public CompletableFuture<List<String>> getListMuteCompletableFuture(SimpleCommand.Invocation invocation) {
         return CompletableFuture.supplyAsync(() -> {
             if (invocation.arguments().length == 1) {
-                if (invocation.source() instanceof Player) {
-                    return ReaperSanction.INSTANCE.getEveryoneExceptMe(((Player) invocation.source()).getUsername());
-                }
-                return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryone(), invocation.arguments()[invocation.arguments().length - 1]);
+                return handleSingleArgument(invocation);
             }
             if (invocation.arguments().length == 2) {
                 return Main.INSTANCE.filterByStart(new ArrayList<>(Arrays.asList("10sec", "10min", "10hour", "10day", "10year")),
@@ -158,5 +153,12 @@ public class ReaperSanction {
             }
             return new ArrayList<>();
         });
+    }
+
+    private List<String> handleSingleArgument(SimpleCommand.Invocation invocation) {
+        if (invocation.source() instanceof Player) {
+            return ReaperSanction.INSTANCE.getEveryoneExceptMe(((Player) invocation.source()).getUsername());
+        }
+        return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryone(), invocation.arguments()[invocation.arguments().length - 1]);
     }
 }

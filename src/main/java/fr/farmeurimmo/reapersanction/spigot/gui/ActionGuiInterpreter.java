@@ -1,9 +1,11 @@
 package fr.farmeurimmo.reapersanction.spigot.gui;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.cpm.CPMManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -90,7 +92,9 @@ public class ActionGuiInterpreter {
                 String player = action.split(SEPARATOR)[2];
                 String reason = "";
                 if (sizeof > 3) reason = action.split(SEPARATOR)[3];
-                p.performCommand("mute " + player + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("mute " + player + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "mute", player + " " + reason);
                 return;
             }
 
@@ -107,7 +111,10 @@ public class ActionGuiInterpreter {
                 String duration = action.split(SEPARATOR)[3];
                 String reason = "";
                 if (sizeof > 4) reason = action.split(SEPARATOR)[4];
-                p.performCommand("tempmute " + player + " " + duration + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode())
+                    p.performCommand("tempmute " + player + " " + duration + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "tempmute", player + " " + duration + " " + reason);
                 return;
             }
 
@@ -119,7 +126,9 @@ public class ActionGuiInterpreter {
                 String player = action.split(SEPARATOR)[2];
                 String reason = "";
                 if (sizeof > 3) reason = action.split(SEPARATOR)[3];
-                p.performCommand("ban " + player + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("ban " + player + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "ban", player + " " + reason);
                 return;
             }
 
@@ -136,7 +145,9 @@ public class ActionGuiInterpreter {
                 String duration = action.split(SEPARATOR)[3];
                 String reason = "";
                 if (sizeof > 4) reason = action.split(SEPARATOR)[4];
-                p.performCommand("tempban " + player + " " + duration + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("tempban " + player + " " + duration + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "tempban", player + " " + duration + " " + reason);
                 return;
             }
 
@@ -148,7 +159,9 @@ public class ActionGuiInterpreter {
                 String player = action.split(SEPARATOR)[2];
                 String reason = "";
                 if (sizeof > 3) reason = action.split(SEPARATOR)[3];
-                p.performCommand("kick " + player + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("kick " + player + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "kick", player + " " + reason);
                 return;
             }
 
@@ -160,7 +173,9 @@ public class ActionGuiInterpreter {
                 String player = action.split(SEPARATOR)[2];
                 String reason = "";
                 if (sizeof > 3) reason = action.split(SEPARATOR)[3];
-                p.performCommand("ban-ip " + player + " " + reason);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("ban-ip " + player + " " + reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "ban-ip", player + " " + reason);
                 return;
             }
 
@@ -170,7 +185,9 @@ public class ActionGuiInterpreter {
                     return;
                 }
                 String player = action.split(SEPARATOR)[2];
-                p.performCommand("unmute " + player);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("unmute " + player);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "unmute", player);
                 return;
             }
 
@@ -180,7 +197,9 @@ public class ActionGuiInterpreter {
                     return;
                 }
                 String player = action.split(SEPARATOR)[2];
-                p.performCommand("unban " + player);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("unban " + player);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "unban", player);
                 return;
             }
 
@@ -190,7 +209,9 @@ public class ActionGuiInterpreter {
                     return;
                 }
                 String player = action.split(SEPARATOR)[2];
-                p.performCommand("unban " + player);
+
+                if (!Main.INSTANCE.isProxyMode()) p.performCommand("unban-ip " + player);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "unban-ip", player);
                 return;
             }
 
@@ -210,7 +231,9 @@ public class ActionGuiInterpreter {
                     return;
                 }
                 String player = action.split(SEPARATOR)[3];
-                sendMessageReported(p, player, reason);
+
+                if (!Main.INSTANCE.isProxyMode()) sendMessageReported(p, player, reason);
+                else CPMManager.INSTANCE.sendPluginMessage(p, "report", player + " " + reason);
                 return;
             }
 

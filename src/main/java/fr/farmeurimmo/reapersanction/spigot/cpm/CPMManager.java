@@ -9,7 +9,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 public class CPMManager implements PluginMessageListener {
 
     public static CPMManager INSTANCE;
-    private final String channel = "reapersanction:main";
+    private final String channel = "reaper:sanction";
 
     public CPMManager() {
         INSTANCE = this;
@@ -22,15 +22,14 @@ public class CPMManager implements PluginMessageListener {
 
     }
 
-    public void sendMessage(Player player, String subchannel, String data) {
-
+    public void sendPluginMessage(Player player, String channel, String... data) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(subchannel);
-        out.writeUTF(data);
 
-        if (!ReaperSanction.INSTANCE.getServer().getMessenger().isOutgoingChannelRegistered(ReaperSanction.INSTANCE, channel)) {
-            ReaperSanction.INSTANCE.getServer().getMessenger().registerOutgoingPluginChannel(ReaperSanction.INSTANCE, channel);
+        out.writeUTF(channel);
+        for (String s : data) {
+            out.writeUTF(s);
         }
-        player.sendPluginMessage(ReaperSanction.INSTANCE, channel, out.toByteArray());
+
+        player.sendPluginMessage(ReaperSanction.INSTANCE, this.channel, out.toByteArray());
     }
 }
