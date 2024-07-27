@@ -39,6 +39,6 @@ public class UnBanCmd implements SimpleCommand {
 
     @Override
     public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
-        return ReaperSanction.INSTANCE.getUsersCompletableFuture(invocation, true);
+        return ReaperSanction.INSTANCE.getUsersCompletableFuture(invocation);
     }
 }

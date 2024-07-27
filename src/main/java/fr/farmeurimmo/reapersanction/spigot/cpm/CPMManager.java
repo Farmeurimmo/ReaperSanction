@@ -2,9 +2,13 @@ package fr.farmeurimmo.reapersanction.spigot.cpm;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import java.util.UUID;
 
 public class CPMManager implements PluginMessageListener {
 
@@ -19,7 +23,35 @@ public class CPMManager implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+        String data = new String(bytes).replace(channel, "");
+        String subChannel = data.split("\\$")[0].trim();
 
+        if (subChannel.equals("nowmuted")) {
+            String uuid = data.split("\\$")[1];
+            try {
+                Main.INSTANCE.mutedPlayers.add(UUID.fromString(uuid));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        if (subChannel.equals("unmuted")) {
+            String uuid = data.split("\\$")[1];
+            try {
+                Main.INSTANCE.mutedPlayers.remove(UUID.fromString(uuid));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+    }
+
+    public void requestForMuteds() {
+        try {
+            sendPluginMessage(ReaperSanction.INSTANCE.getServer().getOnlinePlayers().iterator().next(), "getmuteds");
+        } catch (Exception e) {
+            Bukkit.getScheduler().runTaskLater(ReaperSanction.INSTANCE, this::requestForMuteds, 20L);
+        }
     }
 
     public void sendPluginMessage(Player player, String channel, String... data) {

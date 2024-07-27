@@ -38,6 +38,6 @@ public class UnMuteCmd implements SimpleCommand {
 
     @Override
     public CompletableFuture<List<String>> suggestAsync(Invocation invocation) {
-        return ReaperSanction.INSTANCE.getUsersCompletableFuture(invocation, false);
+        return ReaperSanction.INSTANCE.getUsersCompletableFuture(invocation);
     }
 }

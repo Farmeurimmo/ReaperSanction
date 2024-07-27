@@ -1,11 +1,15 @@
 package fr.farmeurimmo.reapersanction.core.sanctions;
 
 import com.velocitypowered.api.command.SimpleCommand;
+import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.ServerType;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.WebhookManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -176,9 +180,16 @@ public class SanctionsManager {
         user.setMutedBy("");
         user.requestUserUpdate();
 
-        Player player = Bukkit.getPlayer(user.getUuid());
-        if (player != null) {
-            player.sendMessage(MessageManager.INSTANCE.getMessage("MuteEnded", true));
+        if (Main.INSTANCE.getServerType() == ServerType.SPIGOT) {
+            Player player = Bukkit.getPlayer(user.getUuid());
+            if (player != null) {
+                player.sendMessage(MessageManager.INSTANCE.getMessage("MuteEnded", true));
+            }
+        } else if (Main.INSTANCE.getServerType() == ServerType.VELOCITY) {
+            for (com.velocitypowered.api.proxy.Player p : ReaperSanction.INSTANCE.getProxy().getAllPlayers()) {
+                CPMManager.INSTANCE.sendPluginMessage(p, "unmuted", user.getUuid().toString());
+                break;
+            }
         }
     }
 

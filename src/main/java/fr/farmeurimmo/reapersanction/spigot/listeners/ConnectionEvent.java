@@ -62,6 +62,9 @@ public class ConnectionEvent implements Listener {
     @EventHandler
     public void OnLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+
+        Main.INSTANCE.mutedPlayers.remove(player.getUniqueId());
+
         if (Main.VANISHED.contains(player.getUniqueId())) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             Main.VANISHED.remove(player.getUniqueId());

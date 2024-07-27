@@ -6,6 +6,7 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.kyori.adventure.text.Component;
 
@@ -33,6 +34,9 @@ public class MuteCmd implements SimpleCommand {
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
         Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getUsername(),
                 target.getRemoteAddress().getAddress().getHostAddress(), reason, by);
+
+        CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+
         if (target.isActive())
             target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
                     "null", target.getUsername(), by, reason, s.getAt(), s.getUntil())));

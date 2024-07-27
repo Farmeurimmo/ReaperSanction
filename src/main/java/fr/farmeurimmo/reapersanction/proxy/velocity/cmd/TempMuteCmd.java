@@ -8,6 +8,7 @@ import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.kyori.adventure.text.Component;
 
@@ -61,6 +62,9 @@ public class TempMuteCmd implements SimpleCommand {
 
         Sanction s = SanctionsManager.INSTANCE.tempMute(target.getUniqueId(), target.getUsername(),
                 target.getRemoteAddress().getAddress().getHostAddress(), reason, by, cb.toString(), type);
+
+        CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+
         if (target.isActive()) {
             target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
                     s.getDuration(), target.getUsername(), s.getBy(), s.getReason(), s.getAt(), s.getUntil())));

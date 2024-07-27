@@ -16,6 +16,7 @@ public class Main {
     public static final ArrayList<UUID> VANISHED = new ArrayList<>();
     public static Main INSTANCE;
     public final HashMap<String, String> ipblocked = new HashMap<>();
+    public final ArrayList<UUID> mutedPlayers = new ArrayList<>();
     private final ServerType serverType;
     private ConsoleCommandSender bukkitConsole;
     private java.util.logging.Logger loggerSpigot;

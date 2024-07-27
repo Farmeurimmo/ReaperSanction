@@ -45,7 +45,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ConnectionEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(), this);
         //register the custom plugin message listener with channel "reapersanction:main"
-        getServer().getMessenger().registerIncomingPluginChannel(this, "reapersanction:main", new CPMManager());
+        getServer().getMessenger().registerIncomingPluginChannel(this, "reaper:sanction", new CPMManager());
 
         main.sendLogMessage("§6Starting commands...", 0);
         if (!Main.INSTANCE.isProxyMode()) {
@@ -66,6 +66,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getCommand("history").setExecutor(new HistoryCmd());
 
         vanish();
+
+        CPMManager.INSTANCE.requestForMuteds();
 
         main.endOfStart();
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);

@@ -1,5 +1,7 @@
 package fr.farmeurimmo.reapersanction.proxy.velocity.cpm;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
@@ -8,6 +10,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import net.kyori.adventure.text.Component;
@@ -15,6 +19,7 @@ import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.util.Optional;
 
 public class CPMManager {
 
@@ -46,6 +51,16 @@ public class CPMManager {
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
         try {
             String subchannel = in.readUTF();
+
+            if (subchannel.equals("getmuteds")) {
+                for (User user : UsersManager.INSTANCE.users) {
+                    if (user.isMuted()) {
+                        sendPluginMessage(player, "nowmuted", user.getUuid().toString());
+                    }
+                }
+                return;
+            }
+
             String msg = in.readUTF();
 
             String[] args = msg.split(" ");
@@ -73,13 +88,17 @@ public class CPMManager {
         }
     }
 
-    /*public void sendPluginMessage(Player player, String channel, String... data) {
+    public void sendPluginMessage(Player player, String channel, String... data) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
         out.writeUTF(channel);
+
         for (String s : data) {
             out.writeUTF(s);
         }
+
         Optional<ServerConnection> server = player.getCurrentServer();
+
         server.ifPresent(serverConnection -> serverConnection.sendPluginMessage(queue, out.toByteArray()));
-    }*/
+    }
 }

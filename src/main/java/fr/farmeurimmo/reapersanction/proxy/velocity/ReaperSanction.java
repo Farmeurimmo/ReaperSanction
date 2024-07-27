@@ -3,7 +3,6 @@ package fr.farmeurimmo.reapersanction.proxy.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.player.KickedFromServerEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
@@ -15,7 +14,6 @@ import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -72,18 +70,6 @@ public class ReaperSanction {
         Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
     }
 
-    @Subscribe
-    public void playerGotKick(KickedFromServerEvent e) {
-        Player p = e.getPlayer();
-        if (!e.getServerKickReason().isPresent()) return;
-        Component reason = e.getServerKickReason().get();
-        String reasonText = String.valueOf(reason);
-        if (reasonText.contains("RS:IMP:")) {
-            e.setResult(KickedFromServerEvent.DisconnectPlayer.create(
-                    Component.text("§cYou have been kicked from the server for the following reason: §4" + reason)));
-        }
-    }
-
     public Player getPlayer(String name) {
         Optional<Player> player = proxy.getPlayer(name);
         return player.orElse(null);
@@ -132,7 +118,7 @@ public class ReaperSanction {
     }
 
     @NotNull
-    public CompletableFuture<List<String>> getUsersCompletableFuture(SimpleCommand.Invocation invocation, boolean bans) {
+    public CompletableFuture<List<String>> getUsersCompletableFuture(SimpleCommand.Invocation invocation) {
         return CompletableFuture.supplyAsync(() -> {
             if (invocation.arguments().length == 1) {
                 return handleSingleArgument(invocation);
