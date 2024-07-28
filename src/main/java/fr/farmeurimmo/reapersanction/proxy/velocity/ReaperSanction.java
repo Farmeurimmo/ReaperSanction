@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
         id = "reapersanction",
         name = "ReaperSanction",
         description = "ReaperSanction velocity plugin",
-        url = "https://reaper.farmeurimmo.fr",
+        url = "https://farmeurimmo.fr/projects/reapersanction",
         authors = "Farmeurimmo",
         version = "2.0.0-RC1"
 )

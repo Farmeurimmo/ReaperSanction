@@ -28,7 +28,7 @@ public class RsAdminCmd implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("infos")) {
             sender.sendMessage("Plugin developper : Farmeurimmo");
             sender.sendMessage("Email : contact@farmeurimmo.fr");
-            sender.sendMessage("Website : https://reaper.farmeurimmo.fr/reapersanction");
+            sender.sendMessage("Website : https://farmeurimmo.fr/projects/reapersanction");
             sender.sendMessage("Version : " + ReaperSanction.INSTANCE.getDescription().getVersion());
             return false;
         }

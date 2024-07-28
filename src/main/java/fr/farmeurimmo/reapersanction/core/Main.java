@@ -101,7 +101,7 @@ public class Main {
 
     public void endOfStart() {
         sendLogMessage("ReaperSanction is now enabled", 0);
-        sendLogMessage("§eOfficial website : §bhttps://reaper.farmeurimmo.fr/reapersanction", 0);
+        sendLogMessage("§eOfficial website : §bhttps://farmeurimmo.fr/projects/reapersanction", 0);
     }
 
     public void disable() {

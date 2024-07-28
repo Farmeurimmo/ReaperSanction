@@ -1,13 +1,9 @@
 package fr.farmeurimmo.reapersanction.core.update;
 
 import fr.farmeurimmo.reapersanction.core.Main;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
@@ -26,13 +22,13 @@ public class UpdateChecker {
                 consumer.accept(scanner.next());
             }
         } catch (IOException exception) {
-            System.out.println("Auto updater crashed, please go to https://reaper.farmeurimmo.fr/reapersanction and check for updates manually.");
+            System.out.println("Auto updater crashed, please go to https://www.spigotmc.org/resources/reapersanction.89580/ and check for updates manually.");
         }
     }
 
-    public JSONObject getVersionViaAPI() {
+    /*public JSONObject getVersionViaAPI() {
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.farmeurimmo.fr/plugins/89580").openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.farmeurimmo.fr/v1/plugins/89580").openConnection();
             connection.setRequestMethod("GET");
 
             InputStream responseStream = connection.getInputStream();
@@ -46,22 +42,18 @@ public class UpdateChecker {
         } catch (IOException | ParseException ignored) {
         }
         return new JSONObject();
-    }
+    }*/
 
-    public void checkForUpdate(String v) {
+    public void checkForUpdate(String version) {
         //TODO: channel update??
 
-        if (v.contains("ERROR")) {
+        if (version.contains("ERROR")) {
             Main.INSTANCE.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
             return;
         }
-        new UpdateChecker(89580).getVersion(version -> {
-            JSONObject json = getVersionViaAPI();
-            if (json != null && json.containsKey("version") && !json.get("version").equals(version)) {
-                if (isLatest(json.get("version").toString(), version)) version = json.get("version").toString();
-            }
+        new UpdateChecker(89580).getVersion(v -> {
             boolean latest = isLatest(v, version);
-            Main.INSTANCE.sendLogMessage("§6Detected version : §b" + v + "§6, Current production version : §b" + version, 0);
+            Main.INSTANCE.sendLogMessage("§aDetected version : §b" + v + "§6, Current production version : §b" + version, 0);
             if (version.contains("RC")) {
                 if (latest) {
                     Main.INSTANCE.sendLogMessage("§6No update found. §eYou are using a release candidate version, bugs may be present ! §b" + v, 0);
@@ -72,16 +64,13 @@ public class UpdateChecker {
                 return;
             }
             if (!latest) {
-                Main.INSTANCE.sendLogMessage("A new update is available please consider updating if you want to receive support !", 1);
                 Main.INSTANCE.sendLogMessage("§cNewest version detected at spigot : §4§l" + version, 1);
                 Main.INSTANCE.sendLogMessage("§6Your version : §c" + v, 1);
-                Main.INSTANCE.sendLogMessage("§6Download link : §ahttps://reaper.farmeurimmo.fr/reapersanction/", 1);
-                Main.INSTANCE.sendLogMessage("§4§lA new update is available please consider updating if you want to receive support !" +
-                        " (the spigot api is taking time to update the version)", 1);
+                Main.INSTANCE.sendLogMessage("§6Download link : §ahttps://farmeurimmo.fr/projects/reapersanction", 1);
+                Main.INSTANCE.sendLogMessage("§4§lA new update is available please consider updating if you want to receive support !", 1);
                 return;
             }
             Main.INSTANCE.sendLogMessage("§6No major update found.", 0);
-
         });
     }
 

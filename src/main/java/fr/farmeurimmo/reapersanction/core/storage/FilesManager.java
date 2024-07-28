@@ -242,7 +242,7 @@ public class FilesManager {
         Map<String, Object> version = new HashMap<>();
         version.put("last-update-of-missing", TimeConverter.getDateFormatted(System.currentTimeMillis()));
         version.put("plugin-version", Main.INSTANCE.getPluginVersion());
-        version.put("documentation", "https://reaper.farmeurimmo.fr/reapersanction");
+        version.put("documentation", "https://farmeurimmo.fr/projects/reapersanction");
 
         map.put("infos-file", version);
     }
