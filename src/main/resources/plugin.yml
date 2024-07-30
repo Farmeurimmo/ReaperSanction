@@ -1,8 +1,8 @@
 name: ReaperSanction
-version: '1.6.0'
+version: 2.0.0-RC1
 author: Farmeurimmo
-main: fr.farmeurimmo.reapersanction.ReaperSanction
-website: https://reaper.farmeurimmo.fr/reapersanction
+main: fr.farmeurimmo.reapersanction.spigot.ReaperSanction
+website: https://farmeurimmo.fr/projects/reapersanction
 description: A plugin to punish players with simple gui
 commands:
   rs:
@@ -19,10 +19,10 @@ commands:
     description: Vanish command
     aliases: [ v ]
     permission: reapersanction.vanish
-  ban:
-    permission: reapersanction.ban
   tempban:
     permission: reapersanction.tempban
+  ban:
+    permission: reapersanction.ban
   ban-ip:
     permission: reapersanction.ban-ip
   mute:
