@@ -1,5 +1,7 @@
 package fr.farmeurimmo.reapersanction.core.users;
 
+import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+
 public class Sanction {
 
     private final int type;
@@ -60,14 +62,12 @@ public class Sanction {
     }
 
     public String getSanctionTypeStr() {
-        /*if (this.type == 0) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.banip");
-        if (this.type == 1) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.ban");
-        if (this.type == 2) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.tempban");
-        if (this.type == 3) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.mute");
-        if (this.type == 4) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.tempmute");
-        if (this.type == 5) return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.kick");
-        return FilesManager.INSTANCE.getFromConfigFormatted("History.sanctiontype.unknown");*/
-        //FIXME: gui
-        return "temporarily broken";
+        if (this.type == 0) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.banip");
+        if (this.type == 1) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.ban");
+        if (this.type == 2) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.tempban");
+        if (this.type == 3) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.mute");
+        if (this.type == 4) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.tempmute");
+        if (this.type == 5) return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.kick");
+        return ReaperSanction.INSTANCE.getConfig().getString("History.sanctiontype.unknown");
     }
 }

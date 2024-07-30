@@ -52,7 +52,6 @@ public class SettingsManager {
         toReturn.put("context", "global");
         toReturn.put("proxy", false);
 
-        //FIXME: add %until% for temporary sanctions
         Map<String, Object> sanctions = new HashMap<>();
         sanctions.put("banip", Arrays.asList("&cConnection refused", " ",
                 "&4You are permanently ip banned from this server", " ", "&6Date of ban : &e%date%", "&6By : &e%banner%",

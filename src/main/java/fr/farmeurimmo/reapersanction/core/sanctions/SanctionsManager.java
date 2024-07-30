@@ -25,13 +25,12 @@ public class SanctionsManager {
 
     public SanctionsManager() {
         INSTANCE = this;
+    }
 
-        //FIXME: scheduler for sanction expiration
-        /*Bukkit.getScheduler().runTaskTimerAsynchronously(ReaperSanction.INSTANCE, () -> {
-            for (User user : UsersManager.INSTANCE.users) {
-                checkForSanctionExpiration(user);
-            }
-        }, 0, 20);*/
+    public void checkForUsersExpiration() {
+        for (User user : UsersManager.INSTANCE.users) {
+            checkForSanctionExpiration(user);
+        }
     }
 
     public Sanction ban(UUID uuid, String playerName, String host, String reason, String banner) {

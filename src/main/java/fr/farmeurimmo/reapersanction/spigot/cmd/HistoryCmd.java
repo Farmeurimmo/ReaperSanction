@@ -35,6 +35,12 @@ public class HistoryCmd implements CommandExecutor, TabCompleter {
             player.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
+
+        if (targetUser.getHistory().isEmpty()) {
+            player.sendMessage(MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable", true));
+            return false;
+        }
+
         CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(player, targetUser, 0);
         return false;
     }

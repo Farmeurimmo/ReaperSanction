@@ -11,8 +11,9 @@ import java.util.UUID;
 
 public class User {
 
-    private final static String separator = "§";
-    private static final String separator_G = "§§";
+    private final static String SEPARATOR = "§";
+    private static final String SEPARATOR_G = "§§";
+    private static final String SPECIAL_BUNGEE = "§§§";
 
     private final UUID uuid;
     private final String name;
@@ -75,14 +76,14 @@ public class User {
     public static String getHistoryAsString(LinkedList<Sanction> history) {
         StringBuilder builder = new StringBuilder();
         for (Sanction sanction : history) {
-            builder.append(sanctionAsString(sanction)).append(separator_G);
+            builder.append(sanctionAsString(sanction)).append(SEPARATOR_G);
         }
         return builder.toString();
     }
 
     public static LinkedList<Sanction> getHistoryFromString(String history) {
         LinkedList<Sanction> sanctions = new LinkedList<>();
-        String[] args = history.split(separator_G);
+        String[] args = history.split(SEPARATOR_G);
         for (String sanction : args) {
             if (sanction == null) continue;
             if (sanction.isEmpty()) continue;
@@ -109,13 +110,20 @@ public class User {
     }
 
     public static String sanctionAsString(Sanction sanction) {
-        return sanction.getType() + separator + sanction.getReason() + separator + sanction.getBy() + separator + sanction.getAt() + separator + sanction.getUntil() +
-                separator + sanction.isBan() + separator + sanction.isIp() + separator + sanction.getDuration();
+        return sanction.getType() + SEPARATOR + sanction.getReason() + SEPARATOR + sanction.getBy() + SEPARATOR + sanction.getAt() + SEPARATOR + sanction.getUntil() +
+                SEPARATOR + sanction.isBan() + SEPARATOR + sanction.isIp() + SEPARATOR + sanction.getDuration();
     }
 
     public static Sanction sanctionFromString(String sanction) {
-        String[] args = sanction.split(separator);
+        String[] args = sanction.split(SEPARATOR);
         return new Sanction(Integer.parseInt(args[0]), args[1], args[2], Long.parseLong(args[3]), Long.parseLong(args[4]), Boolean.parseBoolean(args[5]), Boolean.parseBoolean(args[6]), args[7]);
+    }
+
+    public static User getUserFromString(String user) {
+        String[] args = user.split(SPECIAL_BUNGEE);
+        return new User(UUID.fromString(args[0]), args[1], Long.parseLong(args[2]), args[3], args[4],
+                Long.parseLong(args[5]), args[6], Long.parseLong(args[7]), args[8], args[9], Long.parseLong(args[10]),
+                Boolean.parseBoolean(args[11]), args[12], args[13], getHistoryFromString(args[14]));
     }
 
     public void requestUserUpdate() {
@@ -298,4 +306,13 @@ public class User {
         setMutedDuration(sanction.getDuration());
         addSanction(sanction);
     }
+
+    public String getUserAsString() {
+        return "'" + uuid + SPECIAL_BUNGEE + name + SPECIAL_BUNGEE + mutedUntil + SPECIAL_BUNGEE + mutedReason +
+                SPECIAL_BUNGEE + mutedBy + SPECIAL_BUNGEE + mutedAt + SPECIAL_BUNGEE + mutedDuration + SPECIAL_BUNGEE
+                + bannedUntil + SPECIAL_BUNGEE + bannedReason + SPECIAL_BUNGEE + bannedBy + SPECIAL_BUNGEE + bannedAt +
+                SPECIAL_BUNGEE + isIpBanned + SPECIAL_BUNGEE + bannedDuration + SPECIAL_BUNGEE + ip + SPECIAL_BUNGEE +
+                getHistoryAsString(history) + "'";
+    }
 }
+

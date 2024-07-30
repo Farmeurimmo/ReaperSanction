@@ -1,6 +1,7 @@
 package fr.farmeurimmo.reapersanction.spigot;
 
 import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.cmd.*;
 import fr.farmeurimmo.reapersanction.spigot.cpm.CPMManager;
@@ -68,6 +69,8 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         vanish();
 
         CPMManager.INSTANCE.requestForMuteds();
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> SanctionsManager.INSTANCE.checkForUsersExpiration(), 0, 20 * 10);
 
         main.endOfStart();
         main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);

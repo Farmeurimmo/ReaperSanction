@@ -3,7 +3,10 @@ package fr.farmeurimmo.reapersanction.spigot.cpm;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
+import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -26,6 +29,20 @@ public class CPMManager implements PluginMessageListener {
         String data = new String(bytes).replace(channel, "");
         String subChannel = data.split("\\$")[0].trim();
 
+        if (subChannel.startsWith("openhistorygui")) {
+            data = subChannel.replace("openhistorygui", "").replace("�", "");
+
+            try {
+                User user = User.getUserFromString(data.substring(data.indexOf("'") + 1, data.lastIndexOf("'") - 1));
+
+                UsersManager.INSTANCE.replaceUser(user);
+
+                CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(player, user, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         if (subChannel.equals("nowmuted")) {
             String uuid = data.split("\\$")[1];
             try {

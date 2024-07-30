@@ -54,4 +54,13 @@ public class UsersManager {
         if (user == null) user = createUser(uuid, name);
         return user;
     }
+
+    public void replaceUser(User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUuid().equals(user.getUuid())) {
+                users.set(i, user);
+                return;
+            }
+        }
+    }
 }

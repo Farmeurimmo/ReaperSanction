@@ -11,6 +11,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
+import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(
         id = "reapersanction",
@@ -62,10 +64,14 @@ public class ReaperSanction {
         proxy.getCommandManager().register("ban-ip", new BanIpCmd());
         proxy.getCommandManager().register("mute", new MuteCmd());
         proxy.getCommandManager().register("tempmute", new TempMuteCmd());
+        proxy.getCommandManager().register("history", new HistoryCmd());
 
         //init custom plugin message channel "reapersanction:main"
         proxy.getEventManager().register(this, new CPMManager(proxy, logger));
         proxy.getEventManager().register(this, new PlayerListener());
+
+        proxy.getScheduler().buildTask(ReaperSanction.INSTANCE, () ->
+                SanctionsManager.INSTANCE.checkForUsersExpiration()).repeat(10, TimeUnit.SECONDS).schedule();
 
         Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
     }
