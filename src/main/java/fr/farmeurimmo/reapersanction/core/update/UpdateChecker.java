@@ -44,16 +44,20 @@ public class UpdateChecker {
         return new JSONObject();
     }*/
 
-    public void checkForUpdate(String version) {
+    public void checkForUpdate(String v) {
         //TODO: channel update??
 
-        if (version.contains("ERROR")) {
+        if (v.contains("ERROR")) {
             Main.INSTANCE.sendLogMessage("§c§lCan't find plugin version to check for update, please check for update manually !", 2);
             return;
         }
-        new UpdateChecker(89580).getVersion(v -> {
+        new UpdateChecker(89580).getVersion(version -> {
             boolean latest = isLatest(v, version);
             Main.INSTANCE.sendLogMessage("§aDetected version : §b" + v + "§6, Current production version : §b" + version, 0);
+            if (version.equals(v)) {
+                Main.INSTANCE.sendLogMessage("§6No update found.", 0);
+                return;
+            }
             if (version.contains("RC")) {
                 if (latest) {
                     Main.INSTANCE.sendLogMessage("§6No update found. §eYou are using a release candidate version, bugs may be present ! §b" + v, 0);
@@ -86,6 +90,7 @@ public class UpdateChecker {
             int c = Integer.parseInt(current[i]);
             int t = Integer.parseInt(targetVersion[i]);
             if (c < t) return false;
+            if (c > t) return true;
         }
         return true;
     }
