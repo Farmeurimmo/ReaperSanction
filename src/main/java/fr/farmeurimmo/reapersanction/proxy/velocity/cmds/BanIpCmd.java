@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.proxy.velocity.cmd;
+package fr.farmeurimmo.reapersanction.proxy.velocity.cmds;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -20,7 +20,7 @@ public class BanIpCmd implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         if (invocation.arguments().length == 0) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorBanIpArg", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorBanIpArg", true)));
             return;
         }
         if (Main.INSTANCE.isProxyMode()) {
@@ -29,7 +29,7 @@ public class BanIpCmd implements SimpleCommand {
         }
         Player target = ReaperSanction.INSTANCE.getPlayer(invocation.arguments()[0]);
         if (target == null) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("InvalidPlayer", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);

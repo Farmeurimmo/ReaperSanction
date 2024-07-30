@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.proxy.velocity.cmd;
+package fr.farmeurimmo.reapersanction.proxy.velocity.cmds;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -19,13 +19,13 @@ public class KickCmd implements SimpleCommand {
     public void execute(Invocation invocation) {
         String[] args = invocation.arguments();
         if (args.length == 0) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorKickArg", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorKickArg", true)));
             return;
         }
         Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
         if (target == null) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("InvalidPlayer", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
         if (args.length != 1) {

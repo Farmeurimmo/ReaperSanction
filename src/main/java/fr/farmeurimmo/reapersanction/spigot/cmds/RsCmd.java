@@ -1,11 +1,9 @@
-package fr.farmeurimmo.reapersanction.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmds;
 
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
-import fr.farmeurimmo.reapersanction.utils.Parser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,31 +14,24 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class ReportCmd implements CommandExecutor, TabCompleter {
-
-    //TODO: recode the report
+public class RsCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("NotAvailableInConsole", true));
             return false;
         }
         Player player = (Player) sender;
-        if (!Parser.PARSE_BOOLEAN(SettingsManager.INSTANCE.getSetting("report.status"))) {
-            player.sendMessage(MessageManager.INSTANCE.getMessage("Report-Disabled", true));
-            return false;
-        }
         if (args.length != 1) {
-            player.sendMessage(MessageManager.INSTANCE.getMessage("Report-ErrorArg", true));
+            player.sendMessage(MessageManager.INSTANCE.getMessage("ErrorArg", true));
             return false;
         }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) {
-            player.sendMessage(MessageManager.INSTANCE.getMessage("Report-PlayerNotOnline", true));
-            return false;
-        }
-        CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.REPORT, args[0]);
+        if (Bukkit.getPlayer(args[0]) != null)
+            CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
+        else player.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
+
         return false;
     }
 

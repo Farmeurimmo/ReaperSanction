@@ -4,6 +4,8 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.*;
 import fr.farmeurimmo.reapersanction.core.update.UpdateChecker;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
@@ -19,6 +21,7 @@ public class Main {
     public final ArrayList<UUID> mutedPlayers = new ArrayList<>();
     private final ServerType serverType;
     private ConsoleCommandSender bukkitConsole;
+    private CommandSender bungeeConsole;
     private java.util.logging.Logger loggerSpigot;
     private Logger loggerVelocity;
 
@@ -36,6 +39,7 @@ public class Main {
                 break;
             case BUNGEECORD:
                 if (logger instanceof java.util.logging.Logger) {
+                    bungeeConsole = fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().getConsole();
                     loggerSpigot = (java.util.logging.Logger) logger;
                 }
                 break;
@@ -133,11 +137,17 @@ public class Main {
                     else if (type == 2) loggerVelocity.error(getWithoutColor(message));
                     else throw new RuntimeException("Can't send message : " + getWithoutColor(message));
                     break;
+                case BUNGEECORD:
+                    if (type == 0) bungeeConsole.sendMessage(new TextComponent("§a" + message));
+                    else if (type == 1) bungeeConsole.sendMessage(new TextComponent("§e" + message));
+                    else if (type == 2) bungeeConsole.sendMessage(new TextComponent("§c" + message));
+                    else throw new RuntimeException("Can't send message : " + getWithoutColor(message));
+                    break;
                 default:
-                    throw new RuntimeException("Can't send info message : " + getWithoutColor(message));
+                    throw new RuntimeException("Can't send info message: " + getWithoutColor(message));
             }
         } catch (Exception e) {
-            throw new RuntimeException("Can't send info message" + message);
+            throw new RuntimeException("Can't send info message: " + message);
         }
     }
 
@@ -148,7 +158,7 @@ public class Main {
             case VELOCITY:
                 return fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction.INSTANCE.getPluginVersion();
             case BUNGEECORD:
-                // TODO
+                return fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getPluginVersion();
             default:
                 return "ERROR";
         }

@@ -1,8 +1,5 @@
 package fr.farmeurimmo.reapersanction.core.storage;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,13 +32,9 @@ public class MessageManager {
         return getMessages().get("Prefix").replace("&", "§");
     }
 
-    public Component getComponent(String key, boolean withPrefix) {
-        return Component.text((withPrefix ? PREFIX : "") + (getMessages().containsKey(key) && key != null ? getMessages().get(key).replace("&", "§") :
-                "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)"));
-    }
-
     public String getMessage(String key, boolean withPrefix) {
-        return LegacyComponentSerializer.legacySection().serialize(getComponent(key, withPrefix));
+        return (withPrefix ? PREFIX : "") + (getMessages().containsKey(key) && key != null ? getMessages().get(key).replace("&", "§") :
+                "§4An error has occured while getting the message, please contact the administrator ! (debug: " + key + " not found)");
     }
 
     protected void regen() {

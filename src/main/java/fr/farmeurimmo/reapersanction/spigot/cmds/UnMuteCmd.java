@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmds;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
@@ -16,17 +16,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class UnBanCmd implements CommandExecutor, TabCompleter {
+public class UnMuteCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorUnBanArg", true));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorUnMuteArg", true));
             return false;
         }
         if (Main.INSTANCE.isProxyMode()) {
             CPMManager.INSTANCE.sendPluginMessage((Player) sender, "unban", args[0]);
-            sender.sendMessage("Proxy mode enabled, sending unban request to proxy, it can fail if the proxy is not running");
+            sender.sendMessage("Proxy mode enabled, sending unmute request to proxy, it can fail if the proxy is not running");
             return false;
         }
         User user = UsersManager.INSTANCE.getUser(args[0]);
@@ -34,7 +34,7 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
-        SanctionsManager.INSTANCE.revokeBanAdmin(user, sender);
+        SanctionsManager.INSTANCE.revokeMuteAdmin(user, sender);
         return false;
     }
 
@@ -43,11 +43,11 @@ public class UnBanCmd implements CommandExecutor, TabCompleter {
         ArrayList<String> subcmd = new ArrayList<>();
         if (args.length == 1) {
             for (User user : UsersManager.INSTANCE.users) {
-                if (user.isBanned()) {
+                if (user.isMuted()) {
                     subcmd.add(user.getName());
                 }
-                if (user.isIpBanned()) {
-                    subcmd.add(user.getIp());
+                if (user.isPermaMuted()) {
+                    subcmd.add(user.getName());
                 }
             }
         } else {

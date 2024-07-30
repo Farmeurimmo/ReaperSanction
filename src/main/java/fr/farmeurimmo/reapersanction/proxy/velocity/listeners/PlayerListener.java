@@ -54,7 +54,6 @@ public class PlayerListener {
                     .replace("%reason%", user.getBannedReason())
                     .replace("%until%", TimeConverter.getDateFormatted(user.getBannedUntil()))
                     .replace("%duration%", user.getBannedDuration()))));
-            return;
         }
     }
 

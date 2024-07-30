@@ -12,7 +12,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
-import fr.farmeurimmo.reapersanction.proxy.velocity.cmd.*;
+import fr.farmeurimmo.reapersanction.proxy.velocity.cmds.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
 import org.jetbrains.annotations.NotNull;

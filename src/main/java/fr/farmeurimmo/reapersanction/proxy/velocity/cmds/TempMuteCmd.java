@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.proxy.velocity.cmd;
+package fr.farmeurimmo.reapersanction.proxy.velocity.cmds;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -20,12 +20,12 @@ public class TempMuteCmd implements SimpleCommand {
     public void execute(Invocation invocation) {
         String[] args = invocation.arguments();
         if (args.length == 0 || args.length == 1) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorTempMuteArg", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
             return;
         }
         Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
         if (target == null) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("InvalidPlayer", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
         String sample = args[1];
@@ -33,24 +33,24 @@ public class TempMuteCmd implements SimpleCommand {
         StringBuilder cb = new StringBuilder();
         for (char c : chars) {
             if (c == '-') {
-                invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorTempMuteArg", true));
+                invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
                 return;
             }
             if (Character.isDigit(c)) cb.append(c);
         }
         if (!(cb.length() > 0 && cb.length() < 6)) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorTempMuteArg", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
             return;
         }
         if (!(args[1].contains("sec")) && !(args[1].contains("min")) && !(args[1].contains("day")) && !(args[1].contains("year"))
                 && !(args[1].contains("hour"))) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("ErrorTempMuteArg", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
             return;
         }
 
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getUsername());
         if (user.isPermaMuted()) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("AlreadyMuted", true));
+            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("AlreadyMuted", true)));
             return;
         }
         String type = args[1].replace(cb.toString(), "").trim();

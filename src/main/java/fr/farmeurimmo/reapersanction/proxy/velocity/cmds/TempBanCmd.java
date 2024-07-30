@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.proxy.velocity.cmd;
+package fr.farmeurimmo.reapersanction.proxy.velocity.cmds;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;

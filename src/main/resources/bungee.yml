@@ -1,0 +1,6 @@
+name: ReaperSanction
+version: 2.0.0-RC1
+author: Farmeurimmo
+main: fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction
+website: https://farmeurimmo.fr/projects/reapersanction
+description: A plugin to punish players with simple gui

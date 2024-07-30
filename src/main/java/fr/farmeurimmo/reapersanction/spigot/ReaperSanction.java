@@ -3,7 +3,7 @@ package fr.farmeurimmo.reapersanction.spigot;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
-import fr.farmeurimmo.reapersanction.spigot.cmd.*;
+import fr.farmeurimmo.reapersanction.spigot.cmds.*;
 import fr.farmeurimmo.reapersanction.spigot.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.spigot.gui.ActionGuiInterpreter;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
@@ -35,7 +35,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main.sendLogMessage("§6This server is using minecraft : §b" + version, 0);
 
         main.sendLogMessage("§6Starting moderation module...", 0);
-        UsersManager.INSTANCE.checkForOnlinePlayersIfTheyAreUsers();
+        checkForOnlinePlayersIfTheyAreUsers();
 
         main.sendLogMessage("§6Initializing GUIs...", 0);
         FastInvManager.register(INSTANCE);
@@ -67,7 +67,6 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         getCommand("history").setExecutor(new HistoryCmd());
 
         vanish();
-
         CPMManager.INSTANCE.requestForMuteds();
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> SanctionsManager.INSTANCE.checkForUsersExpiration(), 0, 20 * 10);
@@ -106,5 +105,11 @@ public class ReaperSanction extends JavaPlugin implements Listener {
 
     public String getServerName() {
         return Bukkit.getServerName();
+    }
+
+    public void checkForOnlinePlayersIfTheyAreUsers() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            UsersManager.INSTANCE.getUserAndCreateIfNotExists(p.getUniqueId(), p.getName());
+        }
     }
 }

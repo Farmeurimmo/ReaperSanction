@@ -2,8 +2,6 @@ package fr.farmeurimmo.reapersanction.core.users;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.DatabaseManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -17,14 +15,10 @@ public class UsersManager {
         INSTANCE = this;
     }
 
-    public void checkForOnlinePlayersIfTheyAreUsers() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            getUserAndCreateIfNotExists(p.getUniqueId(), p.getName());
-        }
-    }
-
     public User getUser(UUID uuid) {
         for (User user : users) {
+            if (user == null) continue;
+            if (user.getUuid() == null) continue;
             if (user.getUuid().equals(uuid)) {
                 return user;
             }

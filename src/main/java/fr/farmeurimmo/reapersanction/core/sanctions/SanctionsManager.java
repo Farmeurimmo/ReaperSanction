@@ -1,6 +1,5 @@
 package fr.farmeurimmo.reapersanction.core.sanctions;
 
-import com.velocitypowered.api.command.SimpleCommand;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.ServerType;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
@@ -10,7 +9,6 @@ import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -224,24 +222,5 @@ public class SanctionsManager {
         }
         revokeBan(user);
         requester.sendMessage(MessageManager.INSTANCE.getMessage("SuccessfullyUnbanned", true).replace("%player%", user.getName()));
-    }
-
-    public void revokeBanAdmin(User user, SimpleCommand.Invocation invocation) {
-        if (!user.isBanned()) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("NotBanned", true));
-            return;
-        }
-        revokeBan(user);
-        invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("SuccessfullyUnbanned", true).replace("%player%", user.getName())));
-    }
-
-    public void revokeMuteAdmin(User user, SimpleCommand.Invocation invocation) {
-        if (!user.isMuted()) {
-            invocation.source().sendMessage(MessageManager.INSTANCE.getComponent("NotMuted", true));
-            return;
-        }
-        revokeMute(user, invocation.alias());
-        invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("SuccessfullyUnmuted", true)
-                .replace("%player%", user.getName())));
     }
 }

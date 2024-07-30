@@ -59,7 +59,6 @@ public class CPMManager implements PluginMessageListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return;
         }
     }
 

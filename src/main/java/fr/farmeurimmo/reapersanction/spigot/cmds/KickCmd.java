@@ -1,11 +1,10 @@
-package fr.farmeurimmo.reapersanction.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmds;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
-import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
-import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,12 +15,12 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class MuteCmd implements CommandExecutor, TabCompleter {
+public class KickCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorMuteArg", true));
+            sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorKickArg", true));
             return false;
         }
         if (Main.INSTANCE.isProxyMode()) {
@@ -33,20 +32,21 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
-        String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
+        String reason = "UnknownReasonSpecified";
         if (args.length != 1) {
-            reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
+            reason = String.join(" ", args).replace(args[0] + " ", "");
         }
-        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, sender.getName());
-        target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
-                "null", target.getName(), sender.getName(), reason, s.getAt(), s.getUntil()));
+        SanctionsManager.INSTANCE.kick(target.getUniqueId(), target.getName(), reason, sender.getName());
+        if (target.isOnline()) target.kickPlayer(SettingsManager.INSTANCE.getSanctionMessage("kick")
+                .replace("%banner%", sender.getName())
+                .replace("%date%", TimeConverter.getDateFormatted(System.currentTimeMillis()))
+                .replace("%reason%", reason));
         return false;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (args.length == 1) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
+        if (args.length == 1 && command.getName().equalsIgnoreCase("kick")) {
             return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
         }
         return null;

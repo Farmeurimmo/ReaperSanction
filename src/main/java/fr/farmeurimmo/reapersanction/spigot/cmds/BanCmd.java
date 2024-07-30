@@ -1,4 +1,4 @@
-package fr.farmeurimmo.reapersanction.spigot.cmd;
+package fr.farmeurimmo.reapersanction.spigot.cmds;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;

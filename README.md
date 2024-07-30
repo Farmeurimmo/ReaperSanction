@@ -8,4 +8,5 @@ Feel free to contribute.
 
 # Old releases
 
-Old releases before 1.6.0 are available on https://github.com/Reaper-Solutions/Minecraft-ReaperSanction until the 1st september 2024.
+Old releases before 1.6.0 are available on https://github.com/Reaper-Solutions/Minecraft-ReaperSanction until the 1st
+september 2024.
