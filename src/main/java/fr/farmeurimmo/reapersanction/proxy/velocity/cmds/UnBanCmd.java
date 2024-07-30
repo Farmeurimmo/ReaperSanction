@@ -17,7 +17,7 @@ public class UnBanCmd implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         String[] args = invocation.arguments();
-        if (args.length == 0) {
+        if (args.length != 1) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorUnBanArg", true)));
             return;
         }
@@ -30,10 +30,7 @@ public class UnBanCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotBanned", true)));
             return;
         }
-        revokeBanAdmin(user, invocation);
-    }
 
-    public void revokeBanAdmin(User user, SimpleCommand.Invocation invocation) {
         if (!user.isBanned()) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotBanned", true)));
             return;

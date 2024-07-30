@@ -10,14 +10,14 @@ import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class PlayerListener implements Listener {
 
     @EventHandler
-    public void onPreLogin(PreLoginEvent e) {
+    public void onPreLogin(LoginEvent e) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(e.getConnection().getUniqueId(), e.getConnection().getName());
 
         user.setIp(e.getConnection().getAddress().getAddress().getHostAddress());
@@ -50,7 +50,7 @@ public class PlayerListener implements Listener {
                     .replace("%reason%", user.getBannedReason())));
             return;
         }
-        if (user.isBanned() && !user.isPermaBan()) {
+        if (user.isBanned()) {
             e.setCancelled(true);
             e.setReason(new TextComponent(SettingsManager.INSTANCE.getSanctionMessage("tempban")
                     .replace("%banner%", user.getBannedBy())
