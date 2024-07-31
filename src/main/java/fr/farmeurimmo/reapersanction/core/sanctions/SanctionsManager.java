@@ -9,6 +9,7 @@ import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -185,6 +186,11 @@ public class SanctionsManager {
         } else if (Main.INSTANCE.getServerType() == ServerType.VELOCITY) {
             for (com.velocitypowered.api.proxy.Player p : ReaperSanction.INSTANCE.getProxy().getAllPlayers()) {
                 CPMManager.INSTANCE.sendPluginMessage(p, "unmuted", user.getUuid().toString());
+                break;
+            }
+        } else if (Main.INSTANCE.getServerType() == ServerType.BUNGEECORD) {
+            for (ProxiedPlayer p : fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().getPlayers()) {
+                fr.farmeurimmo.reapersanction.proxy.bungeecord.cpm.CPMManager.INSTANCE.sendPluginMessage(p, "unmuted", user.getUuid().toString());
                 break;
             }
         }

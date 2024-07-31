@@ -29,10 +29,7 @@ public class UnMuteCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotMuted", true)));
             return;
         }
-        revokeMuteAdmin(user, invocation);
-    }
 
-    public void revokeMuteAdmin(User user, SimpleCommand.Invocation invocation) {
         if (!user.isMuted()) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotMuted", true)));
             return;

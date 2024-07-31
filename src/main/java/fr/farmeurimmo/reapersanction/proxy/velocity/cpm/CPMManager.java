@@ -50,9 +50,11 @@ public class CPMManager {
     public void handle(Player player, byte[] data) {
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
         try {
-            String subchannel = in.readUTF();
+            String subChannel = in.readUTF();
+            String playerName = subChannel.split(";")[1];
+            subChannel = subChannel.split(";")[0];
 
-            if (subchannel.equals("getmuteds")) {
+            if (subChannel.equals("getmuteds")) {
                 for (User user : UsersManager.INSTANCE.users) {
                     if (user.isMuted()) {
                         sendPluginMessage(player, "nowmuted", user.getUuid().toString());
@@ -65,14 +67,14 @@ public class CPMManager {
 
             String[] args = msg.split(" ");
 
-            if (subchannel.equals("report")) {
+            if (subChannel.equals("report")) {
                 sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
                 return;
             }
 
             CommandManager cmdManager = ReaperSanction.INSTANCE.getProxy().getCommandManager();
 
-            cmdManager.executeAsync(player, subchannel + " " + msg);
+            cmdManager.executeAsync(player, subChannel + " " + msg);
         } catch (Exception e) {
             e.printStackTrace();
         }

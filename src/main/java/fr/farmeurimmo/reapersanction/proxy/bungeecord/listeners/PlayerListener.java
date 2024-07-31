@@ -6,11 +6,13 @@ import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import fr.farmeurimmo.reapersanction.proxy.bungeecord.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -66,6 +68,8 @@ public class PlayerListener implements Listener {
         ProxiedPlayer p = (ProxiedPlayer) e.getSender();
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(p.getUniqueId(), p.getName());
 
+        SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
+
         if (user.isMuted()) {
             e.setCancelled(true);
             if (user.isPermaMuted()) {
@@ -75,6 +79,16 @@ public class PlayerListener implements Listener {
             }
             p.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("TempMutedPlayerChat", true)
                     .replace("%player%", p.getName()).replace("%banner%", user.getMutedBy())));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerConnectedToServer(ServerConnectedEvent e) {
+        ProxiedPlayer p = e.getPlayer();
+
+        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(p.getUniqueId(), p.getName());
+        if (user.isMuted()) {
+            CPMManager.INSTANCE.sendPluginMessage(p, "nowmuted", p.getUniqueId().toString());
         }
     }
 }

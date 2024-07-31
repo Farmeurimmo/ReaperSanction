@@ -73,7 +73,7 @@ public class CPMManager implements PluginMessageListener {
     public void sendPluginMessage(Player player, String channel, String... data) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-        out.writeUTF(channel);
+        out.writeUTF(channel + ";" + player.getName());
         for (String s : data) {
             out.writeUTF(s);
         }
