@@ -32,6 +32,7 @@ public class ReaperSanction extends Plugin {
         getProxy().getPluginManager().registerCommand(INSTANCE, new UnMuteCmd());
         getProxy().getPluginManager().registerCommand(INSTANCE, new TempMuteCmd());
         getProxy().getPluginManager().registerCommand(INSTANCE, new HistoryCmd());
+        getProxy().getPluginManager().registerCommand(INSTANCE, new KickCmd());
 
         getProxy().getScheduler().schedule(INSTANCE, () -> SanctionsManager.INSTANCE.checkForUsersExpiration(), 0, 10, TimeUnit.SECONDS);
     }
