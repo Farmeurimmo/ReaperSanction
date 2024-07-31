@@ -66,7 +66,6 @@ public class ReaperSanction {
         proxy.getCommandManager().register("tempmute", new TempMuteCmd());
         proxy.getCommandManager().register("history", new HistoryCmd());
 
-        //init custom plugin message channel "reapersanction:main"
         proxy.getEventManager().register(this, new CPMManager(proxy, logger));
         proxy.getEventManager().register(this, new PlayerListener());
 

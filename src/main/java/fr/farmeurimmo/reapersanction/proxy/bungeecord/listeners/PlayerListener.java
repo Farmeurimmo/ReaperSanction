@@ -68,6 +68,9 @@ public class PlayerListener implements Listener {
         ProxiedPlayer p = (ProxiedPlayer) e.getSender();
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(p.getUniqueId(), p.getName());
 
+        if (e.getMessage().startsWith("/"))
+            return;
+
         SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
 
         if (user.isMuted()) {

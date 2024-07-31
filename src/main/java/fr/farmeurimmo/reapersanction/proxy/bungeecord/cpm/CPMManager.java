@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction;
+import fr.farmeurimmo.reapersanction.proxy.bungeecord.cmds.*;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -46,12 +47,33 @@ public class CPMManager implements Listener {
             String msg = in.readUTF();
             String[] args = msg.split(" ");
 
-            if (subChannel.equals("report")) {
-                sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
-                return;
+            switch (subChannel) {
+                case "report":
+                    sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
+                    return;
+                case "tempmute":
+                    new TempMuteCmd().execute(player, args);
+                    return;
+                case "mute":
+                    new MuteCmd().execute(player, args);
+                    return;
+                case "unmute":
+                    new UnMuteCmd().execute(player, args);
+                    return;
+                case "kick":
+                    new KickCmd().execute(player, args);
+                    return;
+                case "ban":
+                    new BanCmd().execute(player, args);
+                    return;
+                case "unban":
+                    new UnBanCmd().execute(player, args);
+                    return;
+                case "tempban":
+                    new TempBanCmd().execute(player, args);
+                    return;
             }
 
-            //FIXME: not like velocity we can't force the player to execute a command
         } catch (Exception ex) {
             ex.printStackTrace();
         }
