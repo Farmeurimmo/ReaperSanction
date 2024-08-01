@@ -77,6 +77,10 @@ public class ActionGuiInterpreter {
                         } catch (Exception ignored) {
                         }
                     }
+                    if (Main.INSTANCE.isProxyMode()) {
+                        CPMManager.INSTANCE.sendPluginMessage(p, "openhistorygui", user.getUuid().toString());
+                        return;
+                    }
                     CustomInventories.INSTANCE.startInventoryOpenOfHistoryGui(p, user, 0);
                     return;
                 }

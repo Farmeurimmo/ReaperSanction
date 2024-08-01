@@ -4,8 +4,8 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.*;
 import fr.farmeurimmo.reapersanction.core.update.UpdateChecker;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
+import fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
@@ -138,9 +138,9 @@ public class Main {
                     else throw new RuntimeException("Can't send message : " + getWithoutColor(message));
                     break;
                 case BUNGEECORD:
-                    if (type == 0) bungeeConsole.sendMessage(new TextComponent("§a" + message));
-                    else if (type == 1) bungeeConsole.sendMessage(new TextComponent("§e" + message));
-                    else if (type == 2) bungeeConsole.sendMessage(new TextComponent("§c" + message));
+                    if (type == 0) ReaperSanction.INSTANCE.sendBungeeCordMessage("§a" + message);
+                    else if (type == 1) ReaperSanction.INSTANCE.sendBungeeCordMessage("§e" + message);
+                    else if (type == 2) ReaperSanction.INSTANCE.sendBungeeCordMessage("§c" + message);
                     else throw new RuntimeException("Can't send message : " + getWithoutColor(message));
                     break;
                 default:

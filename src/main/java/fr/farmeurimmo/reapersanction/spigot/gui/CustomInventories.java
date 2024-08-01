@@ -2,6 +2,7 @@ package fr.farmeurimmo.reapersanction.spigot.gui;
 
 import fr.farmeurimmo.reapersanction.core.storage.FilesManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.spigot.utils.ItemStackUtils;
 import fr.farmeurimmo.reapersanction.utils.Parser;
@@ -10,10 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CustomInventories {
 
@@ -317,7 +315,38 @@ public class CustomInventories {
             return;
         }
         if (page < 1) page = 1;
+
+        if (user.getHistory().isEmpty()) {
+            p.sendMessage(MessageManager.INSTANCE.getMessage("PlayerNoHistoryAvailable", true));
+            p.closeInventory();
+            return;
+        }
+
+        while (true) {
+            if (getContentForPage(user.getHistory(), page).isEmpty()) {
+                page--;
+            } else break;
+        }
+
         new HistoryGui(ci, p, user, page).open(p);
+    }
+
+    public LinkedList<Sanction> getContentForPage(LinkedList<Sanction> history, int page) {
+        LinkedList<Sanction> content = new LinkedList<>(history);
+        content.descendingIterator();
+        if (page < 1) return new LinkedList<>();
+        if (page == 1) return content;
+        LinkedList<Sanction> toReturn = new LinkedList<>();
+        for (int i = 0; i < HistoryGui.PER_PAGE * (page - 1); i++) {
+            if (content.isEmpty()) break;
+            content.removeLast();
+        }
+        for (int i = 0; i < HistoryGui.PER_PAGE; i++) {
+            if (content.isEmpty()) break;
+            toReturn.add(content.getFirst());
+            content.removeFirst();
+        }
+        return toReturn;
     }
 
     public void saveInventories() {

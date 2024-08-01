@@ -44,6 +44,10 @@ public class ReaperSanction extends Plugin {
         main.disable();
     }
 
+    public void sendBungeeCordMessage(String message) {
+        getProxy().getConsole().sendMessage(new net.md_5.bungee.api.chat.TextComponent(message));
+    }
+
     public ProxiedPlayer getPlayer(String name) {
         return getProxy().getPlayer(name);
     }

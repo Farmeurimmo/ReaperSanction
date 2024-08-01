@@ -51,6 +51,7 @@ public class CPMManager {
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
         try {
             String subChannel = in.readUTF();
+
             String playerName = subChannel.split(";")[1];
             subChannel = subChannel.split(";")[0];
 
@@ -60,6 +61,13 @@ public class CPMManager {
                         sendPluginMessage(player, "nowmuted", user.getUuid().toString());
                     }
                 }
+                return;
+            }
+
+            if (subChannel.equals("openhistorygui")) {
+                User user = UsersManager.INSTANCE.getUser(player.getUniqueId());
+                if (user == null) return;
+                sendPluginMessage(player, "openhistorygui", user.getUserAsString());
                 return;
             }
 

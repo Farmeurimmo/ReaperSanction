@@ -43,7 +43,7 @@ public class HistoryGui extends FastInv {
         ci.applyCible(userTarget.getName());
         ci.applyPage(page);
 
-        LinkedList<Sanction> historyForPage = getContentForPage(userTarget.getHistory(), page);
+        LinkedList<Sanction> historyForPage = CustomInventories.INSTANCE.getContentForPage(userTarget.getHistory(), page);
 
         for (int i = 0; i < PER_PAGE; i++) {
             if (historyForPage.isEmpty()) break;
@@ -76,23 +76,5 @@ public class HistoryGui extends FastInv {
                 }
             });
         }
-    }
-
-    public LinkedList<Sanction> getContentForPage(LinkedList<Sanction> history, int page) {
-        LinkedList<Sanction> content = new LinkedList<>(history);
-        content.descendingIterator();
-        if (page < 1) return new LinkedList<>();
-        if (page == 1) return content;
-        LinkedList<Sanction> toReturn = new LinkedList<>();
-        for (int i = 0; i < PER_PAGE * (page - 1); i++) {
-            if (content.isEmpty()) break;
-            content.removeLast();
-        }
-        for (int i = 0; i < PER_PAGE; i++) {
-            if (content.isEmpty()) break;
-            toReturn.add(content.getFirst());
-            content.removeFirst();
-        }
-        return toReturn;
     }
 }
