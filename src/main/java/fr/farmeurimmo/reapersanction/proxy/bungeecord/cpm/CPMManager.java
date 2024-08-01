@@ -44,34 +44,38 @@ public class CPMManager implements Listener {
                 return;
             }
 
-            String msg = in.readUTF();
-            String[] args = msg.split(" ");
+            try {
+                String msg = in.readUTF();
+                String[] args = msg.split(" ");
 
-            switch (subChannel) {
-                case "report":
-                    sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
-                    return;
-                case "tempmute":
-                    new TempMuteCmd().execute(player, args);
-                    return;
-                case "mute":
-                    new MuteCmd().execute(player, args);
-                    return;
-                case "unmute":
-                    new UnMuteCmd().execute(player, args);
-                    return;
-                case "kick":
-                    new KickCmd().execute(player, args);
-                    return;
-                case "ban":
-                    new BanCmd().execute(player, args);
-                    return;
-                case "unban":
-                    new UnBanCmd().execute(player, args);
-                    return;
-                case "tempban":
-                    new TempBanCmd().execute(player, args);
-                    return;
+                switch (subChannel) {
+                    case "report":
+                        sendMessageReported(player, args[0], StrUtils.fromArgs(args).replace(args[0] + " ", "").trim());
+                        return;
+                    case "tempmute":
+                        new TempMuteCmd().execute(player, args);
+                        return;
+                    case "mute":
+                        new MuteCmd().execute(player, args);
+                        return;
+                    case "unmute":
+                        new UnMuteCmd().execute(player, args);
+                        return;
+                    case "kick":
+                        new KickCmd().execute(player, args);
+                        return;
+                    case "ban":
+                        new BanCmd().execute(player, args);
+                        return;
+                    case "unban":
+                        new UnBanCmd().execute(player, args);
+                        return;
+                    case "tempban":
+                        new TempBanCmd().execute(player, args);
+                        return;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
         } catch (Exception ex) {

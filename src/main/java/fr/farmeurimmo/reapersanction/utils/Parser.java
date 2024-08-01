@@ -8,6 +8,8 @@ public class Parser {
                 return Long.parseLong((String) object);
             } else if (object instanceof Integer) {
                 return ((Integer) object).longValue();
+            } else if (object instanceof Long) {
+                return (Long) object;
             } else {
                 return 0;
             }
@@ -22,6 +24,8 @@ public class Parser {
                 return (Integer) object;
             } else if (object instanceof String) {
                 return Integer.parseInt((String) object);
+            } else if (object instanceof Long) {
+                return ((Long) object).intValue();
             } else {
                 return 0;
             }

@@ -22,7 +22,7 @@ public class UpdateChecker {
                 consumer.accept(scanner.next());
             }
         } catch (IOException exception) {
-            System.out.println("Auto updater crashed, please go to https://www.spigotmc.org/resources/reapersanction.89580/ and check for updates manually.");
+            Main.INSTANCE.sendLogMessage("Auto updater crashed, please go to https://www.spigotmc.org/resources/reapersanction.89580/ and check for updates manually.", 2);
         }
     }
 

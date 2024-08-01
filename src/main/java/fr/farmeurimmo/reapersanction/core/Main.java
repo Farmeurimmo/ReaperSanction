@@ -185,7 +185,7 @@ public class Main {
                 fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction.INSTANCE.getProxy().shutdown();
                 break;
             case BUNGEECORD:
-                // TODO
+                fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().stop();
             default:
                 throw new RuntimeException("Can't shutdown server");
         }

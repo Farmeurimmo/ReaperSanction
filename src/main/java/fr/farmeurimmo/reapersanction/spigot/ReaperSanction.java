@@ -31,7 +31,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         main = new Main(Bukkit.getConsoleSender(), getLogger(), INSTANCE.getDataFolder());
 
         String version = Bukkit.getServer().getBukkitVersion();
-        main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
+
         main.sendLogMessage("§6This server is using minecraft : §b" + version, 0);
 
         main.sendLogMessage("§6Starting moderation module...", 0);
@@ -72,16 +72,11 @@ public class ReaperSanction extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTaskTimerAsynchronously(INSTANCE, () -> SanctionsManager.INSTANCE.checkForUsersExpiration(), 0, 20 * 10);
 
         main.endOfStart();
-        main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
     }
 
     @Override
     public void onDisable() {
-        main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
-
         main.disable();
-
-        main.sendLogMessage("§6-----------------------------------------------------------------------------------------------------", 0);
     }
 
     public void vanish() {

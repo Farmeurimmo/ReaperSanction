@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
@@ -72,7 +73,12 @@ public class ReaperSanction {
         proxy.getScheduler().buildTask(ReaperSanction.INSTANCE, () ->
                 SanctionsManager.INSTANCE.checkForUsersExpiration()).repeat(10, TimeUnit.SECONDS).schedule();
 
-        Main.INSTANCE.sendLogMessage("ReaperSanction is now enabled", 0);
+        Main.INSTANCE.endOfStart();
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent e) {
+        main.disable();
     }
 
     public Player getPlayer(String name) {
