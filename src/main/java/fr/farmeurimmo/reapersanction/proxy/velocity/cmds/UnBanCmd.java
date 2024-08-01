@@ -26,10 +26,6 @@ public class UnBanCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
-        if (!user.isPermaBan()) {
-            invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotBanned", true)));
-            return;
-        }
 
         if (!user.isBanned()) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("NotBanned", true)));

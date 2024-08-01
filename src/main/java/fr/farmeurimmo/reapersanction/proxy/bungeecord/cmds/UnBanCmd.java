@@ -26,10 +26,6 @@ public class UnBanCmd extends Command {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
-        if (!user.isPermaBan()) {
-            sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("NotBanned", true)));
-            return;
-        }
 
         if (!user.isBanned()) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("NotBanned", true)));
