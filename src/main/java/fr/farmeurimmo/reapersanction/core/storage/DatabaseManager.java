@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.core.storage;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
@@ -96,6 +97,8 @@ public class DatabaseManager {
             statement.setString(15, user.getUuid().toString());
 
             statement.executeUpdate();
+
+            Main.INSTANCE.updateBlockedIps();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -106,6 +109,7 @@ public class DatabaseManager {
             createUser(user);
             updatePlayer(user);
         }
+        Main.INSTANCE.updateBlockedIps();
     }
 
     public void loadUsers() {
@@ -120,6 +124,7 @@ public class DatabaseManager {
             }
 
             UsersManager.INSTANCE.users = users;
+            Main.INSTANCE.updateBlockedIps();
         } catch (SQLException e) {
             e.printStackTrace();
         }

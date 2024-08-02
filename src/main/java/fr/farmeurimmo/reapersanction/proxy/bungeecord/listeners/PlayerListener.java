@@ -30,6 +30,7 @@ public class PlayerListener implements Listener {
 
         if (Main.INSTANCE.ipblocked.containsKey(partialIp)) {
             e.setCancelled(true);
+            user = Main.INSTANCE.ipblocked.get(partialIp);
             e.setReason(new TextComponent(SettingsManager.INSTANCE.getSanctionMessage("banip")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))

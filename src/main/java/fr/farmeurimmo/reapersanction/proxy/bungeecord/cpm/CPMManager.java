@@ -75,11 +75,13 @@ public class CPMManager implements Listener {
                     case "tempban":
                         new TempBanCmd().execute(player, args);
                         return;
+                    case "banip":
+                        new BanIpCmd().execute(player, args);
+                        return;
                     case "openhistorygui":
                         User user = UsersManager.INSTANCE.getUser(player.getUniqueId());
                         if (user == null) return;
                         CPMManager.INSTANCE.sendPluginMessage(player, "openhistorygui", user.getUserAsString());
-                        return;
                 }
             } catch (Exception ignored) {
             }

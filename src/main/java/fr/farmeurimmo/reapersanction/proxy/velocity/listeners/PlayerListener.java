@@ -27,6 +27,7 @@ public class PlayerListener {
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
         SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
         if (Main.INSTANCE.ipblocked.containsKey(partialIp)) {
+            user = Main.INSTANCE.ipblocked.get(partialIp);
             e.setResult(LoginEvent.ComponentResult.denied(Component.text(SettingsManager.INSTANCE.getSanctionMessage("banip")
                     .replace("%banner%", user.getBannedBy())
                     .replace("%date%", TimeConverter.getDateFormatted(user.getBannedAt()))

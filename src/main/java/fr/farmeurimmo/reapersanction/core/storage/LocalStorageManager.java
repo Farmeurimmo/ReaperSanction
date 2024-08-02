@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.core.storage;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
@@ -50,6 +51,8 @@ public class LocalStorageManager {
         toSend.put(user.getUuid().toString(), data);
 
         FilesManager.INSTANCE.setSanctions(toSend);
+
+        Main.INSTANCE.updateBlockedIps();
     }
 
     public void saveAllUsers() {
@@ -97,5 +100,6 @@ public class LocalStorageManager {
             users.add(new User(uuid, name, mutedUntil, mutedReason, mutedBy, mutedAt, mutedDuration, bannedUntil, bannedReason, bannedBy, bannedAt, isIpBanned, bannedDuration, ip, history));
         }
         UsersManager.INSTANCE.users = users;
+        Main.INSTANCE.updateBlockedIps();
     }
 }

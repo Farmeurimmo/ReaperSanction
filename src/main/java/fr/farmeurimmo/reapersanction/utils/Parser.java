@@ -39,7 +39,9 @@ public class Parser {
             if (object instanceof String) {
                 return Boolean.parseBoolean((String) object);
             } else if (object instanceof Integer) {
-                return ((Integer) object).intValue() == 1;
+                return (Integer) object == 1;
+            } else if (object instanceof Boolean) {
+                return (Boolean) object;
             } else {
                 return false;
             }

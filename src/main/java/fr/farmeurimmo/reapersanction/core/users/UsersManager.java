@@ -36,6 +36,10 @@ public class UsersManager {
         return null;
     }
 
+    public final ArrayList<User> getUsers() {
+        return users;
+    }
+
     public User createUser(UUID uuid, String name) {
         User user = new User(uuid, name);
         users.add(user);

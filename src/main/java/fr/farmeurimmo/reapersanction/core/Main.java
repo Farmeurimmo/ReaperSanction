@@ -3,9 +3,9 @@ package fr.farmeurimmo.reapersanction.core;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.*;
 import fr.farmeurimmo.reapersanction.core.update.UpdateChecker;
+import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction;
-import net.md_5.bungee.api.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.slf4j.Logger;
 
@@ -17,11 +17,10 @@ public class Main {
 
     public static final ArrayList<UUID> VANISHED = new ArrayList<>();
     public static Main INSTANCE;
-    public final HashMap<String, String> ipblocked = new HashMap<>();
+    public final HashMap<String, User> ipblocked = new HashMap<>();
     public final ArrayList<UUID> mutedPlayers = new ArrayList<>();
     private final ServerType serverType;
     private ConsoleCommandSender bukkitConsole;
-    private CommandSender bungeeConsole;
     private java.util.logging.Logger loggerSpigot;
     private Logger loggerVelocity;
 
@@ -39,7 +38,6 @@ public class Main {
                 break;
             case BUNGEECORD:
                 if (logger instanceof java.util.logging.Logger) {
-                    bungeeConsole = fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().getConsole();
                     loggerSpigot = (java.util.logging.Logger) logger;
                 }
                 break;
@@ -211,6 +209,20 @@ public class Main {
 
     public boolean isProxyMode() {
         return SettingsManager.INSTANCE.getSetting("proxy").equalsIgnoreCase("true");
+    }
+
+    public void updateBlockedIps() {
+        ArrayList<User> users = UsersManager.INSTANCE.getUsers();
+
+        HashMap<String, User> ipblocked = new HashMap<>();
+        for (User user : users) {
+            if (user.isIpBanned()) {
+                ipblocked.put(user.getTruckedIp(), user);
+            }
+        }
+
+        this.ipblocked.clear();
+        this.ipblocked.putAll(ipblocked);
     }
 
     public List<String> filterByStart(List<String> list, String start) {

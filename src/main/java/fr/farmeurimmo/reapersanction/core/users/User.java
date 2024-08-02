@@ -227,6 +227,10 @@ public class User {
         this.ip = ip;
     }
 
+    public String getTruckedIp() {
+        return getIp().substring(0, getIp().lastIndexOf("."));
+    }
+
     public LinkedList<Sanction> getHistory() {
         return history;
     }
