@@ -52,7 +52,7 @@ public class CPMManager {
         try {
             String subChannel = in.readUTF();
 
-            String playerName = subChannel.split(";")[1];
+            //String playerName = subChannel.split(";")[1];
             subChannel = subChannel.split(";")[0];
 
             if (subChannel.equals("getmuteds")) {

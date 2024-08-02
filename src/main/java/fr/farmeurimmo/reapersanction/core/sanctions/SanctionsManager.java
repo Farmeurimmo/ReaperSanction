@@ -184,11 +184,18 @@ public class SanctionsManager {
                 player.sendMessage(MessageManager.INSTANCE.getMessage("MuteEnded", true));
             }
         } else if (Main.INSTANCE.getServerType() == ServerType.VELOCITY) {
+            ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).ifPresent(player -> ReaperSanction.INSTANCE.sendMuteEnded(player));
+
             for (com.velocitypowered.api.proxy.Player p : ReaperSanction.INSTANCE.getProxy().getAllPlayers()) {
                 CPMManager.INSTANCE.sendPluginMessage(p, "unmuted", user.getUuid().toString());
                 break;
             }
         } else if (Main.INSTANCE.getServerType() == ServerType.BUNGEECORD) {
+            ProxiedPlayer player = fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid());
+            if (player != null) {
+                fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.sendMuteEnded(player);
+            }
+
             for (ProxiedPlayer p : fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction.INSTANCE.getProxy().getPlayers()) {
                 fr.farmeurimmo.reapersanction.proxy.bungeecord.cpm.CPMManager.INSTANCE.sendPluginMessage(p, "unmuted", user.getUuid().toString());
                 break;

@@ -13,9 +13,11 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmds.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -159,5 +161,9 @@ public class ReaperSanction {
                     invocation.arguments()[invocation.arguments().length - 1]);
         }
         return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryone(), invocation.arguments()[invocation.arguments().length - 1]);
+    }
+
+    public void sendMuteEnded(Player player) {
+        player.sendMessage(Component.text(MessageManager.INSTANCE.getMessage("MuteEnded", true)));
     }
 }

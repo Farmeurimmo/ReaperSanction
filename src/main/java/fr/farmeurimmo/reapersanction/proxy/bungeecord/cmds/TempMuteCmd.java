@@ -6,6 +6,7 @@ import fr.farmeurimmo.reapersanction.core.users.Sanction;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction;
+import fr.farmeurimmo.reapersanction.proxy.bungeecord.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -64,6 +65,8 @@ public class TempMuteCmd extends Command {
 
         ProxiedPlayer target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid());
         if (target != null && target.isConnected()) {
+            CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+
             target.sendMessage(new TextComponent(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
                     s.getDuration(), target.getName(), s.getBy(), s.getReason(), s.getAt(), s.getUntil())));
         }

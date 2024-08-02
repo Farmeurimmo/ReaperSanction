@@ -2,10 +2,12 @@ package fr.farmeurimmo.reapersanction.proxy.bungeecord;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
+import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.cmds.*;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.listeners.PlayerListener;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -73,5 +75,9 @@ public class ReaperSanction extends Plugin {
         ArrayList<String> everyone = getEveryone();
         everyone.remove(me);
         return everyone;
+    }
+
+    public void sendMuteEnded(ProxiedPlayer player) {
+        player.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("MuteEnded", true)));
     }
 }

@@ -17,7 +17,7 @@ public class ChatEvent implements Listener {
         Player player = e.getPlayer();
 
         if (Main.INSTANCE.mutedPlayers.contains(player.getUniqueId())) {
-            e.setCancelled(true);
+            e.getRecipients().clear();
             return;
         }
 

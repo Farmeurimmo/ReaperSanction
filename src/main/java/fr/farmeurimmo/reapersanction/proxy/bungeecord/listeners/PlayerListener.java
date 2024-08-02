@@ -75,7 +75,6 @@ public class PlayerListener implements Listener {
         SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
 
         if (user.isMuted()) {
-            e.setCancelled(true);
             if (user.isPermaMuted()) {
                 p.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("PermaMutedPlayerChat", true)
                         .replace("%player%", p.getName()).replace("%banner%", user.getMutedBy())));

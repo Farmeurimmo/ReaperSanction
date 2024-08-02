@@ -25,7 +25,9 @@ public class PlayerListener {
         user.setIp(p.getRemoteAddress().getAddress().getHostAddress());
         String ip = p.getRemoteAddress().getAddress().getHostAddress();
         String partialIp = ip.substring(0, ip.lastIndexOf("."));
+
         SanctionsManager.INSTANCE.checkForSanctionExpiration(user);
+
         if (Main.INSTANCE.ipblocked.containsKey(partialIp)) {
             user = Main.INSTANCE.ipblocked.get(partialIp);
             e.setResult(LoginEvent.ComponentResult.denied(Component.text(SettingsManager.INSTANCE.getSanctionMessage("banip")
