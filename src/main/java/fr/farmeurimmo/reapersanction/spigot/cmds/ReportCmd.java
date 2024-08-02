@@ -3,11 +3,12 @@ package fr.farmeurimmo.reapersanction.spigot.cmds;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
 import fr.farmeurimmo.reapersanction.utils.Parser;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,7 @@ public class ReportCmd implements CommandExecutor, TabCompleter {
             player.sendMessage(MessageManager.INSTANCE.getMessage("Report-ErrorArg", true));
             return false;
         }
-        Player target = Bukkit.getPlayer(args[0]);
+        User target = UsersManager.INSTANCE.getUser(args[0]);
         if (target == null) {
             player.sendMessage(MessageManager.INSTANCE.getMessage("Report-PlayerNotOnline", true));
             return false;

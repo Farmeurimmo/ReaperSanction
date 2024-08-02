@@ -3,6 +3,8 @@ package fr.farmeurimmo.reapersanction.proxy.bungeecord.cmds;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.bungeecord.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.md_5.bungee.api.CommandSender;
@@ -22,8 +24,8 @@ public class MuteCmd extends Command {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("ErrorMuteArg", true)));
             return;
         }
-        ProxiedPlayer target = ReaperSanction.INSTANCE.getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -32,9 +34,10 @@ public class MuteCmd extends Command {
             reason = String.join(" ", args).replace(args[0] + " ", "").trim();
         }
         String by = sender.getName();
-        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, by);
-        if (target.isConnected()) target.sendMessage(new TextComponent(TimeConverter.replaceArgs(
+        Sanction s = SanctionsManager.INSTANCE.mute(user.getUuid(), user.getName(), reason, by);
+
+        ProxiedPlayer target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid());
+        if (target != null && target.isConnected()) target.sendMessage(new TextComponent(TimeConverter.replaceArgs(
                 MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true), "null",
                 target.getName(), by, reason, s.getAt(), s.getUntil())));
     }

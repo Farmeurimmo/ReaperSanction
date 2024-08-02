@@ -32,10 +32,10 @@ public class SanctionsManager {
         }
     }
 
-    public Sanction ban(UUID uuid, String playerName, String host, String reason, String banner) {
+    public Sanction ban(UUID uuid, String playerName, String reason, String banner) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(1, reason, banner, System.currentTimeMillis(), -1, true, false, "Permanent");
-        user.applyBan(sanction, host);
+        user.applyBan(sanction, user.getIp());
 
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
@@ -46,14 +46,14 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction banIp(UUID uuid, String playerName, String host, String reason, String banner) {
+    public Sanction banIp(UUID uuid, String playerName, String reason, String banner) {
         /*String ip = player.getAddress().getHostString();
         String partialIp = (ip.contains("l") ? ip : ip.substring(0, ip.lastIndexOf(".")));
         ReaperSanction.INSTANCE.ipblocked.put(partialIp, player.getName());*/
 
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(0, reason, banner, System.currentTimeMillis(), -1, true, true, "Permanent");
-        user.applyBan(sanction, host);
+        user.applyBan(sanction, user.getIp());
 
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();
@@ -64,7 +64,7 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction tempBan(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
+    public Sanction tempBan(UUID uuid, String playerName, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
 
         long timeMillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
@@ -72,7 +72,7 @@ public class SanctionsManager {
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
         Sanction sanction = new Sanction(2, reason, sender, System.currentTimeMillis(), timeMillis, true, false, duration);
-        user.applyBan(sanction, host);
+        user.applyBan(sanction, user.getIp());
 
         String finalDuration = duration;
         CompletableFuture.runAsync(() -> {
@@ -84,13 +84,13 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction tempMute(UUID uuid, String playerName, String host, String reason, String sender, String duration, String type) {
+    public Sanction tempMute(UUID uuid, String playerName, String reason, String sender, String duration, String type) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         long timeMillis = getMillisOfEmission(System.currentTimeMillis(), duration, type);
         duration = duration + type.replace("sec", " second(s)").replace("min", " minute(s)")
                 .replace("day", " day(s)").replace("hour", " hour(s)").replace("year", " year(s)");
         Sanction sanction = new Sanction(4, reason, sender, System.currentTimeMillis(), timeMillis, false, false, duration);
-        user.applyMute(sanction, host);
+        user.applyMute(sanction, user.getIp());
 
         String finalDuration = duration;
         CompletableFuture.runAsync(() -> {
@@ -102,10 +102,10 @@ public class SanctionsManager {
         return sanction;
     }
 
-    public Sanction mute(UUID uuid, String playerName, String host, String reason, String banner) {
+    public Sanction mute(UUID uuid, String playerName, String reason, String banner) {
         User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(uuid, playerName);
         Sanction sanction = new Sanction(3, reason, banner, System.currentTimeMillis(), -1, false, false, "Permanent");
-        user.applyMute(sanction, host);
+        user.applyMute(sanction, user.getIp());
 
         CompletableFuture.runAsync(() -> {
             user.requestUserUpdate();

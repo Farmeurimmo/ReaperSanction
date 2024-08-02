@@ -24,8 +24,8 @@ public class TempMuteCmd extends Command {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
             return;
         }
-        ProxiedPlayer target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -49,7 +49,6 @@ public class TempMuteCmd extends Command {
             return;
         }
 
-        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getName());
         if (user.isPermaMuted()) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("AlreadyMuted", true)));
             return;
@@ -61,10 +60,10 @@ public class TempMuteCmd extends Command {
         }
         String by = sender.getName();
 
-        Sanction s = SanctionsManager.INSTANCE.tempMute(target.getUniqueId(), target.getName(),
-                target.getPendingConnection().getSocketAddress().toString(), reason, by, cb.toString(), type);
+        Sanction s = SanctionsManager.INSTANCE.tempMute(user.getUuid(), user.getName(), reason, by, cb.toString(), type);
 
-        if (target.isConnected()) {
+        ProxiedPlayer target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid());
+        if (target != null && target.isConnected()) {
             target.sendMessage(new TextComponent(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
                     s.getDuration(), target.getName(), s.getBy(), s.getReason(), s.getAt(), s.getUntil())));
         }

@@ -32,8 +32,8 @@ public class TempMuteCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
             return false;
         }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorPlayerNotFound", true));
             return false;
         }
@@ -56,7 +56,6 @@ public class TempMuteCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true));
             return false;
         }
-        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getName());
         if (user.isPermaMuted()) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("AlreadyMuted", true));
             return false;
@@ -66,10 +65,12 @@ public class TempMuteCmd implements CommandExecutor, TabCompleter {
         if (args.length != 2) {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
-        Sanction s = SanctionsManager.INSTANCE.tempMute(target.getUniqueId(), target.getName(), target.getAddress().getAddress().getHostAddress(),
-                reason.trim(), sender.getName(), cb.toString(), type.replace(cb, ""));
-        target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
-                s.getDuration(), target.getName(), s.getBy(), s.getReason(), s.getAt(), s.getUntil()));
+        Sanction s = SanctionsManager.INSTANCE.tempMute(user.getUuid(), user.getName(), reason.trim(), sender.getName(),
+                cb.toString(), type.replace(cb, ""));
+        Player target = Bukkit.getPlayer(user.getUuid());
+        if (target != null)
+            target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
+                    s.getDuration(), target.getName(), s.getBy(), s.getReason(), s.getAt(), s.getUntil()));
         return false;
     }
 

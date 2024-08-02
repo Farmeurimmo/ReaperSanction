@@ -25,8 +25,8 @@ public class TempBanCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempBanArg", true)));
             return;
         }
-        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -49,7 +49,6 @@ public class TempBanCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempBanArg", true)));
             return;
         }
-        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getUsername());
 
         if (user.isPermaBan()) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("AlreadyBanned", true)));
@@ -61,14 +60,16 @@ public class TempBanCmd implements SimpleCommand {
             reason = String.join(" ", args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
-        Sanction s = SanctionsManager.INSTANCE.tempBan(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, by, cb.toString(), type);
-        if (target.isActive()) target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("tempban")
-                .replace("%banner%", s.getBy())
-                .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
-                .replace("%reason%", s.getReason())
-                .replace("%until%", TimeConverter.getDateFormatted(s.getUntil()))
-                .replace("%duration%", s.getDuration())));
+        Sanction s = SanctionsManager.INSTANCE.tempBan(user.getUuid(), user.getName(), reason, by, cb.toString(), type);
+
+        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).orElse(null);
+        if (target != null && target.isActive())
+            target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("tempban")
+                    .replace("%banner%", s.getBy())
+                    .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
+                    .replace("%reason%", s.getReason())
+                    .replace("%until%", TimeConverter.getDateFormatted(s.getUntil()))
+                    .replace("%duration%", s.getDuration())));
     }
 
     @Override

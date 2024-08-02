@@ -4,6 +4,8 @@ import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -28,8 +30,8 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
             return false;
         }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
@@ -37,10 +39,11 @@ public class MuteCmd implements CommandExecutor, TabCompleter {
         if (args.length != 1) {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").trim();
         }
-        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, sender.getName());
-        target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
-                "null", target.getName(), sender.getName(), reason, s.getAt(), s.getUntil()));
+        Sanction s = SanctionsManager.INSTANCE.mute(user.getUuid(), user.getName(), reason, sender.getName());
+        Player target = Bukkit.getPlayer(user.getUuid());
+        if (target != null)
+            target.sendMessage(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
+                    "null", target.getName(), sender.getName(), reason, s.getAt(), s.getUntil()));
         return false;
     }
 

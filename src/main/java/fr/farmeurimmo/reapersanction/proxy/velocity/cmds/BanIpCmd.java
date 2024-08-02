@@ -7,6 +7,8 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -27,8 +29,8 @@ public class BanIpCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text("§cIn proxy mode, please use this command on the proxy"));
             return;
         }
-        Player target = ReaperSanction.INSTANCE.getPlayer(invocation.arguments()[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(invocation.arguments()[0]);
+        if (user == null) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -37,9 +39,10 @@ public class BanIpCmd implements SimpleCommand {
             reason = StrUtils.fromArgs(invocation.arguments()).replace(invocation.arguments()[0] + " ", "").trim();
         }
         String banner = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
-        Sanction s = SanctionsManager.INSTANCE.banIp(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, banner);
-        if (target.isActive()) {
+        Sanction s = SanctionsManager.INSTANCE.banIp(user.getUuid(), user.getName(), reason, banner);
+
+        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).orElse(null);
+        if (target != null && target.isActive()) {
             target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("banip")
                     .replace("%banner%", s.getBy())
                     .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))

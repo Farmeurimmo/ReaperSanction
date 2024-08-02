@@ -5,6 +5,8 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.StrUtils;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -31,8 +33,8 @@ public class TempBanCmd implements CommandExecutor, TabCompleter {
             sender.sendMessage("§cIn proxy mode, please use this command on the proxy");
             return false;
         }
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
             return false;
         }
@@ -60,9 +62,9 @@ public class TempBanCmd implements CommandExecutor, TabCompleter {
         if (args.length != 2) {
             reason = StrUtils.fromArgs(args).replace(args[0] + " ", "").replace(args[1] + " ", "").trim();
         }
-        Sanction s = SanctionsManager.INSTANCE.tempBan(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, sender.getName(), cb.toString(), type);
-        if (target.isOnline()) target.kickPlayer(SettingsManager.INSTANCE.getSanctionMessage("tempban")
+        Sanction s = SanctionsManager.INSTANCE.tempBan(user.getUuid(), user.getName(), reason, sender.getName(), cb.toString(), type);
+        Player target = Bukkit.getPlayer(user.getUuid());
+        if (target != null) target.kickPlayer(SettingsManager.INSTANCE.getSanctionMessage("tempban")
                 .replace("%banner%", s.getBy())
                 .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
                 .replace("%reason%", s.getReason())

@@ -6,6 +6,8 @@ import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.storage.SettingsManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
 import net.kyori.adventure.text.Component;
@@ -21,9 +23,9 @@ public class BanCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorBanArg", true)));
             return;
         }
-        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
+        User user = UsersManager.INSTANCE.getUser(args[0]);
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
-        if (target == null) {
+        if (user == null) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -31,12 +33,14 @@ public class BanCmd implements SimpleCommand {
             reason = String.join(" ", args).replace(args[0] + " ", "").trim();
         }
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
-        Sanction s = SanctionsManager.INSTANCE.ban(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, by);
-        if (target.isActive()) target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("ban")
-                .replace("%banner%", s.getBy())
-                .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
-                .replace("%reason%", s.getReason())));
+        Sanction s = SanctionsManager.INSTANCE.ban(user.getUuid(), user.getName(), reason, by);
+
+        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).orElse(null);
+        if (target != null && target.isActive())
+            target.disconnect(Component.text(SettingsManager.INSTANCE.getSanctionMessage("ban")
+                    .replace("%banner%", s.getBy())
+                    .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))
+                    .replace("%reason%", s.getReason())));
     }
 
     @Override

@@ -5,6 +5,8 @@ import com.velocitypowered.api.proxy.Player;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.Sanction;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.ReaperSanction;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.utils.TimeConverter;
@@ -22,9 +24,9 @@ public class MuteCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorMuteArg", true)));
             return;
         }
-        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
+        User user = UsersManager.INSTANCE.getUser(args[0]);
         String reason = MessageManager.INSTANCE.getMessage("UnknownReasonSpecified", false);
-        if (target == null) {
+        if (user == null) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -32,14 +34,17 @@ public class MuteCmd implements SimpleCommand {
             reason = String.join(" ", args).replace(args[0] + " ", "").trim();
         }
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
-        Sanction s = SanctionsManager.INSTANCE.mute(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, by);
+        Sanction s = SanctionsManager.INSTANCE.mute(user.getUuid(), user.getName(), reason, by);
 
-        CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).orElse(null);
 
-        if (target.isActive())
-            target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
-                    "null", target.getUsername(), by, reason, s.getAt(), s.getUntil())));
+        if (target != null) {
+            CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+
+            if (target.isActive())
+                target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotPermaMuted", true),
+                        "null", target.getUsername(), by, reason, s.getAt(), s.getUntil())));
+        }
     }
 
     @Override

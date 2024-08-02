@@ -75,7 +75,7 @@ public class MessageManager {
         toReturn.put("UnknownReasonSpecified", "N/A");
         toReturn.put("NoPermission", "&cYou don't have the permission to do this !");
         toReturn.put("ReloadMessage", "&6Reload done !");
-        toReturn.put("InvalidPlayer", "&6Player unknown or offline !");
+        toReturn.put("InvalidPlayer", "&6Player unknown !");
         toReturn.put("Report-Sended", "&eYou have successfuly report &6%player% &efor %reason% &e!");
         toReturn.put("Report-ErrorArg", "&6Usage, /report <player-name>");
         toReturn.put("Report-Disabled", "&6This command is disabled !");

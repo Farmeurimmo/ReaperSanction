@@ -25,8 +25,8 @@ public class TempBanCmd extends Command {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("ErrorTempBanArg", true)));
             return;
         }
-        ProxiedPlayer target = ReaperSanction.INSTANCE.getPlayer(args[0]);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -49,7 +49,6 @@ public class TempBanCmd extends Command {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("ErrorTempBanArg", true)));
             return;
         }
-        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getName());
 
         if (user.isPermaBan()) {
             sender.sendMessage(new TextComponent(MessageManager.INSTANCE.getMessage("AlreadyBanned", true)));
@@ -61,9 +60,10 @@ public class TempBanCmd extends Command {
             reason = String.join(" ", args).replace(args[0] + " " + args[1] + " ", "").trim();
         }
         String by = sender.getName();
-        Sanction s = SanctionsManager.INSTANCE.tempBan(target.getUniqueId(), target.getName(),
-                target.getAddress().getAddress().getHostAddress(), reason, by, cb.toString(), type);
-        if (target.isConnected())
+        Sanction s = SanctionsManager.INSTANCE.tempBan(user.getUuid(), user.getName(), reason, by, cb.toString(), type);
+
+        ProxiedPlayer target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid());
+        if (target != null && target.isConnected())
             target.disconnect(new TextComponent(SettingsManager.INSTANCE.getSanctionMessage("tempban")
                     .replace("%banner%", s.getBy())
                     .replace("%date%", TimeConverter.getDateFormatted(s.getAt()))

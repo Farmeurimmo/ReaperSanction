@@ -23,8 +23,8 @@ public class TempMuteCmd implements SimpleCommand {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("ErrorTempMuteArg", true)));
             return;
         }
-        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(args[0]).orElse(null);
-        if (target == null) {
+        User user = UsersManager.INSTANCE.getUser(args[0]);
+        if (user == null) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("InvalidPlayer", true)));
             return;
         }
@@ -48,7 +48,6 @@ public class TempMuteCmd implements SimpleCommand {
             return;
         }
 
-        User user = UsersManager.INSTANCE.getUserAndCreateIfNotExists(target.getUniqueId(), target.getUsername());
         if (user.isPermaMuted()) {
             invocation.source().sendMessage(Component.text(MessageManager.INSTANCE.getMessage("AlreadyMuted", true)));
             return;
@@ -60,14 +59,17 @@ public class TempMuteCmd implements SimpleCommand {
         }
         String by = (invocation.source() instanceof Player) ? ((Player) invocation.source()).getUsername() : "Console";
 
-        Sanction s = SanctionsManager.INSTANCE.tempMute(target.getUniqueId(), target.getUsername(),
-                target.getRemoteAddress().getAddress().getHostAddress(), reason, by, cb.toString(), type);
+        Sanction s = SanctionsManager.INSTANCE.tempMute(user.getUuid(), user.getName(), reason, by, cb.toString(), type);
 
-        CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+        Player target = ReaperSanction.INSTANCE.getProxy().getPlayer(user.getUuid()).orElse(null);
 
-        if (target.isActive()) {
-            target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
-                    s.getDuration(), target.getUsername(), s.getBy(), s.getReason(), s.getAt(), s.getUntil())));
+        if (target != null) {
+            CPMManager.INSTANCE.sendPluginMessage(target, "nowmuted", target.getUniqueId().toString());
+
+            if (target.isActive()) {
+                target.sendMessage(Component.text(TimeConverter.replaceArgs(MessageManager.INSTANCE.getMessage("MessageToPlayerGotTempMuted", true),
+                        s.getDuration(), target.getUsername(), s.getBy(), s.getReason(), s.getAt(), s.getUntil())));
+            }
         }
     }
 

@@ -2,10 +2,10 @@ package fr.farmeurimmo.reapersanction.spigot.cmds;
 
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
 import fr.farmeurimmo.reapersanction.spigot.gui.InventoryType;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,7 +29,7 @@ public class RsCmd implements CommandExecutor, TabCompleter {
             player.sendMessage(MessageManager.INSTANCE.getMessage("ErrorArg", true));
             return false;
         }
-        if (Bukkit.getPlayer(args[0]) != null)
+        if (UsersManager.INSTANCE.getUser(args[0]) != null)
             CustomInventories.INSTANCE.startInventoryOpenProcess(player, InventoryType.MAIN, args[0]);
         else player.sendMessage(MessageManager.INSTANCE.getMessage("InvalidPlayer", true));
 
