@@ -14,6 +14,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.sanctions.SanctionsManager;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
+import fr.farmeurimmo.reapersanction.core.users.User;
+import fr.farmeurimmo.reapersanction.core.users.UsersManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cmds.*;
 import fr.farmeurimmo.reapersanction.proxy.velocity.cpm.CPMManager;
 import fr.farmeurimmo.reapersanction.proxy.velocity.listeners.PlayerListener;
@@ -111,8 +113,8 @@ public class ReaperSanction {
 
     public ArrayList<String> getEveryone() {
         ArrayList<String> list = new ArrayList<>();
-        for (Player p : proxy.getAllPlayers()) {
-            list.add(p.getUsername());
+        for (User user : UsersManager.INSTANCE.getUsers()) {
+            list.add(user.getName());
         }
         return list;
     }
