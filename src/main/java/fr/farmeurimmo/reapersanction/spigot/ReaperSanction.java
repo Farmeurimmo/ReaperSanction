@@ -94,7 +94,7 @@ public class ReaperSanction extends JavaPlugin implements Listener {
     public ArrayList<String> getEveryoneExceptMe(String playerName) {
         ArrayList<String> players = new ArrayList<>();
 
-        Bukkit.getOnlinePlayers().stream().filter(p -> !p.getName().equals(playerName)).forEach(p -> players.add(p.getName()));
+        UsersManager.INSTANCE.getUsers().stream().filter(user -> !user.getName().equals(playerName)).forEach(p -> players.add(p.getName()));
 
         return players;
     }
