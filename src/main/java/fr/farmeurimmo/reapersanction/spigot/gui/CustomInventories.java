@@ -397,6 +397,7 @@ public class CustomInventories {
         for (InventoryType type : InventoryType.values()) {
             try {
                 Map<String, Object> map = (Map<String, Object>) FilesManager.INSTANCE.getInventories().get(type.toString());
+                if (map == null) continue;
                 if (map.isEmpty()) continue;
 
                 String name = (String) map.get("name");
