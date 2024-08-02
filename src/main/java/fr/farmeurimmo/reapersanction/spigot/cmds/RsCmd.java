@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmds;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.spigot.ReaperSanction;
 import fr.farmeurimmo.reapersanction.spigot.gui.CustomInventories;
@@ -38,7 +39,7 @@ public class RsCmd implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
+            return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName()), args[0]);
         }
         return Collections.emptyList();
     }

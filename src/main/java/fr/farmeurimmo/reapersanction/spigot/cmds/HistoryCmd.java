@@ -1,5 +1,6 @@
 package fr.farmeurimmo.reapersanction.spigot.cmds;
 
+import fr.farmeurimmo.reapersanction.core.Main;
 import fr.farmeurimmo.reapersanction.core.storage.MessageManager;
 import fr.farmeurimmo.reapersanction.core.users.User;
 import fr.farmeurimmo.reapersanction.core.users.UsersManager;
@@ -49,7 +50,7 @@ public class HistoryCmd implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         ArrayList<String> subcmd = new ArrayList<>();
         if (args.length == 1) {
-            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
+            return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName()), args[0]);
         } else if (args.length >= 2) {
             subcmd.add("");
         }

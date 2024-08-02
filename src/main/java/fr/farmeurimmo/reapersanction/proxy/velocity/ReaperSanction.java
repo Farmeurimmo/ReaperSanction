@@ -119,10 +119,7 @@ public class ReaperSanction {
     public CompletableFuture<List<String>> getListCompletableFuture(SimpleCommand.Invocation invocation) {
         return CompletableFuture.supplyAsync(() -> {
             if (invocation.arguments().length == 1) {
-                if (invocation.source() instanceof Player) {
-                    return ReaperSanction.INSTANCE.getEveryoneExceptMe(((Player) invocation.source()).getUsername());
-                }
-                return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryone(), invocation.arguments()[invocation.arguments().length - 1]);
+                return getStringsCommandsCompleted(invocation);
             }
             return new ArrayList<>();
         });
@@ -153,8 +150,13 @@ public class ReaperSanction {
     }
 
     private List<String> handleSingleArgument(SimpleCommand.Invocation invocation) {
+        return getStringsCommandsCompleted(invocation);
+    }
+
+    private List<String> getStringsCommandsCompleted(SimpleCommand.Invocation invocation) {
         if (invocation.source() instanceof Player) {
-            return ReaperSanction.INSTANCE.getEveryoneExceptMe(((Player) invocation.source()).getUsername());
+            return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryoneExceptMe(((Player) invocation.source()).getUsername()),
+                    invocation.arguments()[invocation.arguments().length - 1]);
         }
         return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryone(), invocation.arguments()[invocation.arguments().length - 1]);
     }

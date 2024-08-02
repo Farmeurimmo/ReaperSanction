@@ -15,7 +15,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class VanishCmd implements CommandExecutor, TabCompleter {
@@ -87,11 +86,6 @@ public class VanishCmd implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        ArrayList<String> subcmd = new ArrayList<>();
-        if (cmd.getName().equalsIgnoreCase("vanish")) {
-            subcmd.add("");
-            Collections.sort(subcmd);
-        }
-        return subcmd;
+        return new ArrayList<>();
     }
 }

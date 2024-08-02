@@ -50,10 +50,10 @@ public class UnMuteCmd implements CommandExecutor, TabCompleter {
                     subcmd.add(user.getName());
                 }
             }
+            subcmd = new ArrayList<>(Main.INSTANCE.filterByStart(subcmd, args[0]));
         } else {
             return Collections.emptyList();
         }
-        Collections.sort(subcmd);
         return subcmd;
     }
 }

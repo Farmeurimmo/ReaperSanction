@@ -47,7 +47,7 @@ public class KickCmd implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         if (args.length == 1 && command.getName().equalsIgnoreCase("kick")) {
-            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
+            return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName()), args[0]);
         }
         return null;
     }

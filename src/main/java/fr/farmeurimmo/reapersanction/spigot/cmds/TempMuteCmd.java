@@ -76,9 +76,9 @@ public class TempMuteCmd implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName());
+            return Main.INSTANCE.filterByStart(ReaperSanction.INSTANCE.getEveryoneExceptMe(sender.getName()), args[0]);
         } else if (args.length == 2) {
-            return new ArrayList<>(Arrays.asList("10sec", "10min", "10hour", "10day", "10year"));
+            return Main.INSTANCE.filterByStart(new ArrayList<>(Arrays.asList("10sec", "10min", "10hour", "10day", "10year")), args[1]);
         }
         return null;
     }
