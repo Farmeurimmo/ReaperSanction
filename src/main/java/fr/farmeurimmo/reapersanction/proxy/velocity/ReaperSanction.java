@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
         description = "ReaperSanction velocity plugin",
         url = "https://farmeurimmo.fr/projects/reapersanction",
         authors = "Farmeurimmo",
-        version = "2.0.0-RC1"
+        version = "2.0.0"
 )
 public class ReaperSanction {
 
